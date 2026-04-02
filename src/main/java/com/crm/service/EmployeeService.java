@@ -1,8 +1,8 @@
-// EmployeeService.java
 package com.crm.service;
 
 import com.crm.dto.EmployeeDTO;
 import com.crm.dto.EmployeeResponseDTO;
+import com.crm.dto.PasswordResetDTO;
 
 import java.util.List;
 
@@ -14,4 +14,5 @@ public interface EmployeeService {
     List<EmployeeResponseDTO> getAllEmployees();
     List<EmployeeResponseDTO> getActiveEmployees();
     List<EmployeeResponseDTO> getEmployeesByDepartment(String department);
+    void resetEmployeePassword(PasswordResetDTO passwordResetDTO);
 }

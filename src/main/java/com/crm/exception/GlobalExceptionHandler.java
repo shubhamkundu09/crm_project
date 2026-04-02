@@ -48,6 +48,24 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 
+
+    // GlobalExceptionHandler.java (add new exception handler)
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ApiResponse<Map<String, String>>> handleUnauthorizedException(
+            UnauthorizedException ex, HttpServletRequest request) {
+        Map<String, String> errorDetails = new HashMap<>();
+        errorDetails.put("error", "Unauthorized");
+        errorDetails.put("details", ex.getMessage());
+
+        ApiResponse<Map<String, String>> response = ApiResponse.error(
+                ex.getMessage(),
+                HttpStatus.UNAUTHORIZED.value(),
+                errorDetails,
+                request.getRequestURI()
+        );
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Map<String, String>>> handleValidationExceptions(
             MethodArgumentNotValidException ex, HttpServletRequest request) {

@@ -1,4 +1,3 @@
-// AuthController.java (updated)
 package com.crm.controller;
 
 import com.crm.dto.ApiResponse;
@@ -9,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Slf4j
+@Slf4j  // Add this annotation
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
@@ -46,12 +44,14 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(HttpServletRequest request) {
+        log.info("Logout request received");
         SecurityContextHolder.clearContext();
         return ResponseEntity.ok(ApiResponse.success("Logout successful", request.getRequestURI()));
     }
 
     @GetMapping("/validate")
     public ResponseEntity<ApiResponse<String>> validateToken(HttpServletRequest request) {
+        log.info("Token validation request received");
         return ResponseEntity.ok(ApiResponse.success("Token is valid", "Token validation successful", request.getRequestURI()));
     }
 }

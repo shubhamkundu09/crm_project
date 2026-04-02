@@ -36,6 +36,9 @@ public class Employee {
     private String employeeCode;
 
     @Column(nullable = false)
+    private String password; // New field for employee password
+
+    @Column(nullable = false)
     private String department;
 
     @Column(nullable = false)
@@ -54,6 +57,10 @@ public class Employee {
     @Builder.Default
     private Boolean isActive = true;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private Boolean isFirstLogin = true; // Track if it's first login
+
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
@@ -61,11 +68,9 @@ public class Employee {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    // Method to generate employee code automatically
     @PrePersist
     public void generateEmployeeCode() {
         if (this.employeeCode == null) {
-            // Format: EMP + timestamp (YYMMDDHHMMSS) + random 4 digits
             String timestamp = String.valueOf(System.currentTimeMillis());
             String randomDigits = String.format("%04d", (int)(Math.random() * 10000));
             this.employeeCode = "EMP" + timestamp.substring(timestamp.length() - 8) + randomDigits;
