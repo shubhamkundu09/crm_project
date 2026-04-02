@@ -86,6 +86,37 @@ public class EmailService {
         }
     }
 
+
+    // Add this method to EmailService.java
+    @Async
+    public void sendLeadAssignmentEmail(String to, String employeeName, String leadName, String leadType) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(to);
+            message.setSubject("New Lead Assigned - CRM System");
+            message.setText(String.format("""
+            Dear %s,
+            
+            A new lead has been assigned to you.
+            
+            Lead Details:
+            -------------
+            Name: %s
+            Type: %s
+            
+            Please log in to the CRM system to view more details and take necessary action.
+            
+            Best regards,
+            CRM Admin Team
+            """, employeeName, leadName, leadType));
+
+            mailSender.send(message);
+            log.info("Lead assignment email sent to: {}", to);
+        } catch (Exception e) {
+            log.error("Failed to send lead assignment email to {}: {}", to, e.getMessage());
+        }
+    }
+
     @Async
     public void sendPasswordChangeConfirmation(String to, String name) {
         try {

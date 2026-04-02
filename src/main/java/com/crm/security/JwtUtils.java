@@ -1,15 +1,12 @@
-// JwtUtils.java
 package com.crm.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import java.security.Key;
 import java.util.Date;
@@ -29,10 +26,22 @@ public class JwtUtils {
     }
 
     public String generateJwtToken(Authentication authentication) {
-        AdminUserDetails userPrincipal = (AdminUserDetails) authentication.getPrincipal();
+        // Get the principal which could be either AdminUserDetails or EmployeeUserDetails
+        Object principal = authentication.getPrincipal();
+        String username;
+
+        if (principal instanceof AdminUserDetails) {
+            username = ((AdminUserDetails) principal).getUsername();
+        } else if (principal instanceof EmployeeUserDetails) {
+            username = ((EmployeeUserDetails) principal).getUsername();
+        } else if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+        } else {
+            username = principal.toString();
+        }
 
         return Jwts.builder()
-                .setSubject(userPrincipal.getUsername())
+                .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpiration))
                 .signWith(key(), SignatureAlgorithm.HS512)

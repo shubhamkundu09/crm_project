@@ -1,4 +1,3 @@
-// EmployeeAuthServiceImpl.java
 package com.crm.service;
 
 import com.crm.dto.ChangePasswordRequest;
@@ -15,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +33,8 @@ public class EmployeeAuthServiceImpl implements EmployeeAuthService {
 
     @Override
     public LoginResponse authenticateEmployee(EmployeeLoginRequest loginRequest) {
+        log.info("Authenticating employee with email: {}", loginRequest.getEmail());
+
         // Authenticate the employee
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())
@@ -54,6 +56,8 @@ public class EmployeeAuthServiceImpl implements EmployeeAuthService {
                 "Login successful. Please change your password." :
                 "Login successful";
 
+        log.info("Employee authenticated successfully: {}", loginRequest.getEmail());
+
         return new LoginResponse(jwt, loginRequest.getEmail(), message);
     }
 
@@ -62,6 +66,8 @@ public class EmployeeAuthServiceImpl implements EmployeeAuthService {
         // Get current authenticated user email
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
+
+        log.info("Changing password for employee: {}", email);
 
         Employee employee = employeeRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
