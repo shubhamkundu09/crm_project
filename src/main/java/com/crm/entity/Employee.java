@@ -1,3 +1,4 @@
+// Employee.java (updated)
 package com.crm.entity;
 
 import jakarta.persistence.*;
@@ -59,4 +60,15 @@ public class Employee {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    // Method to generate employee code automatically
+    @PrePersist
+    public void generateEmployeeCode() {
+        if (this.employeeCode == null) {
+            // Format: EMP + timestamp (YYMMDDHHMMSS) + random 4 digits
+            String timestamp = String.valueOf(System.currentTimeMillis());
+            String randomDigits = String.format("%04d", (int)(Math.random() * 10000));
+            this.employeeCode = "EMP" + timestamp.substring(timestamp.length() - 8) + randomDigits;
+        }
+    }
 }

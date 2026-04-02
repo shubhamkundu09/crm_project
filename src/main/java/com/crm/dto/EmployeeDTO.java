@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class EmployeeDTO {
 
-    private Long id;
+    // ID removed - will be auto-generated
 
     @NotBlank(message = "First name is required")
     @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
@@ -29,9 +29,6 @@ public class EmployeeDTO {
     @Email(message = "Invalid email format")
     private String email;
 
-    @NotBlank(message = "Employee code is required")
-    @Pattern(regexp = "^EMP[0-9]{6}$", message = "Employee code must be in format EMP followed by 6 digits")
-    private String employeeCode;
 
     @NotBlank(message = "Department is required")
     private String department;

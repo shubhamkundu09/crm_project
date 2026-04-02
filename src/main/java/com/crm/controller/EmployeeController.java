@@ -1,9 +1,11 @@
-// EmployeeController.java - Updated
+// EmployeeController.java (updated)
 package com.crm.controller;
 
+import com.crm.dto.ApiResponse;
 import com.crm.dto.EmployeeDTO;
 import com.crm.dto.EmployeeResponseDTO;
 import com.crm.service.EmployeeService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,52 +25,62 @@ public class EmployeeController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<EmployeeResponseDTO> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
+    public ResponseEntity<ApiResponse<EmployeeResponseDTO>> createEmployee(
+            @Valid @RequestBody EmployeeDTO employeeDTO,
+            HttpServletRequest request) {
         EmployeeResponseDTO createdEmployee = employeeService.createEmployee(employeeDTO);
-        return new ResponseEntity<>(createdEmployee, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(createdEmployee, "Employee created successfully", request.getRequestURI()));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<EmployeeResponseDTO> updateEmployee(
+    public ResponseEntity<ApiResponse<EmployeeResponseDTO>> updateEmployee(
             @PathVariable Long id,
-            @Valid @RequestBody EmployeeDTO employeeDTO) {
+            @Valid @RequestBody EmployeeDTO employeeDTO,
+            HttpServletRequest request) {
         EmployeeResponseDTO updatedEmployee = employeeService.updateEmployee(id, employeeDTO);
-        return ResponseEntity.ok(updatedEmployee);
+        return ResponseEntity.ok(ApiResponse.success(updatedEmployee, "Employee updated successfully", request.getRequestURI()));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> deleteEmployee(
+            @PathVariable Long id,
+            HttpServletRequest request) {
         employeeService.deleteEmployee(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(ApiResponse.success("Employee deleted successfully", request.getRequestURI()));
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<EmployeeResponseDTO> getEmployeeById(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<EmployeeResponseDTO>> getEmployeeById(
+            @PathVariable Long id,
+            HttpServletRequest request) {
         EmployeeResponseDTO employee = employeeService.getEmployeeById(id);
-        return ResponseEntity.ok(employee);
+        return ResponseEntity.ok(ApiResponse.success(employee, "Employee retrieved successfully", request.getRequestURI()));
     }
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<EmployeeResponseDTO>> getAllEmployees() {
+    public ResponseEntity<ApiResponse<List<EmployeeResponseDTO>>> getAllEmployees(HttpServletRequest request) {
         List<EmployeeResponseDTO> employees = employeeService.getAllEmployees();
-        return ResponseEntity.ok(employees);
+        return ResponseEntity.ok(ApiResponse.success(employees, "Employees retrieved successfully", request.getRequestURI()));
     }
 
     @GetMapping("/active")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<EmployeeResponseDTO>> getActiveEmployees() {
+    public ResponseEntity<ApiResponse<List<EmployeeResponseDTO>>> getActiveEmployees(HttpServletRequest request) {
         List<EmployeeResponseDTO> employees = employeeService.getActiveEmployees();
-        return ResponseEntity.ok(employees);
+        return ResponseEntity.ok(ApiResponse.success(employees, "Active employees retrieved successfully", request.getRequestURI()));
     }
 
     @GetMapping("/department/{department}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<EmployeeResponseDTO>> getEmployeesByDepartment(@PathVariable String department) {
+    public ResponseEntity<ApiResponse<List<EmployeeResponseDTO>>> getEmployeesByDepartment(
+            @PathVariable String department,
+            HttpServletRequest request) {
         List<EmployeeResponseDTO> employees = employeeService.getEmployeesByDepartment(department);
-        return ResponseEntity.ok(employees);
+        return ResponseEntity.ok(ApiResponse.success(employees, "Employees retrieved successfully for department: " + department, request.getRequestURI()));
     }
 }
