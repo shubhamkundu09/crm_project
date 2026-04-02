@@ -1,0 +1,169 @@
+
+
+// EmployeeServiceImpl.java
+package com.crm.service;
+
+import com.crm.dto.EmployeeDTO;
+import com.crm.dto.EmployeeResponseDTO;
+import com.crm.entity.Employee;
+import com.crm.exception.DuplicateResourceException;
+import com.crm.exception.ResourceNotFoundException;
+import com.crm.repository.EmployeeRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+@Transactional
+public class EmployeeServiceImpl implements EmployeeService {
+
+    private final EmployeeRepository employeeRepository;
+    private final EmailService emailService;
+
+    @Override
+    public EmployeeResponseDTO createEmployee(EmployeeDTO employeeDTO) {
+        log.info("Creating new employee with email: {}", employeeDTO.getEmail());
+
+        // Check for duplicate email
+        if (employeeRepository.existsByEmail(employeeDTO.getEmail())) {
+            throw new DuplicateResourceException("Email already exists: " + employeeDTO.getEmail());
+        }
+
+        // Check for duplicate employee code
+        if (employeeRepository.existsByEmployeeCode(employeeDTO.getEmployeeCode())) {
+            throw new DuplicateResourceException("Employee code already exists: " + employeeDTO.getEmployeeCode());
+        }
+
+        Employee employee = mapToEntity(employeeDTO);
+        Employee savedEmployee = employeeRepository.save(employee);
+
+        // Send welcome email
+        emailService.sendWelcomeEmail(savedEmployee.getEmail(),
+                savedEmployee.getFirstName() + " " + savedEmployee.getLastName());
+
+        log.info("Employee created successfully with ID: {}", savedEmployee.getId());
+        return mapToResponseDTO(savedEmployee);
+    }
+
+    @Override
+    public EmployeeResponseDTO updateEmployee(Long id, EmployeeDTO employeeDTO) {
+        log.info("Updating employee with ID: {}", id);
+
+        Employee existingEmployee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
+
+        // Check email uniqueness for update
+        if (!existingEmployee.getEmail().equals(employeeDTO.getEmail()) &&
+                employeeRepository.existsByEmail(employeeDTO.getEmail())) {
+            throw new DuplicateResourceException("Email already exists: " + employeeDTO.getEmail());
+        }
+
+        // Update fields
+        existingEmployee.setFirstName(employeeDTO.getFirstName());
+        existingEmployee.setLastName(employeeDTO.getLastName());
+        existingEmployee.setEmail(employeeDTO.getEmail());
+        existingEmployee.setDepartment(employeeDTO.getDepartment());
+        existingEmployee.setPosition(employeeDTO.getPosition());
+        existingEmployee.setSalary(employeeDTO.getSalary());
+        existingEmployee.setPhoneNumber(employeeDTO.getPhoneNumber());
+        existingEmployee.setJoiningDate(employeeDTO.getJoiningDate());
+
+        Employee updatedEmployee = employeeRepository.save(existingEmployee);
+        log.info("Employee updated successfully with ID: {}", id);
+
+        return mapToResponseDTO(updatedEmployee);
+    }
+
+    @Override
+    public void deleteEmployee(Long id) {
+        log.info("Deleting employee with ID: {}", id);
+
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
+
+        // Soft delete - set inactive
+        employee.setIsActive(false);
+        employeeRepository.save(employee);
+
+        log.info("Employee deactivated successfully with ID: {}", id);
+    }
+
+    @Override
+    public EmployeeResponseDTO getEmployeeById(Long id) {
+        log.info("Fetching employee with ID: {}", id);
+
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + id));
+
+        return mapToResponseDTO(employee);
+    }
+
+    @Override
+    public List<EmployeeResponseDTO> getAllEmployees() {
+        log.info("Fetching all employees");
+
+        return employeeRepository.findAll()
+                .stream()
+                .map(this::mapToResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EmployeeResponseDTO> getActiveEmployees() {
+        log.info("Fetching active employees");
+
+        return employeeRepository.findByIsActiveTrue()
+                .stream()
+                .map(this::mapToResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<EmployeeResponseDTO> getEmployeesByDepartment(String department) {
+        log.info("Fetching employees from department: {}", department);
+
+        return employeeRepository.findByDepartment(department)
+                .stream()
+                .map(this::mapToResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    private Employee mapToEntity(EmployeeDTO dto) {
+        return Employee.builder()
+                .firstName(dto.getFirstName())
+                .lastName(dto.getLastName())
+                .email(dto.getEmail())
+                .employeeCode(dto.getEmployeeCode())
+                .department(dto.getDepartment())
+                .position(dto.getPosition())
+                .salary(dto.getSalary())
+                .phoneNumber(dto.getPhoneNumber())
+                .joiningDate(dto.getJoiningDate())
+                .isActive(true)
+                .build();
+    }
+
+    private EmployeeResponseDTO mapToResponseDTO(Employee employee) {
+        return EmployeeResponseDTO.builder()
+                .id(employee.getId())
+                .firstName(employee.getFirstName())
+                .lastName(employee.getLastName())
+                .email(employee.getEmail())
+                .employeeCode(employee.getEmployeeCode())
+                .department(employee.getDepartment())
+                .position(employee.getPosition())
+                .salary(employee.getSalary())
+                .phoneNumber(employee.getPhoneNumber())
+                .joiningDate(employee.getJoiningDate())
+                .isActive(employee.getIsActive())
+                .createdAt(employee.getCreatedAt())
+                .updatedAt(employee.getUpdatedAt())
+                .build();
+    }
+}
