@@ -19,7 +19,6 @@
           --accent4: #f7b731;
           --text: #e8e8f0;
           --text2: #8888a8;
-          --text3: #5555708;
           --danger: #ff4757;
           --success: #2ed573;
           --warning: #ffa502;
@@ -33,24 +32,13 @@
         }
         
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
         
-        html { scroll-behavior: smooth; }
-        
-        body {
-          font-family: 'DM Sans', sans-serif;
-          background: var(--bg);
-          color: var(--text);
-          min-height: 100vh;
-          overflow-x: hidden;
-        }
-        
-        /* ─── SCROLLBAR ─── */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--surface); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
         
-        /* ─── LOGIN PAGE ─── */
+        /* Login Page */
         #login-page {
           min-height: 100vh;
           display: flex;
@@ -58,45 +46,16 @@
           justify-content: center;
           background: var(--bg);
           position: relative;
-          overflow: hidden;
         }
-        
-        #login-page::before {
-          content: '';
-          position: absolute;
-          width: 600px; height: 600px;
-          background: radial-gradient(circle, rgba(108,99,255,0.15) 0%, transparent 70%);
-          top: -100px; left: -100px;
-          border-radius: 50%;
-        }
-        #login-page::after {
-          content: '';
-          position: absolute;
-          width: 400px; height: 400px;
-          background: radial-gradient(circle, rgba(255,101,132,0.1) 0%, transparent 70%);
-          bottom: -50px; right: 50px;
-          border-radius: 50%;
-        }
-        
         .login-box {
           background: var(--surface);
           border: 1px solid var(--border);
           border-radius: 20px;
           padding: 48px;
           width: 420px;
-          position: relative;
-          z-index: 10;
           box-shadow: var(--shadow);
         }
-        
-        .login-logo {
-          font-family: 'Syne', sans-serif;
-          font-size: 28px;
-          font-weight: 800;
-          color: var(--text);
-          margin-bottom: 8px;
-          letter-spacing: -0.5px;
-        }
+        .login-logo { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 8px; }
         .login-logo span { color: var(--accent); }
         .login-sub { color: var(--text2); font-size: 14px; margin-bottom: 36px; }
         
@@ -115,27 +74,13 @@
           border-radius: 6px;
           background: transparent;
           color: var(--text2);
-          font-family: 'DM Sans', sans-serif;
-          font-size: 14px;
-          font-weight: 500;
           cursor: pointer;
           transition: all 0.2s;
         }
-        .role-tab.active {
-          background: var(--accent);
-          color: #fff;
-          box-shadow: 0 2px 8px rgba(108,99,255,0.4);
-        }
+        .role-tab.active { background: var(--accent); color: #fff; }
         
         .form-group { margin-bottom: 20px; }
-        .form-label {
-          display: block;
-          font-size: 13px;
-          font-weight: 500;
-          color: var(--text2);
-          margin-bottom: 8px;
-          letter-spacing: 0.3px;
-        }
+        .form-label { display: block; font-size: 13px; color: var(--text2); margin-bottom: 8px; }
         .form-control {
           width: 100%;
           background: var(--surface2);
@@ -143,14 +88,10 @@
           border-radius: var(--radius-sm);
           color: var(--text);
           padding: 12px 16px;
-          font-family: 'DM Sans', sans-serif;
           font-size: 14px;
-          transition: all 0.2s;
           outline: none;
         }
-        .form-control:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(108,99,255,0.15); }
-        .form-control::placeholder { color: var(--text2); opacity: 0.5; }
-        .form-control option { background: var(--surface2); }
+        .form-control:focus { border-color: var(--accent); }
         
         .btn {
           display: inline-flex;
@@ -159,51 +100,26 @@
           gap: 8px;
           padding: 12px 24px;
           border-radius: var(--radius-sm);
-          font-family: 'DM Sans', sans-serif;
           font-size: 14px;
           font-weight: 600;
           cursor: pointer;
           border: none;
           transition: all 0.2s;
-          text-decoration: none;
         }
-        .btn-primary {
-          background: var(--accent);
-          color: #fff;
-          width: 100%;
-          padding: 14px;
-          font-size: 15px;
-          box-shadow: 0 4px 16px rgba(108,99,255,0.3);
-        }
-        .btn-primary:hover { background: #7b73ff; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(108,99,255,0.4); }
-        .btn-primary:active { transform: translateY(0); }
-        .btn-sm { padding: 8px 16px; font-size: 13px; }
+        .btn-primary { background: var(--accent); color: #fff; width: 100%; }
+        .btn-primary:hover { background: #7b73ff; transform: translateY(-1px); }
+        .btn-outline { background: transparent; color: var(--text); border: 1px solid var(--border); }
+        .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
         .btn-danger { background: rgba(255,71,87,0.15); color: var(--danger); border: 1px solid rgba(255,71,87,0.3); }
-        .btn-danger:hover { background: rgba(255,71,87,0.25); }
         .btn-success { background: rgba(46,213,115,0.15); color: var(--success); border: 1px solid rgba(46,213,115,0.3); }
-        .btn-success:hover { background: rgba(46,213,115,0.25); }
         .btn-warning { background: rgba(255,165,2,0.15); color: var(--warning); border: 1px solid rgba(255,165,2,0.3); }
-        .btn-warning:hover { background: rgba(255,165,2,0.25); }
-        .btn-outline {
-          background: transparent;
-          color: var(--text);
-          border: 1px solid var(--border);
-        }
-        .btn-outline:hover { border-color: var(--accent); color: var(--accent); background: rgba(108,99,255,0.08); }
-        .btn-ghost { background: transparent; color: var(--text2); border: none; }
-        .btn-ghost:hover { color: var(--text); background: var(--surface2); }
-        .btn-accent2 { background: rgba(255,101,132,0.15); color: var(--accent2); border: 1px solid rgba(255,101,132,0.3); }
-        .btn-accent2:hover { background: rgba(255,101,132,0.25); }
         .btn-purple { background: var(--accent); color: #fff; }
-        .btn-purple:hover { background: #7b73ff; }
+        .btn-sm { padding: 8px 16px; font-size: 13px; }
         
-        /* ─── MAIN APP ─── */
-        #app {
-          display: none;
-          min-height: 100vh;
-        }
+        /* Main App */
+        #app { display: none; min-height: 100vh; }
         
-        /* ─── SIDEBAR ─── */
+        /* Sidebar */
         .sidebar {
           position: fixed;
           left: 0; top: 0;
@@ -213,28 +129,11 @@
           border-right: 1px solid var(--border);
           display: flex;
           flex-direction: column;
-          z-index: 100;
           overflow-y: auto;
         }
-        
-        .sidebar-logo {
-          padding: 24px 20px;
-          font-family: 'Syne', sans-serif;
-          font-size: 20px;
-          font-weight: 800;
-          color: var(--text);
-          letter-spacing: -0.3px;
-          border-bottom: 1px solid var(--border);
-        }
+        .sidebar-logo { padding: 24px 20px; font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; border-bottom: 1px solid var(--border); }
         .sidebar-logo span { color: var(--accent); }
-        
-        .sidebar-user {
-          padding: 16px 20px;
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          border-bottom: 1px solid var(--border);
-        }
+        .sidebar-user { padding: 16px 20px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--border); }
         .user-avatar {
           width: 36px; height: 36px;
           border-radius: 50%;
@@ -243,28 +142,11 @@
           align-items: center;
           justify-content: center;
           font-weight: 700;
-          font-size: 14px;
-          color: #fff;
-          flex-shrink: 0;
         }
-        .user-info { flex: 1; min-width: 0; }
-        .user-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .user-role {
-          font-size: 11px;
-          color: var(--text2);
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-        }
-        
+        .user-name { font-size: 13px; font-weight: 600; }
+        .user-role { font-size: 11px; color: var(--text2); }
         .sidebar-nav { padding: 12px 0; flex: 1; }
-        .nav-section-title {
-          font-size: 10px;
-          font-weight: 600;
-          color: var(--text2);
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          padding: 8px 20px 4px;
-        }
+        .nav-section-title { font-size: 10px; color: var(--text2); padding: 8px 20px 4px; }
         .nav-item {
           display: flex;
           align-items: center;
@@ -272,169 +154,52 @@
           padding: 10px 20px;
           color: var(--text2);
           cursor: pointer;
-          transition: all 0.15s;
           font-size: 14px;
-          font-weight: 500;
-          border-radius: 0;
           margin: 1px 8px;
           border-radius: var(--radius-sm);
         }
         .nav-item:hover { color: var(--text); background: var(--surface2); }
         .nav-item.active { color: var(--accent); background: rgba(108,99,255,0.12); }
-        .nav-item i { width: 18px; text-align: center; font-size: 15px; }
+        .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); }
         
-        .sidebar-footer {
-          padding: 16px 20px;
-          border-top: 1px solid var(--border);
-        }
-        
-        /* ─── MAIN CONTENT ─── */
-        .main-content {
-          margin-left: var(--sidebar-w);
-          padding: 32px;
-          min-height: 100vh;
-        }
-        
-        /* ─── TOPBAR ─── */
-        .topbar {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 28px;
-        }
-        .page-title {
-          font-family: 'Syne', sans-serif;
-          font-size: 26px;
-          font-weight: 700;
-          color: var(--text);
-          letter-spacing: -0.5px;
-        }
+        /* Main Content */
+        .main-content { margin-left: var(--sidebar-w); padding: 32px; min-height: 100vh; }
+        .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
+        .page-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 700; }
         .page-sub { font-size: 14px; color: var(--text2); margin-top: 4px; }
-        .topbar-actions { display: flex; align-items: center; gap: 12px; }
         
-        /* ─── STATS GRID ─── */
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 16px;
-          margin-bottom: 28px;
-        }
-        
-        .stat-card {
-          background: var(--surface);
-          border: 1px solid var(--border);
-          border-radius: var(--radius);
-          padding: 20px;
-          position: relative;
-          overflow: hidden;
-          transition: all 0.2s;
-        }
-        .stat-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-        .stat-card::after {
-          content: '';
-          position: absolute;
-          bottom: 0; left: 0; right: 0;
-          height: 3px;
-        }
-        .stat-card.purple::after { background: var(--accent); }
-        .stat-card.pink::after { background: var(--accent2); }
-        .stat-card.green::after { background: var(--accent3); }
-        .stat-card.yellow::after { background: var(--accent4); }
-        
-        .stat-icon {
-          width: 40px; height: 40px;
-          border-radius: var(--radius-sm);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 18px;
-          margin-bottom: 12px;
-        }
+        /* Cards & Tables */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 28px; }
+        .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+        .stat-icon { width: 40px; height: 40px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
         .stat-icon.purple { background: rgba(108,99,255,0.15); color: var(--accent); }
-        .stat-icon.pink { background: rgba(255,101,132,0.15); color: var(--accent2); }
-        .stat-icon.green { background: rgba(67,233,123,0.15); color: var(--accent3); }
-        .stat-icon.yellow { background: rgba(247,183,49,0.15); color: var(--accent4); }
+        .stat-value { font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800; }
+        .stat-label { font-size: 13px; color: var(--text2); }
         
-        .stat-value {
-          font-family: 'Syne', sans-serif;
-          font-size: 32px;
-          font-weight: 800;
-          color: var(--text);
-          line-height: 1;
-          margin-bottom: 4px;
-        }
-        .stat-label { font-size: 13px; color: var(--text2); font-weight: 500; }
-        
-        /* ─── CARD ─── */
-        .card {
-          background: var(--surface);
-          border: 1px solid var(--border);
-          border-radius: var(--radius);
-          overflow: hidden;
-        }
-        .card-header {
-          padding: 20px 24px;
-          border-bottom: 1px solid var(--border);
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-        .card-title {
-          font-family: 'Syne', sans-serif;
-          font-size: 16px;
-          font-weight: 700;
-          color: var(--text);
-        }
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+        .card-header { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+        .card-title { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; }
         .card-body { padding: 24px; }
         
-        /* ─── TABLE ─── */
         .table-wrapper { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
-        thead tr { background: var(--surface2); }
-        th {
-          padding: 12px 16px;
-          font-size: 12px;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.8px;
-          color: var(--text2);
-          text-align: left;
-          white-space: nowrap;
-        }
-        td {
-          padding: 14px 16px;
-          font-size: 14px;
-          color: var(--text);
-          border-bottom: 1px solid var(--border);
-          vertical-align: middle;
-        }
-        tbody tr { transition: background 0.15s; }
+        th { padding: 12px 16px; font-size: 12px; color: var(--text2); text-align: left; }
+        td { padding: 14px 16px; font-size: 14px; border-bottom: 1px solid var(--border); }
         tbody tr:hover { background: rgba(255,255,255,0.02); }
-        tbody tr:last-child td { border-bottom: none; }
         
-        /* ─── BADGES ─── */
         .badge {
           display: inline-flex;
-          align-items: center;
           padding: 4px 10px;
           border-radius: 20px;
           font-size: 11px;
           font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          white-space: nowrap;
         }
-        .badge-hot { background: rgba(255,71,87,0.15); color: var(--hot); border: 1px solid rgba(255,71,87,0.3); }
-        .badge-warm { background: rgba(255,165,2,0.15); color: var(--warm); border: 1px solid rgba(255,165,2,0.3); }
-        .badge-cold { background: rgba(116,185,255,0.15); color: var(--cold); border: 1px solid rgba(116,185,255,0.3); }
-        .badge-active { background: rgba(46,213,115,0.15); color: var(--success); border: 1px solid rgba(46,213,115,0.3); }
-        .badge-inactive { background: rgba(255,71,87,0.15); color: var(--danger); border: 1px solid rgba(255,71,87,0.3); }
-        .badge-stage {
-          background: rgba(108,99,255,0.15); color: var(--accent); border: 1px solid rgba(108,99,255,0.3);
-          font-size: 10px; padding: 3px 8px;
-        }
+        .badge-hot { background: rgba(255,71,87,0.15); color: var(--hot); }
+        .badge-warm { background: rgba(255,165,2,0.15); color: var(--warm); }
+        .badge-cold { background: rgba(116,185,255,0.15); color: var(--cold); }
+        .badge-stage { background: rgba(108,99,255,0.15); color: var(--accent); }
         
-        /* ─── MODAL ─── */
+        /* Modal */
         .modal-overlay {
           position: fixed;
           inset: 0;
@@ -449,72 +214,26 @@
           transition: opacity 0.2s;
         }
         .modal-overlay.open { opacity: 1; pointer-events: all; }
-        
         .modal {
           background: var(--surface);
           border: 1px solid var(--border);
           border-radius: 16px;
           width: 90%;
-          max-width: 560px;
+          max-width: 680px;
           max-height: 90vh;
           overflow-y: auto;
-          transform: translateY(20px) scale(0.98);
-          transition: transform 0.2s;
-          box-shadow: 0 24px 64px rgba(0,0,0,0.5);
         }
-        .modal-overlay.open .modal { transform: translateY(0) scale(1); }
-        .modal.modal-lg { max-width: 720px; }
-        
-        .modal-header {
-          padding: 24px 28px 0;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-        .modal-title {
-          font-family: 'Syne', sans-serif;
-          font-size: 18px;
-          font-weight: 700;
-          color: var(--text);
-        }
-        .modal-close {
-          background: var(--surface2);
-          border: 1px solid var(--border);
-          border-radius: 50%;
-          width: 32px; height: 32px;
-          color: var(--text2);
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.2s;
-          font-size: 14px;
-        }
-        .modal-close:hover { color: var(--text); border-color: var(--accent); }
+        .modal-header { padding: 24px 28px 0; display: flex; justify-content: space-between; }
+        .modal-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; }
+        .modal-close { background: var(--surface2); border: 1px solid var(--border); border-radius: 50%; width: 32px; height: 32px; cursor: pointer; }
         .modal-body { padding: 24px 28px; }
-        .modal-footer {
-          padding: 0 28px 24px;
-          display: flex;
-          gap: 12px;
-          justify-content: flex-end;
-        }
+        .modal-footer { padding: 0 28px 24px; display: flex; gap: 12px; justify-content: flex-end; }
         
-        /* ─── FORM GRID ─── */
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .form-grid.col3 { grid-template-columns: 1fr 1fr 1fr; }
-        .form-grid.col1 { grid-template-columns: 1fr; }
         .col-span-2 { grid-column: span 2; }
         
-        /* ─── SEARCH + FILTER BAR ─── */
-        .filter-bar {
-          display: flex;
-          gap: 12px;
-          align-items: center;
-          margin-bottom: 20px;
-          flex-wrap: wrap;
-        }
-        .search-wrap { position: relative; flex: 1; min-width: 200px; }
-        .search-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text2); font-size: 14px; }
+        .filter-bar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+        .search-wrap { position: relative; flex: 1; }
         .search-input {
           width: 100%;
           background: var(--surface);
@@ -522,268 +241,56 @@
           border-radius: var(--radius-sm);
           color: var(--text);
           padding: 10px 14px 10px 40px;
-          font-family: 'DM Sans', sans-serif;
-          font-size: 14px;
-          transition: all 0.2s;
-          outline: none;
         }
-        .search-input:focus { border-color: var(--accent); }
-        .search-input::placeholder { color: var(--text2); opacity: 0.5; }
+        .search-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); }
+        .select-filter { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 10px 14px; }
         
-        .select-filter {
-          background: var(--surface);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-sm);
-          color: var(--text);
-          padding: 10px 14px;
-          font-family: 'DM Sans', sans-serif;
-          font-size: 14px;
-          outline: none;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-        .select-filter:focus { border-color: var(--accent); }
-        .select-filter option { background: var(--surface); }
-        
-        /* ─── ALERT / TOAST ─── */
-        .toast-container {
-          position: fixed;
-          top: 20px;
-          right: 20px;
-          z-index: 9999;
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-        }
-        .toast {
-          background: var(--surface);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-sm);
-          padding: 14px 18px;
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          min-width: 300px;
-          max-width: 400px;
-          box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-          animation: slideIn 0.3s ease;
-          font-size: 14px;
-        }
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 18px; display: flex; align-items: center; gap: 12px; animation: slideIn 0.3s ease; }
         .toast.success { border-left: 3px solid var(--success); }
         .toast.error { border-left: 3px solid var(--danger); }
-        .toast.warning { border-left: 3px solid var(--warning); }
-        .toast i { font-size: 16px; }
-        .toast.success i { color: var(--success); }
-        .toast.error i { color: var(--danger); }
-        .toast.warning i { color: var(--warning); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         
-        @keyframes slideIn {
-          from { transform: translateX(100%); opacity: 0; }
-          to { transform: translateX(0); opacity: 1; }
-        }
-        @keyframes slideOut {
-          from { transform: translateX(0); opacity: 1; }
-          to { transform: translateX(100%); opacity: 0; }
-        }
-        
-        /* ─── LOADING ─── */
-        .loading {
-          display: inline-block;
-          width: 16px; height: 16px;
-          border: 2px solid rgba(255,255,255,0.3);
-          border-top-color: #fff;
-          border-radius: 50%;
-          animation: spin 0.7s linear infinite;
-        }
+        .loading { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         
-        .page-loading {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 80px;
-          gap: 12px;
-          color: var(--text2);
-          font-size: 14px;
-        }
-        .page-loading .loading { border-color: rgba(108,99,255,0.3); border-top-color: var(--accent); width: 24px; height: 24px; }
-        
-        /* ─── EMPTY STATE ─── */
-        .empty-state {
-          text-align: center;
-          padding: 60px 20px;
-          color: var(--text2);
-        }
-        .empty-state i { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
-        .empty-state h3 { font-size: 18px; color: var(--text); margin-bottom: 8px; }
-        .empty-state p { font-size: 14px; }
-        
-        /* ─── PROFILE CARD ─── */
-        .profile-card {
-          background: var(--surface2);
-          border: 1px solid var(--border);
-          border-radius: var(--radius);
-          padding: 24px;
-          display: flex;
-          align-items: center;
-          gap: 20px;
-          margin-bottom: 24px;
-        }
-        .profile-avatar {
-          width: 72px; height: 72px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, var(--accent), var(--accent2));
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-family: 'Syne', sans-serif;
-          font-size: 28px;
-          font-weight: 800;
-          color: #fff;
-          flex-shrink: 0;
-        }
-        .profile-info h2 { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 700; }
-        .profile-info p { color: var(--text2); font-size: 14px; margin-top: 4px; }
-        .profile-meta {
-          display: flex;
-          gap: 24px;
-          margin-top: 12px;
-          flex-wrap: wrap;
-        }
-        .profile-meta-item { font-size: 13px; color: var(--text2); }
-        .profile-meta-item strong { color: var(--text); display: block; font-size: 14px; }
-        
-        /* ─── HISTORY TIMELINE ─── */
-        .timeline { position: relative; padding-left: 24px; }
-        .timeline::before {
-          content: '';
-          position: absolute;
-          left: 7px; top: 0; bottom: 0;
-          width: 2px;
-          background: var(--border);
-        }
-        .timeline-item {
-          position: relative;
-          margin-bottom: 24px;
-          padding-bottom: 0;
-        }
-        .timeline-dot {
-          position: absolute;
-          left: -24px;
-          top: 4px;
-          width: 14px; height: 14px;
-          border-radius: 50%;
-          background: var(--accent);
-          border: 2px solid var(--surface);
-          z-index: 1;
-        }
-        .timeline-dot.create { background: var(--accent3); }
-        .timeline-dot.update { background: var(--accent); }
-        .timeline-dot.stage { background: var(--accent4); }
-        
-        .timeline-content {
-          background: var(--surface2);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-sm);
-          padding: 14px 16px;
-        }
-        .timeline-header {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 8px;
-        }
-        .timeline-action {
-          font-size: 12px;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.8px;
-          color: var(--accent);
-        }
-        .timeline-date { font-size: 12px; color: var(--text2); }
-        .timeline-changes { font-size: 13px; color: var(--text); line-height: 1.6; }
-        .timeline-by { font-size: 12px; color: var(--text2); margin-top: 6px; }
-        
-        /* ─── LEAD DETAIL ─── */
-        .lead-stats-grid {
-          display: grid;
-          grid-template-columns: repeat(5, 1fr);
-          gap: 12px;
-          margin: 16px 0;
-        }
-        .lead-stat-item {
-          background: var(--surface2);
-          border: 1px solid var(--border);
-          border-radius: var(--radius-sm);
-          padding: 12px;
-          text-align: center;
-        }
-        .lead-stat-item .val { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--accent); }
-        .lead-stat-item .lbl { font-size: 11px; color: var(--text2); margin-top: 2px; }
-        
-        /* ─── CHANGE PASSWORD ─── */
-        .password-form { max-width: 400px; }
-        
-        /* ─── RESPONSIVE ─── */
-        @media (max-width: 768px) {
-          .sidebar { width: 200px; }
-          .main-content { margin-left: 200px; padding: 20px; }
-          :root { --sidebar-w: 200px; }
-          .form-grid { grid-template-columns: 1fr; }
-          .col-span-2 { grid-column: span 1; }
-          .stats-grid { grid-template-columns: 1fr 1fr; }
-          .lead-stats-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-        
-        /* ─── PAGE SECTIONS ─── */
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text2); }
         .section { display: none; }
         .section.active { display: block; }
         
-        /* ─── DIVIDER ─── */
-        .divider { height: 1px; background: var(--border); margin: 20px 0; }
+        .lead-stats-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin: 16px 0; }
+        .lead-stat-item { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; text-align: center; }
+        .lead-stat-item .val { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--accent); }
         
-        /* ─── INFO ROW ─── */
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .info-item label { font-size: 12px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
-        .info-item span { font-size: 14px; color: var(--text); font-weight: 500; }
+        .info-item label { font-size: 12px; color: var(--text2); display: block; margin-bottom: 4px; }
         
-        /* ─── NOTIFICATION BADGE ─── */
-        .nav-item .notif {
-          background: var(--accent2);
-          color: #fff;
-          border-radius: 10px;
-          font-size: 10px;
-          font-weight: 700;
-          padding: 1px 6px;
-          margin-left: auto;
+        .checkbox-group { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; cursor: pointer; }
+        .checkbox-group input { width: 18px; height: 18px; accent-color: var(--accent); }
+        
+        .timeline { position: relative; padding-left: 24px; }
+        .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+        .timeline-item { position: relative; margin-bottom: 24px; }
+        .timeline-dot { position: absolute; left: -24px; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); }
+        .timeline-content { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; }
+        
+        @media (max-width: 768px) {
+          .sidebar { width: 200px; }
+          .main-content { margin-left: 200px; padding: 20px; }
+          .form-grid { grid-template-columns: 1fr; }
+          .col-span-2 { grid-column: span 1; }
         }
-        
-        .text-success { color: var(--success); }
-        .text-danger { color: var(--danger); }
-        .text-warning { color: var(--warning); }
-        .text-muted { color: var(--text2); }
-        .text-accent { color: var(--accent); }
-        .fw-bold { font-weight: 700; }
-        .mt-12 { margin-top: 12px; }
-        .mt-20 { margin-top: 20px; }
-        .d-flex { display: flex; }
-        .gap-8 { gap: 8px; }
-        .gap-12 { gap: 12px; }
-        .align-center { align-items: center; }
-        .justify-between { justify-content: space-between; }
-        .flex-wrap { flex-wrap: wrap; }
     </style>
 </head>
 <body>
 
-<!-- ─── TOAST CONTAINER ─── -->
 <div class="toast-container" id="toast-container"></div>
 
-<!-- ─── LOGIN PAGE ─── -->
+<!-- Login Page -->
 <div id="login-page">
     <div class="login-box">
         <div class="login-logo">CRM<span>.</span>Pro</div>
-        <div class="login-sub">Sign in to your account to continue</div>
+        <div class="login-sub">Sign in to your account</div>
         <div class="role-tabs">
             <button class="role-tab active" onclick="switchLoginRole('admin')">Admin Login</button>
             <button class="role-tab" onclick="switchLoginRole('employee')">Employee Login</button>
@@ -801,17 +308,14 @@
                 <label class="form-label">Password</label>
                 <input type="password" class="form-control" id="login-password" placeholder="••••••••" required>
             </div>
-            <button type="submit" class="btn btn-primary" id="login-btn">
-                <span id="login-btn-text">Sign In</span>
-            </button>
+            <button type="submit" class="btn btn-primary">Sign In</button>
         </form>
     </div>
 </div>
 
-<!-- ─── MAIN APP ─── -->
+<!-- Main App -->
 <div id="app">
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
+    <aside class="sidebar">
         <div class="sidebar-logo">CRM<span>.</span>Pro</div>
         <div class="sidebar-user">
             <div class="user-avatar" id="nav-avatar">A</div>
@@ -828,534 +332,163 @@
         </div>
     </aside>
     
-    <!-- MAIN CONTENT -->
     <main style="width:100vw" class="main-content">
-        <!-- ADMIN SECTIONS -->
+        <!-- Admin Sections -->
         <div id="section-dashboard" class="section">
             <div class="topbar">
-                <div>
-                    <div class="page-title">Dashboard</div>
-                    <div class="page-sub">Overview of your CRM activity</div>
-                </div>
-                <div class="topbar-actions">
-                    <button class="btn btn-primary btn-sm" onclick="loadDashboard()"><i class="fas fa-sync-alt"></i> Refresh</button>
-                </div>
+                <div><div class="page-title">Dashboard</div><div class="page-sub">Overview of your CRM activity</div></div>
+                <button class="btn btn-outline btn-sm" onclick="loadDashboard()"><i class="fas fa-sync-alt"></i> Refresh</button>
             </div>
             <div class="stats-grid" id="dashboard-stats"></div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px" class="dashboard-grids">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Recent Leads</div>
-                        <button class="btn btn-ghost btn-sm" onclick="showSection('section-leads')">View All</button>
-                    </div>
-                    <div class="table-wrapper" id="recent-leads-table"></div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <div class="card-title">Today's Follow-ups</div>
-                    </div>
-                    <div id="today-followups"></div>
-                </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+                <div class="card"><div class="card-header"><div class="card-title">Recent Leads</div></div><div class="table-wrapper" id="recent-leads-table"></div></div>
+                <div class="card"><div class="card-header"><div class="card-title">Today's Follow-ups</div></div><div id="today-followups"></div></div>
             </div>
         </div>
         
         <div id="section-employees" class="section">
-            <div class="topbar">
-                <div>
-                    <div class="page-title">Employees</div>
-                    <div class="page-sub">Manage your team members</div>
-                </div>
-                <button class="btn btn-primary btn-sm" onclick="openCreateEmployee()">
-                    <i class="fas fa-plus"></i> Add Employee
-                </button>
-            </div>
+            <div class="topbar"><div><div class="page-title">Employees</div></div><button class="btn btn-primary btn-sm" onclick="openCreateEmployee()"><i class="fas fa-plus"></i> Add Employee</button></div>
             <div class="filter-bar">
-                <div class="search-wrap"><i class="fas fa-search"></i><input type="text" class="search-input" placeholder="Search employees..." oninput="filterEmployees(this.value)"></div>
-                <select class="select-filter" onchange="filterEmployeesByDept(this.value)" id="dept-filter">
-                    <option value="">All Departments</option>
-                </select>
-                <select class="select-filter" onchange="filterEmployeesByStatus(this.value)">
-                    <option value="">All Status</option>
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                </select>
+                <div class="search-wrap"><i class="fas fa-search"></i><input type="text" class="search-input" placeholder="Search..." oninput="filterEmployees(this.value)"></div>
+                <select class="select-filter" onchange="filterEmployeesByDept(this.value)" id="dept-filter"><option value="">All Departments</option></select>
             </div>
-            <div class="card">
-                <div class="table-wrapper">
-                    <table><thead><tr>
-                        <th>Employee</th><th>Code</th><th>Department</th><th>Position</th><th>Phone</th><th>Status</th><th>Actions</th>
-                    </tr></thead>
-                        <tbody id="employees-table-body"></tbody></table>
-                </div>
-            </div>
+            <div class="card"><div class="table-wrapper"><table><thead><tr><th>Employee</th><th>Code</th><th>Department</th><th>Position</th><th>Phone</th><th>Status</th><th>Actions</th></tr></thead><tbody id="employees-table-body"></tbody></table></div></div>
         </div>
         
         <div id="section-leads" class="section">
-            <div class="topbar">
-                <div>
-                    <div class="page-title">Leads</div>
-                    <div class="page-sub">Track and manage your leads pipeline</div>
-                </div>
-                <button class="btn btn-primary btn-sm" onclick="openCreateLead()">
-                    <i class="fas fa-plus"></i> Add Lead
-                </button>
-            </div>
+            <div class="topbar"><div><div class="page-title">Leads</div></div><button class="btn btn-primary btn-sm" onclick="openCreateLead()"><i class="fas fa-plus"></i> Add Lead</button></div>
             <div class="filter-bar">
                 <div class="search-wrap"><i class="fas fa-search"></i><input type="text" class="search-input" placeholder="Search leads..." oninput="filterLeads(this.value)"></div>
-                <select class="select-filter" onchange="filterLeadsByType(this.value)">
-                    <option value="">All Types</option>
-                    <option value="HOT">🔥 Hot</option>
-                    <option value="WARM">⚡ Warm</option>
-                    <option value="COLD">❄️ Cold</option>
-                </select>
-                <select class="select-filter" onchange="filterLeadsByStage(this.value)">
-                    <option value="">All Stages</option>
-                    <option value="LEAD_GENERATED">Lead Generated</option>
-                    <option value="CONTACTED">Contacted</option>
-                    <option value="INTERESTED">Interested</option>
-                    <option value="MEETING_BOOKED">Meeting Booked</option>
-                    <option value="PROPOSAL_SENT">Proposal Sent</option>
-                    <option value="NEGOTIATION">Negotiation</option>
-                    <option value="CLOSED">Closed</option>
-                </select>
+                <select class="select-filter" onchange="filterLeadsByType(this.value)"><option value="">All Types</option><option value="HOT">Hot</option><option value="WARM">Warm</option><option value="COLD">Cold</option></select>
+                <select class="select-filter" onchange="filterLeadsByStage(this.value)"><option value="">All Stages</option><option value="LEAD_GENERATED">Generated</option><option value="CONTACTED">Contacted</option><option value="INTERESTED">Interested</option><option value="MEETING_BOOKED">Meeting Booked</option><option value="PROPOSAL_SENT">Proposal Sent</option><option value="NEGOTIATION">Negotiation</option><option value="CLOSED">Closed</option></select>
             </div>
-            <div class="card">
-                <div class="table-wrapper">
-                    <table><thead><tr>
-                        <th>Lead</th><th>Type</th><th>Stage</th><th>Assigned To</th><th>Follow-up</th><th>Stats</th><th>Actions</th>
-                    </tr></thead>
-                        <tbody id="leads-table-body"></tbody></table>
-                </div>
-            </div>
+            <div class="card"><div class="table-wrapper"><table><thead><tr><th>Lead</th><th>Type</th><th>Stage</th><th>Assigned To</th><th>Follow-up</th><th>Stats</th><th>Actions</th></tr></thead><tbody id="leads-table-body"></tbody></table></div></div>
         </div>
         
         <div id="section-followups" class="section">
-            <div class="topbar">
-                <div>
-                    <div class="page-title">Follow-ups</div>
-                    <div class="page-sub">Scheduled and pending follow-ups</div>
-                </div>
-                <div class="topbar-actions">
-                    <button class="btn btn-outline btn-sm" onclick="loadTodayFollowUps()"><i class="fas fa-calendar-day"></i> Today</button>
-                    <button class="btn btn-warning btn-sm" onclick="loadPendingFollowUps()"><i class="fas fa-clock"></i> Pending</button>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header"><div class="card-title" id="followup-title">Today's Follow-ups</div></div>
-                <div class="table-wrapper">
-                    <table><thead><tr>
-                        <th>Lead</th><th>Type</th><th>Stage</th><th>Assigned To</th><th>Follow-up Date</th><th>Description</th><th>Actions</th>
-                    </tr></thead>
-                        <tbody id="followups-table-body"></tbody></table>
-                </div>
-            </div>
+            <div class="topbar"><div><div class="page-title">Follow-ups</div></div><div class="topbar-actions"><button class="btn btn-outline btn-sm" onclick="loadTodayFollowUps()"><i class="fas fa-calendar-day"></i> Today</button><button class="btn btn-warning btn-sm" onclick="loadPendingFollowUps()"><i class="fas fa-clock"></i> Pending</button></div></div>
+            <div class="card"><div class="card-header"><div class="card-title" id="followup-title">Today's Follow-ups</div></div><div class="table-wrapper"><table><thead><tr><th>Lead</th><th>Type</th><th>Stage</th><th>Assigned To</th><th>Follow-up Date</th><th>Description</th><th>Actions</th></tr></thead><tbody id="followups-table-body"></tbody></table></div></div>
         </div>
         
-        <!-- EMPLOYEE SECTIONS -->
+        <!-- Employee Sections -->
         <div id="section-my-profile" class="section">
-            <div class="topbar">
-                <div>
-                    <div class="page-title">My Profile</div>
-                    <div class="page-sub">Your account information</div>
-                </div>
-            </div>
+            <div class="topbar"><div><div class="page-title">My Profile</div></div></div>
             <div id="profile-content"></div>
         </div>
         
         <div id="section-my-leads" class="section">
-            <div class="topbar">
-                <div>
-                    <div class="page-title">My Leads</div>
-                    <div class="page-sub">Leads assigned to you</div>
-                </div>
-            </div>
+            <div class="topbar"><div><div class="page-title">My Leads</div></div></div>
             <div class="filter-bar">
                 <div class="search-wrap"><i class="fas fa-search"></i><input type="text" class="search-input" placeholder="Search my leads..." oninput="filterMyLeads(this.value)"></div>
-                <select class="select-filter" onchange="filterMyLeadsByType(this.value)">
-                    <option value="">All Types</option>
-                    <option value="HOT">🔥 Hot</option>
-                    <option value="WARM">⚡ Warm</option>
-                    <option value="COLD">❄️ Cold</option>
-                </select>
+                <select class="select-filter" onchange="filterMyLeadsByType(this.value)"><option value="">All Types</option><option value="HOT">Hot</option><option value="WARM">Warm</option><option value="COLD">Cold</option></select>
             </div>
-            <div class="card">
-                <div class="table-wrapper">
-                    <table><thead><tr>
-                        <th>Lead</th><th>Type</th><th>Stage</th><th>Follow-up</th><th>Stats</th><th>Actions</th>
-                    </tr></thead>
-                        <tbody id="my-leads-table-body"></tbody></table>
-                </div>
-            </div>
+            <div class="card"><div class="table-wrapper"><table><thead><tr><th>Lead</th><th>Type</th><th>Stage</th><th>Follow-up</th><th>Stats</th><th>Actions</th></tr></thead><tbody id="my-leads-table-body"></tbody></table></div></div>
         </div>
         
         <div id="section-change-password" class="section">
-            <div class="topbar">
-                <div>
-                    <div class="page-title">Change Password</div>
-                    <div class="page-sub">Update your account password</div>
-                </div>
-            </div>
-            <div class="card" style="max-width:480px">
-                <div class="card-body">
-                    <form onsubmit="handleChangePassword(event)">
-                        <div class="form-group">
-                            <label class="form-label">Current Password</label>
-                            <input type="password" class="form-control" id="cur-pass" placeholder="Enter current password" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">New Password</label>
-                            <input type="password" class="form-control" id="new-pass" placeholder="Min 8 chars, upper, lower, digit, special" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Confirm New Password</label>
-                            <input type="password" class="form-control" id="confirm-pass" placeholder="Repeat new password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-key"></i> Change Password
-                        </button>
-                    </form>
-                </div>
-            </div>
+            <div class="topbar"><div><div class="page-title">Change Password</div></div></div>
+            <div class="card" style="max-width:480px"><div class="card-body">
+                <form onsubmit="handleChangePassword(event)">
+                    <div class="form-group"><label class="form-label">Current Password</label><input type="password" class="form-control" id="cur-pass" required></div>
+                    <div class="form-group"><label class="form-label">New Password</label><input type="password" class="form-control" id="new-pass" required></div>
+                    <div class="form-group"><label class="form-label">Confirm Password</label><input type="password" class="form-control" id="confirm-pass" required></div>
+                    <button type="submit" class="btn btn-primary">Change Password</button>
+                </form>
+            </div></div>
         </div>
     </main>
 </div>
 
-<!-- ─── MODALS ─── -->
-
-<!-- Employee Modal -->
-<div class="modal-overlay" id="employee-modal">
+<!-- Consolidated Lead Update Modal (Single Modal for All Updates) -->
+<div class="modal-overlay" id="consolidated-update-modal">
     <div class="modal">
         <div class="modal-header">
-            <div class="modal-title" id="emp-modal-title">Add Employee</div>
-            <button class="modal-close" onclick="closeModal('employee-modal')"><i class="fas fa-times"></i></button>
+            <div class="modal-title">Update Lead - Complete Information</div>
+            <button class="modal-close" onclick="closeModal('consolidated-update-modal')"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
-            <form id="employee-form" onsubmit="handleEmployeeSubmit(event)">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">First Name *</label>
-                        <input type="text" class="form-control" id="emp-fname" placeholder="John" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Last Name *</label>
-                        <input type="text" class="form-control" id="emp-lname" placeholder="Doe" required>
-                    </div>
-                    <div class="form-group col-span-2">
-                        <label class="form-label">Email *</label>
-                        <input type="email" class="form-control" id="emp-email" placeholder="john@company.com" required>
-                    </div>
-                    <div class="form-group col-span-2" id="emp-pass-group">
-                        <label class="form-label">Password *</label>
-                        <input type="password" class="form-control" id="emp-pass" placeholder="Min 8 chars, A-Z, a-z, 0-9, @#$%">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Department *</label>
-                        <input type="text" class="form-control" id="emp-dept" placeholder="Sales" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Position *</label>
-                        <input type="text" class="form-control" id="emp-pos" placeholder="Sales Executive" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Salary *</label>
-                        <input type="number" class="form-control" id="emp-salary" placeholder="50000" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Phone *</label>
-                        <input type="text" class="form-control" id="emp-phone" placeholder="9876543210" required maxlength="10">
-                    </div>
-                    <div class="form-group col-span-2">
-                        <label class="form-label">Joining Date *</label>
-                        <input type="date" class="form-control" id="emp-date" required>
+            <form id="consolidated-update-form" onsubmit="handleConsolidatedUpdate(event)">
+                <!-- Contact Section -->
+                <div style="margin-bottom:20px">
+                    <h3 style="font-size:14px;margin-bottom:12px;color:var(--accent)"><i class="fas fa-phone-alt"></i> Contact Information</h3>
+                    <div class="checkbox-group"><input type="checkbox" id="cu-contact-made"> <span>Contact Made with Lead</span></div>
+                    <div class="form-group"><textarea class="form-control" id="cu-response" rows="2" placeholder="Response message (include 'call' or 'whatsapp' for auto-tracking)..."></textarea></div>
+                </div>
+                
+                <!-- Statistics Section -->
+                <div style="margin-bottom:20px">
+                    <h3 style="font-size:14px;margin-bottom:12px;color:var(--accent3)"><i class="fas fa-chart-bar"></i> Statistics Updates</h3>
+                    <div class="form-grid">
+                        <div class="checkbox-group"><input type="checkbox" id="cu-whatsapp"> <span><i class="fab fa-whatsapp"></i> WhatsApp Sent</span></div>
+                        <div class="checkbox-group"><input type="checkbox" id="cu-call"> <span><i class="fas fa-phone"></i> Call Made</span></div>
+                        <div class="checkbox-group"><input type="checkbox" id="cu-meeting-booked"> <span><i class="fas fa-calendar-check"></i> Meeting Booked</span></div>
+                        <div class="checkbox-group"><input type="checkbox" id="cu-meeting-done"> <span><i class="fas fa-handshake"></i> Meeting Done</span></div>
                     </div>
                 </div>
-                <input type="hidden" id="emp-id">
+                
+                <!-- Stage & Conversion Section -->
+                <div style="margin-bottom:20px">
+                    <h3 style="font-size:14px;margin-bottom:12px;color:var(--accent4)"><i class="fas fa-arrow-right"></i> Stage & Conversion</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Update Lead Stage</label>
+                            <select class="form-control" id="cu-stage">
+                                <option value="">No Change</option>
+                                <option value="LEAD_GENERATED">Lead Generated</option>
+                                <option value="CONTACTED">Contacted</option>
+                                <option value="INTERESTED">Interested</option>
+                                <option value="MEETING_BOOKED">Meeting Booked</option>
+                                <option value="PROPOSAL_SENT">Proposal Sent</option>
+                                <option value="NEGOTIATION">Negotiation</option>
+                                <option value="CLOSED">Closed</option>
+                            </select>
+                        </div>
+                        <div class="checkbox-group" style="align-self:center"><input type="checkbox" id="cu-convert"> <span class="text-success"><i class="fas fa-trophy"></i> Convert to Customer (Close Lead)</span></div>
+                    </div>
+                </div>
+                
+                <!-- Follow-up Section -->
+                <div style="margin-bottom:20px">
+                    <h3 style="font-size:14px;margin-bottom:12px;color:var(--warning)"><i class="fas fa-calendar-alt"></i> Follow-up Planning</h3>
+                    <div class="form-grid">
+                        <div class="form-group"><label class="form-label">Next Follow-up Date</label><input type="date" class="form-control" id="cu-followup-date"></div>
+                        <div class="form-group col-span-2"><label class="form-label">Follow-up Description</label><textarea class="form-control" id="cu-followup-desc" rows="2" placeholder="What to discuss in next follow-up..."></textarea></div>
+                    </div>
+                </div>
+                
+                <!-- Remarks Section -->
+                <div style="margin-bottom:20px">
+                    <h3 style="font-size:14px;margin-bottom:12px;color:var(--text2)"><i class="fas fa-sticky-note"></i> Additional Notes</h3>
+                    <div class="form-group"><textarea class="form-control" id="cu-remarks" rows="2" placeholder="Additional remarks or notes about this interaction..."></textarea></div>
+                </div>
+                
+                <input type="hidden" id="cu-lead-id">
+                <input type="hidden" id="cu-mode">
             </form>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeModal('employee-modal')">Cancel</button>
-            <button class="btn btn-primary" onclick="document.getElementById('employee-form').requestSubmit()">
-                <i class="fas fa-save"></i> Save Employee
+            <button class="btn btn-outline" onclick="closeModal('consolidated-update-modal')">Cancel</button>
+            <button class="btn btn-primary" onclick="document.getElementById('consolidated-update-form').requestSubmit()">
+                <i class="fas fa-save"></i> Update Lead (All Changes)
             </button>
         </div>
     </div>
 </div>
 
-<!-- Lead Modal -->
-<div class="modal-overlay" id="lead-modal">
-    <div class="modal modal-lg">
-        <div class="modal-header">
-            <div class="modal-title" id="lead-modal-title">Add Lead</div>
-            <button class="modal-close" onclick="closeModal('lead-modal')"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="modal-body">
-            <form id="lead-form" onsubmit="handleLeadSubmit(event)">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label class="form-label">Lead Name *</label>
-                        <input type="text" class="form-control" id="lead-name" placeholder="Company or Person Name" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Email *</label>
-                        <input type="email" class="form-control" id="lead-email" placeholder="lead@example.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Phone *</label>
-                        <input type="text" class="form-control" id="lead-phone" placeholder="9876543210" maxlength="10" required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Source *</label>
-                        <input type="text" class="form-control" id="lead-source" placeholder="Website, Referral, Cold Call..." required>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Lead Type *</label>
-                        <select class="form-control" id="lead-type" required>
-                            <option value="">Select Type</option>
-                            <option value="HOT">🔥 Hot</option>
-                            <option value="WARM">⚡ Warm</option>
-                            <option value="COLD">❄️ Cold</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Lead Stage *</label>
-                        <select class="form-control" id="lead-stage" required>
-                            <option value="">Select Stage</option>
-                            <option value="LEAD_GENERATED">Lead Generated</option>
-                            <option value="CONTACTED">Contacted</option>
-                            <option value="INTERESTED">Interested</option>
-                            <option value="MEETING_BOOKED">Meeting Booked</option>
-                            <option value="PROPOSAL_SENT">Proposal Sent</option>
-                            <option value="NEGOTIATION">Negotiation</option>
-                            <option value="CLOSED">Closed</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Assigned Employee *</label>
-                        <select class="form-control" id="lead-employee" required>
-                            <option value="">Select Employee</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Next Follow-up Date *</label>
-                        <input type="date" class="form-control" id="lead-followup-date" required>
-                    </div>
-                    <div class="form-group col-span-2">
-                        <label class="form-label">Remarks *</label>
-                        <textarea class="form-control" id="lead-remarks" rows="2" placeholder="Initial contact notes..." required></textarea>
-                    </div>
-                    <div class="form-group col-span-2">
-                        <label class="form-label">Next Follow-up Description *</label>
-                        <textarea class="form-control" id="lead-next-followup" rows="2" placeholder="What to discuss in next follow-up..." required></textarea>
-                    </div>
-                </div>
-                <input type="hidden" id="lead-id">
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeModal('lead-modal')">Cancel</button>
-            <button class="btn btn-primary" onclick="document.getElementById('lead-form').requestSubmit()">
-                <i class="fas fa-save"></i> Save Lead
-            </button>
-        </div>
-    </div>
-</div>
+<!-- Other Modals -->
+<div class="modal-overlay" id="employee-modal"><div class="modal"><div class="modal-header"><div class="modal-title" id="emp-modal-title">Add Employee</div><button class="modal-close" onclick="closeModal('employee-modal')"><i class="fas fa-times"></i></button></div><div class="modal-body"><form id="employee-form" onsubmit="handleEmployeeSubmit(event)"><div class="form-grid"><div class="form-group"><label class="form-label">First Name *</label><input type="text" class="form-control" id="emp-fname" required></div><div class="form-group"><label class="form-label">Last Name *</label><input type="text" class="form-control" id="emp-lname" required></div><div class="form-group col-span-2"><label class="form-label">Email *</label><input type="email" class="form-control" id="emp-email" required></div><div class="form-group col-span-2" id="emp-pass-group"><label class="form-label">Password *</label><input type="password" class="form-control" id="emp-pass"></div><div class="form-group"><label class="form-label">Department *</label><input type="text" class="form-control" id="emp-dept" required></div><div class="form-group"><label class="form-label">Position *</label><input type="text" class="form-control" id="emp-pos" required></div><div class="form-group"><label class="form-label">Salary *</label><input type="number" class="form-control" id="emp-salary" required></div><div class="form-group"><label class="form-label">Phone *</label><input type="text" class="form-control" id="emp-phone" maxlength="10" required></div><div class="form-group col-span-2"><label class="form-label">Joining Date *</label><input type="date" class="form-control" id="emp-date" required></div></div><input type="hidden" id="emp-id"></form></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('employee-modal')">Cancel</button><button class="btn btn-primary" onclick="document.getElementById('employee-form').requestSubmit()">Save Employee</button></div></div></div>
 
-<!-- Lead Detail Modal -->
-<div class="modal-overlay" id="lead-detail-modal">
-    <div class="modal modal-lg">
-        <div class="modal-header">
-            <div class="modal-title">Lead Details</div>
-            <button class="modal-close" onclick="closeModal('lead-detail-modal')"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="modal-body" id="lead-detail-content"></div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeModal('lead-detail-modal')">Close</button>
-        </div>
-    </div>
-</div>
+<div class="modal-overlay" id="lead-modal"><div class="modal modal-lg"><div class="modal-header"><div class="modal-title" id="lead-modal-title">Add Lead</div><button class="modal-close" onclick="closeModal('lead-modal')"><i class="fas fa-times"></i></button></div><div class="modal-body"><form id="lead-form" onsubmit="handleLeadSubmit(event)"><div class="form-grid"><div class="form-group"><label class="form-label">Lead Name *</label><input type="text" class="form-control" id="lead-name" required></div><div class="form-group"><label class="form-label">Email *</label><input type="email" class="form-control" id="lead-email" required></div><div class="form-group"><label class="form-label">Phone *</label><input type="text" class="form-control" id="lead-phone" maxlength="10" required></div><div class="form-group"><label class="form-label">Source *</label><input type="text" class="form-control" id="lead-source" required></div><div class="form-group"><label class="form-label">Lead Type *</label><select class="form-control" id="lead-type" required><option value="">Select</option><option value="HOT">Hot</option><option value="WARM">Warm</option><option value="COLD">Cold</option></select></div><div class="form-group"><label class="form-label">Lead Stage *</label><select class="form-control" id="lead-stage" required><option value="">Select</option><option value="LEAD_GENERATED">Lead Generated</option><option value="CONTACTED">Contacted</option><option value="INTERESTED">Interested</option><option value="MEETING_BOOKED">Meeting Booked</option><option value="PROPOSAL_SENT">Proposal Sent</option><option value="NEGOTIATION">Negotiation</option><option value="CLOSED">Closed</option></select></div><div class="form-group"><label class="form-label">Assigned Employee *</label><select class="form-control" id="lead-employee" required><option value="">Select</option></select></div><div class="form-group"><label class="form-label">Next Follow-up Date *</label><input type="date" class="form-control" id="lead-followup-date" required></div><div class="form-group col-span-2"><label class="form-label">Remarks *</label><textarea class="form-control" id="lead-remarks" rows="2" required></textarea></div><div class="form-group col-span-2"><label class="form-label">Next Follow-up Description *</label><textarea class="form-control" id="lead-next-followup" rows="2" required></textarea></div></div><input type="hidden" id="lead-id"></form></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('lead-modal')">Cancel</button><button class="btn btn-primary" onclick="document.getElementById('lead-form').requestSubmit()">Save Lead</button></div></div></div>
 
-<!-- Lead History Modal -->
-<div class="modal-overlay" id="history-modal">
-    <div class="modal modal-lg">
-        <div class="modal-header">
-            <div class="modal-title">Lead History</div>
-            <button class="modal-close" onclick="closeModal('history-modal')"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="modal-body" id="history-content"></div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeModal('history-modal')">Close</button>
-        </div>
-    </div>
-</div>
+<div class="modal-overlay" id="lead-detail-modal"><div class="modal modal-lg"><div class="modal-header"><div class="modal-title">Lead Details</div><button class="modal-close" onclick="closeModal('lead-detail-modal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="lead-detail-content"></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('lead-detail-modal')">Close</button></div></div></div>
 
-<!-- Employee Lead Update Modal -->
-<div class="modal-overlay" id="update-lead-modal">
-    <div class="modal">
-        <div class="modal-header">
-            <div class="modal-title">Update Lead</div>
-            <button class="modal-close" onclick="closeModal('update-lead-modal')"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="modal-body">
-            <form id="update-lead-form" onsubmit="handleUpdateLeadAfterContact(event)">
-                <div class="form-group">
-                    <label class="form-label">Contact Made?</label>
-                    <select class="form-control" id="ul-contact">
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Response / Notes</label>
-                    <textarea class="form-control" id="ul-response" rows="3" placeholder="Describe the contact (include 'call' or 'whatsapp' for auto-tracking)..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">New Stage</label>
-                    <select class="form-control" id="ul-stage">
-                        <option value="">No Change</option>
-                        <option value="LEAD_GENERATED">Lead Generated</option>
-                        <option value="CONTACTED">Contacted</option>
-                        <option value="INTERESTED">Interested</option>
-                        <option value="MEETING_BOOKED">Meeting Booked</option>
-                        <option value="PROPOSAL_SENT">Proposal Sent</option>
-                        <option value="NEGOTIATION">Negotiation</option>
-                        <option value="CLOSED">Closed</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Remarks</label>
-                    <textarea class="form-control" id="ul-remarks" rows="2" placeholder="Additional notes..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Convert to Customer?</label>
-                    <select class="form-control" id="ul-convert">
-                        <option value="false">No</option>
-                        <option value="true">Yes - Mark as Closed</option>
-                    </select>
-                </div>
-                <input type="hidden" id="ul-lead-id">
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeModal('update-lead-modal')">Cancel</button>
-            <button class="btn btn-primary" onclick="document.getElementById('update-lead-form').requestSubmit()">
-                <i class="fas fa-check"></i> Update Lead
-            </button>
-        </div>
-    </div>
-</div>
+<div class="modal-overlay" id="history-modal"><div class="modal modal-lg"><div class="modal-header"><div class="modal-title">Lead History</div><button class="modal-close" onclick="closeModal('history-modal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="history-content"></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('history-modal')">Close</button></div></div></div>
 
-<!-- Statistics Update Modal -->
-<div class="modal-overlay" id="stats-modal">
-    <div class="modal">
-        <div class="modal-header">
-            <div class="modal-title">Update Statistics</div>
-            <button class="modal-close" onclick="closeModal('stats-modal')"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="modal-body">
-            <p style="color:var(--text2);font-size:14px;margin-bottom:16px">Check what activities occurred for this lead:</p>
-            <div class="form-group">
-                <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
-                    <input type="checkbox" id="stat-whatsapp" style="width:18px;height:18px;accent-color:var(--accent)">
-                    <span><i class="fab fa-whatsapp text-success"></i> WhatsApp Sent</span>
-                </label>
-            </div>
-            <div class="form-group">
-                <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
-                    <input type="checkbox" id="stat-call" style="width:18px;height:18px;accent-color:var(--accent)">
-                    <span><i class="fas fa-phone text-accent"></i> Call Made</span>
-                </label>
-            </div>
-            <div class="form-group">
-                <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
-                    <input type="checkbox" id="stat-followup" style="width:18px;height:18px;accent-color:var(--accent)">
-                    <span><i class="fas fa-redo text-warning"></i> Follow-up Done</span>
-                </label>
-            </div>
-            <div class="form-group">
-                <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
-                    <input type="checkbox" id="stat-meeting-booked" style="width:18px;height:18px;accent-color:var(--accent)">
-                    <span><i class="fas fa-calendar-check" style="color:var(--accent2)"></i> Meeting Booked</span>
-                </label>
-            </div>
-            <div class="form-group">
-                <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
-                    <input type="checkbox" id="stat-meeting-done" style="width:18px;height:18px;accent-color:var(--accent)">
-                    <span><i class="fas fa-handshake" style="color:var(--accent4)"></i> Meeting Done</span>
-                </label>
-            </div>
-            <input type="hidden" id="stats-lead-id">
-            <input type="hidden" id="stats-mode"> <!-- admin or employee -->
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeModal('stats-modal')">Cancel</button>
-            <button class="btn btn-primary" onclick="handleStatsUpdate()">
-                <i class="fas fa-chart-bar"></i> Update Stats
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Follow-up Update Modal -->
-<div class="modal-overlay" id="followup-modal">
-    <div class="modal">
-        <div class="modal-header">
-            <div class="modal-title">Update Follow-up</div>
-            <button class="modal-close" onclick="closeModal('followup-modal')"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="modal-body">
-            <form id="followup-form" onsubmit="handleFollowUpUpdate(event)">
-                <div class="form-group">
-                    <label class="form-label">Next Follow-up Date *</label>
-                    <input type="date" class="form-control" id="fu-date" required>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Follow-up Description *</label>
-                    <textarea class="form-control" id="fu-desc" rows="3" placeholder="What to discuss..." required></textarea>
-                </div>
-                <input type="hidden" id="fu-lead-id">
-                <input type="hidden" id="fu-mode">
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeModal('followup-modal')">Cancel</button>
-            <button class="btn btn-primary" onclick="document.getElementById('followup-form').requestSubmit()">
-                <i class="fas fa-calendar"></i> Update Follow-up
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- Reset Password Modal -->
-<div class="modal-overlay" id="reset-pass-modal">
-    <div class="modal">
-        <div class="modal-header">
-            <div class="modal-title">Reset Employee Password</div>
-            <button class="modal-close" onclick="closeModal('reset-pass-modal')"><i class="fas fa-times"></i></button>
-        </div>
-        <div class="modal-body">
-            <form id="reset-pass-form" onsubmit="handleResetPassword(event)">
-                <div class="form-group">
-                    <label class="form-label">Employee Email</label>
-                    <input type="email" class="form-control" id="rp-email" readonly style="opacity:0.7">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">New Password *</label>
-                    <input type="password" class="form-control" id="rp-pass" placeholder="Min 8 chars, A-Z, a-z, 0-9, @#$%" required>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-outline" onclick="closeModal('reset-pass-modal')">Cancel</button>
-            <button class="btn btn-danger" onclick="document.getElementById('reset-pass-form').requestSubmit()">
-                <i class="fas fa-key"></i> Reset Password
-            </button>
-        </div>
-    </div>
-</div>
+<div class="modal-overlay" id="reset-pass-modal"><div class="modal"><div class="modal-header"><div class="modal-title">Reset Employee Password</div><button class="modal-close" onclick="closeModal('reset-pass-modal')"><i class="fas fa-times"></i></button></div><div class="modal-body"><form id="reset-pass-form" onsubmit="handleResetPassword(event)"><div class="form-group"><label class="form-label">Employee Email</label><input type="email" class="form-control" id="rp-email" readonly></div><div class="form-group"><label class="form-label">New Password *</label><input type="password" class="form-control" id="rp-pass" required></div></form></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('reset-pass-modal')">Cancel</button><button class="btn btn-danger" onclick="document.getElementById('reset-pass-form').requestSubmit()">Reset Password</button></div></div></div>
 
 <script>
     /* ============================================================
-       CONFIG
+       CONFIG & API
     ============================================================ */
     const BASE = 'http://localhost:8080';
     let token = localStorage.getItem('crm_token') || '';
@@ -1364,30 +497,17 @@
     let allEmployees = [], allLeads = [], allMyLeads = [];
     let currentLoginRole = 'admin';
     
-    /* ============================================================
-       API HELPER
-    ============================================================ */
     async function api(method, path, body = null, auth = true) {
       const headers = { 'Content-Type': 'application/json' };
       if (auth && token) headers['Authorization'] = 'Bearer ' + token;
       const opts = { method, headers };
       if (body) opts.body = JSON.stringify(body);
-      try {
-        const res = await fetch(BASE + path, opts);
-        const data = await res.json();
-        if (!res.ok) {
-          const msg = data.message || data.error || 'Request failed';
-          throw new Error(msg);
-        }
-        return data;
-      } catch (e) {
-        throw e;
-      }
+      const res = await fetch(BASE + path, opts);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || data.error || 'Request failed');
+      return data;
     }
     
-    /* ============================================================
-       TOAST
-    ============================================================ */
     function toast(msg, type = 'success') {
       const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', warning: 'fa-exclamation-triangle' };
       const el = document.createElement('div');
@@ -1397,9 +517,6 @@
       setTimeout(() => { el.style.animation = 'slideOut 0.3s ease forwards'; setTimeout(() => el.remove(), 300); }, 3500);
     }
     
-    /* ============================================================
-       MODAL
-    ============================================================ */
     function openModal(id) { document.getElementById(id).classList.add('open'); }
     function closeModal(id) { document.getElementById(id).classList.remove('open'); }
     
@@ -1411,27 +528,17 @@
       document.querySelectorAll('.role-tab').forEach((t, i) => t.classList.toggle('active', (i === 0 && role === 'admin') || (i === 1 && role === 'employee')));
       document.getElementById('admin-email-group').style.display = role === 'admin' ? '' : 'none';
       document.getElementById('employee-email-group').style.display = role === 'employee' ? '' : 'none';
-      document.getElementById('login-username').required = role === 'admin';
-      document.getElementById('login-email').required = role === 'employee';
     }
     
     async function handleLogin(e) {
       e.preventDefault();
-      const btn = document.getElementById('login-btn');
-      const btnText = document.getElementById('login-btn-text');
-      btn.disabled = true;
-      btnText.innerHTML = '<span class="loading"></span> Signing in...';
       try {
         let data;
         if (currentLoginRole === 'admin') {
-          const username = document.getElementById('login-username').value;
-          const password = document.getElementById('login-password').value;
-          data = await api('POST', '/api/auth/login', { username, password }, false);
+          data = await api('POST', '/api/auth/login', { username: document.getElementById('login-username').value, password: document.getElementById('login-password').value }, false);
           currentRole = 'ADMIN';
         } else {
-          const email = document.getElementById('login-email').value;
-          const password = document.getElementById('login-password').value;
-          data = await api('POST', '/api/employee/auth/login', { email, password }, false);
+          data = await api('POST', '/api/employee/auth/login', { email: document.getElementById('login-email').value, password: document.getElementById('login-password').value }, false);
           currentRole = 'EMPLOYEE';
         }
         token = data.data.token;
@@ -1439,14 +546,9 @@
         localStorage.setItem('crm_token', token);
         localStorage.setItem('crm_role', currentRole);
         localStorage.setItem('crm_user', JSON.stringify(currentUser));
-        toast('Welcome back! Login successful.');
+        toast('Login successful!');
         initApp();
-      } catch (err) {
-        toast(err.message || 'Login failed. Check credentials.', 'error');
-      } finally {
-        btn.disabled = false;
-        btnText.textContent = 'Sign In';
-      }
+      } catch (err) { toast(err.message, 'error'); }
     }
     
     function handleLogout() {
@@ -1457,49 +559,36 @@
       localStorage.removeItem('crm_user');
       document.getElementById('app').style.display = 'none';
       document.getElementById('login-page').style.display = '';
-      toast('Logged out successfully.', 'warning');
+      toast('Logged out.', 'warning');
     }
     
-    /* ============================================================
-       APP INIT
-    ============================================================ */
     function initApp() {
       document.getElementById('login-page').style.display = 'none';
       document.getElementById('app').style.display = 'flex';
       setupNav();
-      if (currentRole === 'ADMIN') {
-        showSection('section-dashboard');
-        loadDashboard();
-      } else {
-        showSection('section-my-profile');
-        loadMyProfile();
-      }
+      if (currentRole === 'ADMIN') { showSection('section-dashboard'); loadDashboard(); }
+      else { showSection('section-my-profile'); loadMyProfile(); }
     }
     
     function setupNav() {
       const nav = document.getElementById('sidebar-nav');
-      const username = currentUser?.username || 'User';
-      document.getElementById('nav-username').textContent = username;
+      document.getElementById('nav-username').textContent = currentUser?.username || 'User';
       document.getElementById('nav-role').textContent = currentRole === 'ADMIN' ? 'Administrator' : 'Employee';
-      document.getElementById('nav-avatar').textContent = username.charAt(0).toUpperCase();
-    
+      document.getElementById('nav-avatar').textContent = (currentUser?.username?.charAt(0) || 'U').toUpperCase();
+      
       if (currentRole === 'ADMIN') {
-        nav.innerHTML = `
-          <div class="nav-section-title">Main</div>
+        nav.innerHTML = `<div class="nav-section-title">Main</div>
           <div class="nav-item active" onclick="showSection('section-dashboard');loadDashboard()"><i class="fas fa-chart-pie"></i> Dashboard</div>
           <div class="nav-item" onclick="showSection('section-employees');loadEmployees()"><i class="fas fa-users"></i> Employees</div>
           <div class="nav-item" onclick="showSection('section-leads');loadLeads()"><i class="fas fa-funnel-dollar"></i> Leads</div>
           <div class="nav-section-title">Tools</div>
-          <div class="nav-item" onclick="showSection('section-followups');loadTodayFollowUps()"><i class="fas fa-calendar-alt"></i> Follow-ups</div>
-        `;
+          <div class="nav-item" onclick="showSection('section-followups');loadTodayFollowUps()"><i class="fas fa-calendar-alt"></i> Follow-ups</div>`;
       } else {
-        nav.innerHTML = `
-          <div class="nav-section-title">My Account</div>
+        nav.innerHTML = `<div class="nav-section-title">My Account</div>
           <div class="nav-item active" onclick="showSection('section-my-profile');loadMyProfile()"><i class="fas fa-user-circle"></i> My Profile</div>
           <div class="nav-item" onclick="showSection('section-my-leads');loadMyLeads()"><i class="fas fa-list-alt"></i> My Leads</div>
           <div class="nav-section-title">Settings</div>
-          <div class="nav-item" onclick="showSection('section-change-password')"><i class="fas fa-key"></i> Change Password</div>
-        `;
+          <div class="nav-item" onclick="showSection('section-change-password')"><i class="fas fa-key"></i> Change Password</div>`;
       }
     }
     
@@ -1507,20 +596,16 @@
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      const map = {
-        'section-dashboard': 0, 'section-employees': 1, 'section-leads': 2, 'section-followups': 3,
-        'section-my-profile': 0, 'section-my-leads': 1, 'section-change-password': 2
-      };
       const items = document.querySelectorAll('.nav-item');
-      const idx = map[id];
-      if (items[idx]) items[idx].classList.add('active');
+      const map = { 'section-dashboard': 0, 'section-employees': 1, 'section-leads': 2, 'section-followups': 3, 'section-my-profile': 0, 'section-my-leads': 1, 'section-change-password': 2 };
+      if (items[map[id]]) items[map[id]].classList.add('active');
     }
     
     /* ============================================================
        DASHBOARD
     ============================================================ */
     async function loadDashboard() {
-      document.getElementById('dashboard-stats').innerHTML = '<div class="page-loading"><div class="loading"></div> Loading stats...</div>';
+      document.getElementById('dashboard-stats').innerHTML = '<div class="empty-state"><div class="loading"></div> Loading...</div>';
       try {
         const [statsRes, leadsRes, followupsRes] = await Promise.all([
           api('GET', '/api/admin/leads/statistics'),
@@ -1530,112 +615,48 @@
         const stats = statsRes.data || {};
         const leads = leadsRes.data || [];
         const followups = followupsRes.data || [];
-        const total = stats.total_active_leads || leads.length;
-        const hot = stats.type_hot || 0, warm = stats.type_warm || 0, cold = stats.type_cold || 0;
-    
         document.getElementById('dashboard-stats').innerHTML = `
-          <div class="stat-card purple">
-            <div class="stat-icon purple"><i class="fas fa-layer-group"></i></div>
-            <div class="stat-value">${total}</div>
-            <div class="stat-label">Total Active Leads</div>
-          </div>
-          <div class="stat-card pink">
-            <div class="stat-icon pink"><i class="fas fa-fire"></i></div>
-            <div class="stat-value">${hot}</div>
-            <div class="stat-label">Hot Leads</div>
-          </div>
-          <div class="stat-card yellow">
-            <div class="stat-icon yellow"><i class="fas fa-bolt"></i></div>
-            <div class="stat-value">${warm}</div>
-            <div class="stat-label">Warm Leads</div>
-          </div>
-          <div class="stat-card green">
-            <div class="stat-icon green"><i class="fas fa-calendar-check"></i></div>
-            <div class="stat-value">${followups.length}</div>
-            <div class="stat-label">Today's Follow-ups</div>
-          </div>
-        `;
-        // Recent leads
-        const recentLeads = leads.slice(0, 6);
+          <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-layer-group"></i></div><div class="stat-value">${stats.total_active_leads || leads.length}</div><div class="stat-label">Total Active Leads</div></div>
+          <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-fire"></i></div><div class="stat-value">${stats.type_hot || 0}</div><div class="stat-label">Hot Leads</div></div>
+          <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-bolt"></i></div><div class="stat-value">${stats.type_warm || 0}</div><div class="stat-label">Warm Leads</div></div>
+          <div class="stat-card"><div class="stat-icon purple"><i class="fas fa-calendar-check"></i></div><div class="stat-value">${followups.length}</div><div class="stat-label">Today's Follow-ups</div></div>`;
+        
+        const recentLeads = leads.slice(0, 5);
         document.getElementById('recent-leads-table').innerHTML = recentLeads.length ? `
-          <table><thead><tr><th>Name</th><th>Type</th><th>Stage</th><th>Assigned</th></tr></thead>
-          <tbody>${recentLeads.map(l => `
-            <tr>
-              <td><div style="font-weight:600">${l.name}</div><div style="font-size:12px;color:var(--text2)">${l.email}</div></td>
-              <td><span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span></td>
-              <td><span class="badge-stage badge">${formatStage(l.leadStage)}</span></td>
-              <td style="font-size:13px">${l.assignedEmployee?.firstName || '-'}</td>
-            </tr>`).join('')}
-          </tbody></table>` : '<div class="empty-state" style="padding:30px"><i class="fas fa-inbox"></i><p>No leads yet</p></div>';
-    
-        // Today's follow-ups
-        document.getElementById('today-followups').innerHTML = followups.length ? `
-          <div style="padding:12px 20px">
-            ${followups.slice(0, 5).map(l => `
-              <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border)">
-                <div>
-                  <div style="font-weight:600;font-size:14px">${l.name}</div>
-                  <div style="font-size:12px;color:var(--text2)">${l.assignedEmployee?.firstName || '-'} • ${l.nextFollowUp || 'No description'}</div>
-                </div>
-                <span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span>
-              </div>`).join('')}
-          </div>` : '<div class="empty-state" style="padding:40px"><i class="fas fa-calendar-check"></i><p>No follow-ups today</p></div>';
-      } catch (err) {
-        document.getElementById('dashboard-stats').innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle text-danger"></i><p>${err.message}</p></div>`;
-      }
+          <table><thead><tr><th>Name</th><th>Type</th><th>Stage</th></tr></thead><tbody>${recentLeads.map(l => `<tr><td>${l.name}</td><td><span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span></td><td><span class="badge-stage">${formatStage(l.leadStage)}</span></td></tr>`).join('')}</tbody></table>
+        ` : '<div class="empty-state"><i class="fas fa-inbox"></i><p>No leads</p></div>';
+        
+        document.getElementById('today-followups').innerHTML = followups.length ? `<div style="padding:12px">${followups.slice(0, 5).map(l => `<div style="padding:10px 0;border-bottom:1px solid var(--border)"><div style="font-weight:600">${l.name}</div><div style="font-size:12px;color:var(--text2)">${l.nextFollowUp || '-'}</div></div>`).join('')}</div>` : '<div class="empty-state"><i class="fas fa-calendar-check"></i><p>No follow-ups today</p></div>';
+      } catch (err) { document.getElementById('dashboard-stats').innerHTML = `<div class="empty-state"><p>${err.message}</p></div>`; }
     }
     
     /* ============================================================
        EMPLOYEES
     ============================================================ */
     async function loadEmployees() {
-      document.getElementById('employees-table-body').innerHTML = '<tr><td colspan="7"><div class="page-loading"><div class="loading"></div> Loading...</div></td></tr>';
       try {
         const res = await api('GET', '/api/admin/employees');
         allEmployees = res.data || [];
         renderEmployees(allEmployees);
-        // Populate dept filter
         const depts = [...new Set(allEmployees.map(e => e.department))];
-        const df = document.getElementById('dept-filter');
-        df.innerHTML = '<option value="">All Departments</option>' + depts.map(d => `<option value="${d}">${d}</option>`).join('');
+        document.getElementById('dept-filter').innerHTML = '<option value="">All Departments</option>' + depts.map(d => `<option value="${d}">${d}</option>`).join('');
       } catch (err) { toast(err.message, 'error'); }
     }
     
     function renderEmployees(list) {
       const tb = document.getElementById('employees-table-body');
-      if (!list.length) { tb.innerHTML = `<tr><td colspan="7"><div class="empty-state"><i class="fas fa-users-slash"></i><h3>No employees found</h3></div></td></tr>`; return; }
-      tb.innerHTML = list.map(e => `
-        <tr>
-          <td>
-            <div style="display:flex;align-items:center;gap:10px">
-              <div class="user-avatar" style="width:32px;height:32px;font-size:13px">${e.firstName?.charAt(0) || 'E'}</div>
-              <div><div style="font-weight:600">${e.firstName} ${e.lastName}</div><div style="font-size:12px;color:var(--text2)">${e.email}</div></div>
-            </div>
-          </td>
-          <td style="font-size:12px;color:var(--text2);font-family:monospace">${e.employeeCode}</td>
-          <td>${e.department}</td>
-          <td>${e.position}</td>
-          <td>${e.phoneNumber}</td>
-          <td><span class="badge ${e.isActive ? 'badge-active' : 'badge-inactive'}">${e.isActive ? 'Active' : 'Inactive'}</span></td>
-          <td>
-            <div style="display:flex;gap:6px">
-              <button class="btn btn-outline btn-sm" onclick="openEditEmployee(${JSON.stringify(e).replace(/"/g,'&quot;')})"><i class="fas fa-edit"></i></button>
-              <button class="btn btn-warning btn-sm" onclick="openResetPassword('${e.email}')"><i class="fas fa-key"></i></button>
-              <button class="btn btn-danger btn-sm" onclick="deleteEmployee(${e.id})"><i class="fas fa-trash"></i></button>
-            </div>
-          </td>
-        </tr>`).join('');
+      if (!list.length) { tb.innerHTML = '<tr><td colspan="7"><div class="empty-state">No employees</div></td></tr>'; return; }
+      tb.innerHTML = list.map(e => `<tr><td><div>${e.firstName} ${e.lastName}</div><div style="font-size:12px;color:var(--text2)">${e.email}</div></td><td>${e.employeeCode}</td><td>${e.department}</td><td>${e.position}</td><td>${e.phoneNumber}</td><td><span class="badge ${e.isActive ? 'badge-success' : 'badge-danger'}">${e.isActive ? 'Active' : 'Inactive'}</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm" onclick="openEditEmployee(${JSON.stringify(e).replace(/"/g,'&quot;')})"><i class="fas fa-edit"></i></button><button class="btn btn-warning btn-sm" onclick="openResetPassword('${e.email}')"><i class="fas fa-key"></i></button><button class="btn btn-danger btn-sm" onclick="deleteEmployee(${e.id})"><i class="fas fa-trash"></i></button></div></td></tr>`).join('');
     }
     
-    function filterEmployees(q) { renderEmployees(allEmployees.filter(e => `${e.firstName} ${e.lastName} ${e.email} ${e.department}`.toLowerCase().includes(q.toLowerCase()))); }
+    function filterEmployees(q) { renderEmployees(allEmployees.filter(e => `${e.firstName} ${e.lastName} ${e.email}`.toLowerCase().includes(q.toLowerCase()))); }
     function filterEmployeesByDept(dept) { renderEmployees(dept ? allEmployees.filter(e => e.department === dept) : allEmployees); }
-    function filterEmployeesByStatus(s) { renderEmployees(s === 'active' ? allEmployees.filter(e => e.isActive) : s === 'inactive' ? allEmployees.filter(e => !e.isActive) : allEmployees); }
     
     function openCreateEmployee() {
       document.getElementById('emp-modal-title').textContent = 'Add Employee';
       document.getElementById('employee-form').reset();
       document.getElementById('emp-id').value = '';
-      document.getElementById('emp-pass-group').querySelector('input').required = true;
+      document.getElementById('emp-pass').required = true;
       openModal('employee-modal');
     }
     
@@ -1651,7 +672,7 @@
       document.getElementById('emp-phone').value = emp.phoneNumber;
       document.getElementById('emp-date').value = emp.joiningDate;
       document.getElementById('emp-pass').value = '';
-      document.getElementById('emp-pass-group').querySelector('input').required = false;
+      document.getElementById('emp-pass').required = false;
       openModal('employee-modal');
     }
     
@@ -1671,90 +692,31 @@
         isActive: true
       };
       try {
-        if (id) {
-          await api('PUT', `/api/admin/employees/${id}`, body);
-          toast('Employee updated successfully!');
-        } else {
-          await api('POST', '/api/admin/employees', body);
-          toast('Employee created! Welcome email sent.');
-        }
+        if (id) { await api('PUT', `/api/admin/employees/${id}`, body); toast('Employee updated!'); }
+        else { await api('POST', '/api/admin/employees', body); toast('Employee created!'); }
         closeModal('employee-modal');
         loadEmployees();
       } catch (err) { toast(err.message, 'error'); }
     }
     
-    async function deleteEmployee(id) {
-      if (!confirm('Deactivate this employee?')) return;
-      try {
-        await api('DELETE', `/api/admin/employees/${id}`);
-        toast('Employee deactivated.', 'warning');
-        loadEmployees();
-      } catch (err) { toast(err.message, 'error'); }
-    }
-    
-    function openResetPassword(email) {
-      document.getElementById('rp-email').value = email;
-      document.getElementById('rp-pass').value = '';
-      openModal('reset-pass-modal');
-    }
-    
-    async function handleResetPassword(e) {
-      e.preventDefault();
-      try {
-        await api('POST', '/api/admin/employees/reset-password', {
-          email: document.getElementById('rp-email').value,
-          newPassword: document.getElementById('rp-pass').value
-        });
-        toast('Password reset! Email sent to employee.');
-        closeModal('reset-pass-modal');
-      } catch (err) { toast(err.message, 'error'); }
-    }
+    async function deleteEmployee(id) { if (confirm('Deactivate?')) { await api('DELETE', `/api/admin/employees/${id}`); toast('Deactivated'); loadEmployees(); } }
+    function openResetPassword(email) { document.getElementById('rp-email').value = email; document.getElementById('rp-pass').value = ''; openModal('reset-pass-modal'); }
+    async function handleResetPassword(e) { e.preventDefault(); await api('POST', '/api/admin/employees/reset-password', { email: document.getElementById('rp-email').value, newPassword: document.getElementById('rp-pass').value }); toast('Password reset email sent!'); closeModal('reset-pass-modal'); }
     
     /* ============================================================
        LEADS (ADMIN)
     ============================================================ */
     async function loadLeads() {
-      document.getElementById('leads-table-body').innerHTML = '<tr><td colspan="7"><div class="page-loading"><div class="loading"></div> Loading...</div></td></tr>';
-      try {
-        const res = await api('GET', '/api/admin/leads');
-        allLeads = res.data || [];
-        renderLeads(allLeads);
-      } catch (err) { toast(err.message, 'error'); }
+      try { const res = await api('GET', '/api/admin/leads'); allLeads = res.data || []; renderLeads(allLeads); } catch (err) { toast(err.message, 'error'); }
     }
     
     function renderLeads(list) {
       const tb = document.getElementById('leads-table-body');
-      if (!list.length) { tb.innerHTML = `<tr><td colspan="7"><div class="empty-state"><i class="fas fa-inbox"></i><h3>No leads found</h3></div></td></tr>`; return; }
-      tb.innerHTML = list.map(l => `
-        <tr>
-          <td>
-            <div style="font-weight:600">${l.name}</div>
-            <div style="font-size:12px;color:var(--text2)">${l.email}</div>
-          </td>
-          <td><span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span></td>
-          <td><span class="badge-stage badge">${formatStage(l.leadStage)}</span></td>
-          <td style="font-size:13px">${l.assignedEmployee ? `${l.assignedEmployee.firstName} ${l.assignedEmployee.lastName}` : '-'}</td>
-          <td style="font-size:13px;color:${isOverdue(l.nextFollowUpDate)?'var(--danger)':'var(--text2)'}">${formatDate(l.nextFollowUpDate)}</td>
-          <td>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <span style="font-size:11px;color:var(--text2)">📱${l.whatsappSentCount||0}</span>
-              <span style="font-size:11px;color:var(--text2)">📞${l.callsMadeCount||0}</span>
-              <span style="font-size:11px;color:var(--text2)">📅${l.meetingsDoneCount||0}</span>
-            </div>
-          </td>
-          <td>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <button class="btn btn-outline btn-sm" onclick="viewLeadDetail(${l.id})"><i class="fas fa-eye"></i></button>
-              <button class="btn btn-outline btn-sm" onclick="openEditLead(${JSON.stringify(l).replace(/"/g,'&quot;')})"><i class="fas fa-edit"></i></button>
-              <button class="btn btn-success btn-sm" onclick="openAdminStats(${l.id})"><i class="fas fa-chart-bar"></i></button>
-              <button class="btn btn-accent2 btn-sm" onclick="viewHistory(${l.id})"><i class="fas fa-history"></i></button>
-              <button class="btn btn-danger btn-sm" onclick="deleteLead(${l.id})"><i class="fas fa-trash"></i></button>
-            </div>
-          </td>
-        </tr>`).join('');
+      if (!list.length) { tb.innerHTML = '<tr><td colspan="7"><div class="empty-state">No leads</div></td></tr>'; return; }
+      tb.innerHTML = list.map(l => `<tr><td><div style="font-weight:600">${l.name}</div><div style="font-size:12px;color:var(--text2)">${l.email}</div></td><td><span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span></td><td><span class="badge-stage">${formatStage(l.leadStage)}</span></td><td>${l.assignedEmployee ? l.assignedEmployee.firstName : '-'}</td><td>${formatDate(l.nextFollowUpDate)}</td><td><span style="font-size:11px">📱${l.whatsappSentCount||0} 📞${l.callsMadeCount||0}</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm" onclick="viewLeadDetail(${l.id})"><i class="fas fa-eye"></i></button><button class="btn btn-purple btn-sm" onclick="openConsolidatedUpdate(${l.id},'admin')"><i class="fas fa-edit"></i></button><button class="btn btn-accent2 btn-sm" onclick="viewHistory(${l.id})"><i class="fas fa-history"></i></button><button class="btn btn-danger btn-sm" onclick="deleteLead(${l.id})"><i class="fas fa-trash"></i></button></div></td></tr>`).join('');
     }
     
-    function filterLeads(q) { renderLeads(allLeads.filter(l => `${l.name} ${l.email} ${l.phoneNumber}`.toLowerCase().includes(q.toLowerCase()))); }
+    function filterLeads(q) { renderLeads(allLeads.filter(l => `${l.name} ${l.email}`.toLowerCase().includes(q.toLowerCase()))); }
     function filterLeadsByType(t) { renderLeads(t ? allLeads.filter(l => l.leadType === t) : allLeads); }
     function filterLeadsByStage(s) { renderLeads(s ? allLeads.filter(l => l.leadStage === s) : allLeads); }
     
@@ -1762,32 +724,7 @@
       document.getElementById('lead-modal-title').textContent = 'Add Lead';
       document.getElementById('lead-form').reset();
       document.getElementById('lead-id').value = '';
-      // Load active employees into select
-      try {
-        const res = await api('GET', '/api/admin/employees/active');
-        const sel = document.getElementById('lead-employee');
-        sel.innerHTML = '<option value="">Select Employee</option>' + (res.data || []).map(e => `<option value="${e.id}">${e.firstName} ${e.lastName} - ${e.department}</option>`).join('');
-      } catch {}
-      openModal('lead-modal');
-    }
-    
-    async function openEditLead(lead) {
-      document.getElementById('lead-modal-title').textContent = 'Edit Lead';
-      document.getElementById('lead-id').value = lead.id;
-      document.getElementById('lead-name').value = lead.name;
-      document.getElementById('lead-email').value = lead.email;
-      document.getElementById('lead-phone').value = lead.phoneNumber;
-      document.getElementById('lead-source').value = lead.source;
-      document.getElementById('lead-type').value = lead.leadType;
-      document.getElementById('lead-stage').value = lead.leadStage;
-      document.getElementById('lead-followup-date').value = lead.nextFollowUpDate;
-      document.getElementById('lead-remarks').value = lead.remarks;
-      document.getElementById('lead-next-followup').value = lead.nextFollowUp;
-      try {
-        const res = await api('GET', '/api/admin/employees/active');
-        const sel = document.getElementById('lead-employee');
-        sel.innerHTML = '<option value="">Select Employee</option>' + (res.data || []).map(e => `<option value="${e.id}" ${lead.assignedEmployee?.id == e.id ? 'selected' : ''}>${e.firstName} ${e.lastName} - ${e.department}</option>`).join('');
-      } catch {}
+      try { const res = await api('GET', '/api/admin/employees/active'); document.getElementById('lead-employee').innerHTML = '<option value="">Select</option>' + (res.data || []).map(e => `<option value="${e.id}">${e.firstName} ${e.lastName}</option>`).join(''); } catch {}
       openModal('lead-modal');
     }
     
@@ -1806,125 +743,87 @@
         remarks: document.getElementById('lead-remarks').value,
         nextFollowUp: document.getElementById('lead-next-followup').value
       };
-      try {
-        if (id) {
-          await api('PUT', `/api/admin/leads/${id}`, body);
-          toast('Lead updated successfully!');
-        } else {
-          await api('POST', '/api/admin/leads', body);
-          toast('Lead created! Assignment email sent.');
-        }
-        closeModal('lead-modal');
-        loadLeads();
-      } catch (err) { toast(err.message, 'error'); }
+      try { if (id) { await api('PUT', `/api/admin/leads/${id}`, body); toast('Lead updated!'); } else { await api('POST', '/api/admin/leads', body); toast('Lead created!'); } closeModal('lead-modal'); loadLeads(); } catch (err) { toast(err.message, 'error'); }
     }
     
-    async function deleteLead(id) {
-      if (!confirm('Delete this lead?')) return;
+    async function deleteLead(id) { if (confirm('Delete?')) { await api('DELETE', `/api/admin/leads/${id}`); toast('Deleted'); loadLeads(); } }
+    
+    /* ============================================================
+       CONSOLIDATED LEAD UPDATE (SINGLE MODAL)
+    ============================================================ */
+    function openConsolidatedUpdate(leadId, mode) {
+      document.getElementById('cu-lead-id').value = leadId;
+      document.getElementById('cu-mode').value = mode;
+      // Reset form
+      document.getElementById('cu-contact-made').checked = false;
+      document.getElementById('cu-response').value = '';
+      document.getElementById('cu-whatsapp').checked = false;
+      document.getElementById('cu-call').checked = false;
+      document.getElementById('cu-meeting-booked').checked = false;
+      document.getElementById('cu-meeting-done').checked = false;
+      document.getElementById('cu-stage').value = '';
+      document.getElementById('cu-convert').checked = false;
+      document.getElementById('cu-followup-date').value = '';
+      document.getElementById('cu-followup-desc').value = '';
+      document.getElementById('cu-remarks').value = '';
+      openModal('consolidated-update-modal');
+    }
+    
+    async function handleConsolidatedUpdate(e) {
+      e.preventDefault();
+      const leadId = document.getElementById('cu-lead-id').value;
+      const mode = document.getElementById('cu-mode').value;
+      
+      // Build the update DTO
+      const updateData = {
+        contactMade: document.getElementById('cu-contact-made').checked,
+        responseMessage: document.getElementById('cu-response').value,
+        whatsappSent: document.getElementById('cu-whatsapp').checked,
+        callsMade: document.getElementById('cu-call').checked,
+        meetingBooked: document.getElementById('cu-meeting-booked').checked,
+        meetingDone: document.getElementById('cu-meeting-done').checked,
+        convertToCustomer: document.getElementById('cu-convert').checked,
+        remarks: document.getElementById('cu-remarks').value
+      };
+      
+      const stageValue = document.getElementById('cu-stage').value;
+      if (stageValue) updateData.newLeadStage = stageValue;
+      
+      const followupDate = document.getElementById('cu-followup-date').value;
+      const followupDesc = document.getElementById('cu-followup-desc').value;
+      if (followupDate) updateData.nextFollowUpDate = followupDate;
+      if (followupDesc) updateData.nextFollowUpDescription = followupDesc;
+      
       try {
-        await api('DELETE', `/api/admin/leads/${id}`);
-        toast('Lead deleted.', 'warning');
-        loadLeads();
+        // Use the consolidated PUT endpoint
+        await api('PUT', `/api/employee/leads/${leadId}/update`, updateData);
+        toast('Lead updated successfully with all changes!');
+        closeModal('consolidated-update-modal');
+        if (mode === 'admin') loadLeads(); else loadMyLeads();
       } catch (err) { toast(err.message, 'error'); }
     }
     
     async function viewLeadDetail(id) {
       const content = document.getElementById('lead-detail-content');
-      content.innerHTML = '<div class="page-loading"><div class="loading"></div> Loading...</div>';
+      content.innerHTML = '<div class="loading"></div>';
       openModal('lead-detail-modal');
       try {
         const res = await api('GET', `/api/admin/leads/${id}`);
         const l = res.data;
-        content.innerHTML = `
-          <div style="margin-bottom:20px">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
-              <div>
-                <h2 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700">${l.name}</h2>
-                <div style="color:var(--text2);font-size:14px">${l.email} • ${l.phoneNumber}</div>
-              </div>
-              <div style="display:flex;gap:8px">
-                <span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span>
-                <span class="badge-stage badge">${formatStage(l.leadStage)}</span>
-              </div>
-            </div>
-            <div class="lead-stats-grid">
-              <div class="lead-stat-item"><div class="val">${l.whatsappSentCount||0}</div><div class="lbl">WhatsApp</div></div>
-              <div class="lead-stat-item"><div class="val">${l.callsMadeCount||0}</div><div class="lbl">Calls</div></div>
-              <div class="lead-stat-item"><div class="val">${l.followUpsCount||0}</div><div class="lbl">Follow-ups</div></div>
-              <div class="lead-stat-item"><div class="val">${l.meetingsBookedCount||0}</div><div class="lbl">Mtg Booked</div></div>
-              <div class="lead-stat-item"><div class="val">${l.meetingsDoneCount||0}</div><div class="lbl">Mtg Done</div></div>
-            </div>
-            <div class="info-grid" style="margin-top:16px">
-              <div class="info-item"><label>Source</label><span>${l.source}</span></div>
-              <div class="info-item"><label>Assigned To</label><span>${l.assignedEmployee ? `${l.assignedEmployee.firstName} ${l.assignedEmployee.lastName}` : '-'}</span></div>
-              <div class="info-item"><label>Next Follow-up</label><span>${formatDate(l.nextFollowUpDate)}</span></div>
-              <div class="info-item"><label>Last Contact</label><span>${l.lastContactDate ? formatDateTime(l.lastContactDate) : 'Never'}</span></div>
-              <div class="info-item"><label>Update Count</label><span>${l.updateCount || 0}</span></div>
-              <div class="info-item"><label>Last Updated By</label><span>${l.lastUpdatedBy}</span></div>
-              <div class="info-item" style="grid-column:span 2"><label>Remarks</label><span>${l.remarks}</span></div>
-              <div class="info-item" style="grid-column:span 2"><label>Next Follow-up Plan</label><span>${l.nextFollowUp}</span></div>
-            </div>
-          </div>
-        `;
-      } catch (err) { content.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle text-danger"></i><p>${err.message}</p></div>`; }
+        content.innerHTML = `<div><h2>${l.name}</h2><p>${l.email} | ${l.phoneNumber}</p><div class="lead-stats-grid"><div class="lead-stat-item"><div class="val">${l.whatsappSentCount||0}</div><div class="lbl">WhatsApp</div></div><div class="lead-stat-item"><div class="val">${l.callsMadeCount||0}</div><div class="lbl">Calls</div></div><div class="lead-stat-item"><div class="val">${l.followUpsCount||0}</div><div class="lbl">Follow-ups</div></div><div class="lead-stat-item"><div class="val">${l.meetingsBookedCount||0}</div><div class="lbl">Mtg Booked</div></div><div class="lead-stat-item"><div class="val">${l.meetingsDoneCount||0}</div><div class="lbl">Mtg Done</div></div></div><div class="info-grid"><div class="info-item"><label>Source</label><span>${l.source}</span></div><div class="info-item"><label>Next Follow-up</label><span>${formatDate(l.nextFollowUpDate)}</span></div><div class="info-item"><label>Remarks</label><span>${l.remarks}</span></div><div class="info-item"><label>Plan</label><span>${l.nextFollowUp}</span></div></div></div>`;
+      } catch (err) { content.innerHTML = `<div class="empty-state">${err.message}</div>`; }
     }
     
     async function viewHistory(id) {
       const content = document.getElementById('history-content');
-      content.innerHTML = '<div class="page-loading"><div class="loading"></div> Loading history...</div>';
+      content.innerHTML = '<div class="loading"></div>';
       openModal('history-modal');
       try {
         const res = await api('GET', `/api/admin/leads/${id}/history`);
         const history = res.data || [];
-        if (!history.length) { content.innerHTML = '<div class="empty-state"><i class="fas fa-history"></i><h3>No history yet</h3></div>'; return; }
-        content.innerHTML = `<div class="timeline">${history.map(h => `
-          <div class="timeline-item">
-            <div class="timeline-dot ${h.action === 'CREATE' ? 'create' : h.action === 'STAGE_CHANGE' ? 'stage' : 'update'}"></div>
-            <div class="timeline-content">
-              <div class="timeline-header">
-                <span class="timeline-action">${h.action}</span>
-                <span class="timeline-date">${formatDateTime(h.createdAt)}</span>
-              </div>
-              <div class="timeline-changes">${h.changes || '-'}</div>
-              ${h.remarks ? `<div class="timeline-by">Remarks: ${h.remarks}</div>` : ''}
-              ${h.employee ? `<div class="timeline-by">By: ${h.employee.firstName} ${h.employee.lastName}</div>` : ''}
-              ${h.previousStage !== h.newStage ? `<div class="timeline-by" style="margin-top:4px"><span style="color:var(--text2)">${h.previousStage}</span> → <span style="color:var(--accent)">${h.newStage}</span></div>` : ''}
-            </div>
-          </div>`).join('')}</div>`;
-      } catch (err) { content.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle text-danger"></i><p>${err.message}</p></div>`; }
-    }
-    
-    function openAdminStats(leadId) {
-      document.getElementById('stats-lead-id').value = leadId;
-      document.getElementById('stats-mode').value = 'admin';
-      document.getElementById('stat-whatsapp').checked = false;
-      document.getElementById('stat-call').checked = false;
-      document.getElementById('stat-followup').checked = false;
-      document.getElementById('stat-meeting-booked').checked = false;
-      document.getElementById('stat-meeting-done').checked = false;
-      openModal('stats-modal');
-    }
-    
-    async function handleStatsUpdate() {
-      const leadId = document.getElementById('stats-lead-id').value;
-      const mode = document.getElementById('stats-mode').value;
-      const body = {
-        whatsappSent: document.getElementById('stat-whatsapp').checked,
-        callsMade: document.getElementById('stat-call').checked,
-        followUp: document.getElementById('stat-followup').checked,
-        meetingBooked: document.getElementById('stat-meeting-booked').checked,
-        meetingDone: document.getElementById('stat-meeting-done').checked
-      };
-      try {
-        if (mode === 'admin') {
-          await api('PATCH', `/api/admin/leads/${leadId}/statistics`, body);
-        } else {
-          await api('PATCH', `/api/employee/leads/${leadId}/statistics`, body);
-        }
-        toast('Statistics updated!');
-        closeModal('stats-modal');
-        if (mode === 'admin') loadLeads(); else loadMyLeads();
-      } catch (err) { toast(err.message, 'error'); }
+        if (!history.length) { content.innerHTML = '<div class="empty-state">No history</div>'; return; }
+        content.innerHTML = `<div class="timeline">${history.map(h => `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><div><strong>${h.action}</strong> - ${formatDateTime(h.createdAt)}</div><div style="font-size:13px;margin-top:4px">${h.changes || '-'}</div></div></div>`).join('')}</div>`;
+      } catch (err) { content.innerHTML = `<div class="empty-state">${err.message}</div>`; }
     }
     
     /* ============================================================
@@ -1932,270 +831,74 @@
     ============================================================ */
     async function loadTodayFollowUps() {
       document.getElementById('followup-title').textContent = "Today's Follow-ups";
-      document.getElementById('followups-table-body').innerHTML = '<tr><td colspan="7"><div class="page-loading"><div class="loading"></div> Loading...</div></td></tr>';
-      try {
-        const res = await api('GET', '/api/admin/leads/followups/today');
-        renderFollowUps(res.data || []);
-      } catch (err) { toast(err.message, 'error'); }
+      try { const res = await api('GET', '/api/admin/leads/followups/today'); renderFollowUps(res.data || []); } catch (err) { toast(err.message, 'error'); }
     }
     
     async function loadPendingFollowUps() {
       document.getElementById('followup-title').textContent = 'Pending Follow-ups';
-      document.getElementById('followups-table-body').innerHTML = '<tr><td colspan="7"><div class="page-loading"><div class="loading"></div> Loading...</div></td></tr>';
-      try {
-        const res = await api('GET', '/api/admin/leads/followups/pending');
-        renderFollowUps(res.data || []);
-      } catch (err) { toast(err.message, 'error'); }
+      try { const res = await api('GET', '/api/admin/leads/followups/pending'); renderFollowUps(res.data || []); } catch (err) { toast(err.message, 'error'); }
     }
     
     function renderFollowUps(list) {
       const tb = document.getElementById('followups-table-body');
-      if (!list.length) { tb.innerHTML = `<tr><td colspan="7"><div class="empty-state"><i class="fas fa-calendar-check"></i><h3>No follow-ups</h3></div></td></tr>`; return; }
-      tb.innerHTML = list.map(l => `
-        <tr>
-          <td><div style="font-weight:600">${l.name}</div><div style="font-size:12px;color:var(--text2)">${l.email}</div></td>
-          <td><span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span></td>
-          <td><span class="badge-stage badge">${formatStage(l.leadStage)}</span></td>
-          <td>${l.assignedEmployee ? `${l.assignedEmployee.firstName} ${l.assignedEmployee.lastName}` : '-'}</td>
-          <td style="color:${isOverdue(l.nextFollowUpDate)?'var(--danger)':'var(--text2)'}">${formatDate(l.nextFollowUpDate)}</td>
-          <td style="font-size:13px;color:var(--text2)">${l.nextFollowUp || '-'}</td>
-          <td>
-            <div style="display:flex;gap:6px">
-              <button class="btn btn-outline btn-sm" onclick="viewLeadDetail(${l.id})"><i class="fas fa-eye"></i></button>
-              <button class="btn btn-success btn-sm" onclick="openAdminStats(${l.id})"><i class="fas fa-chart-bar"></i></button>
-            </div>
-          </td>
-        </tr>`).join('');
+      if (!list.length) { tb.innerHTML = '<tr><td colspan="7"><div class="empty-state">No follow-ups</div></td></tr>'; return; }
+      tb.innerHTML = list.map(l => `<tr><td>${l.name}</td><td><span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span></td><td><span class="badge-stage">${formatStage(l.leadStage)}</span></td><td>${l.assignedEmployee?.firstName || '-'}</td><td>${formatDate(l.nextFollowUpDate)}</td><td>${l.nextFollowUp || '-'}</td><td><button class="btn btn-outline btn-sm" onclick="viewLeadDetail(${l.id})"><i class="fas fa-eye"></i></button></td></tr>`).join('');
     }
     
     /* ============================================================
-       EMPLOYEE - MY PROFILE
+       EMPLOYEE SECTIONS
     ============================================================ */
     async function loadMyProfile() {
-      document.getElementById('profile-content').innerHTML = '<div class="page-loading"><div class="loading"></div> Loading profile...</div>';
       try {
         const res = await api('GET', '/api/employee/profile');
         const p = res.data;
-        document.getElementById('profile-content').innerHTML = `
-          <div class="profile-card">
-            <div class="profile-avatar">${p.firstName?.charAt(0) || 'E'}</div>
-            <div class="profile-info">
-              <h2>${p.firstName} ${p.lastName}</h2>
-              <p>${p.position} • ${p.department}</p>
-              <div class="profile-meta">
-                <div class="profile-meta-item"><strong>${p.email}</strong>Email</div>
-                <div class="profile-meta-item"><strong>${p.phoneNumber}</strong>Phone</div>
-                <div class="profile-meta-item"><strong>${formatDate(p.joiningDate)}</strong>Joined</div>
-                <div class="profile-meta-item"><strong>₹${p.salary?.toLocaleString()}</strong>Salary</div>
-              </div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-header"><div class="card-title">Account Details</div></div>
-            <div class="card-body">
-              <div class="info-grid">
-                <div class="info-item"><label>Employee Code</label><span style="font-family:monospace">${p.employeeCode}</span></div>
-                <div class="info-item"><label>Status</label><span class="badge badge-active">Active</span></div>
-                <div class="info-item"><label>Department</label><span>${p.department}</span></div>
-                <div class="info-item"><label>Position</label><span>${p.position}</span></div>
-                <div class="info-item"><label>Member Since</label><span>${formatDateTime(p.createdAt)}</span></div>
-              </div>
-            </div>
-          </div>`;
-      } catch (err) { document.getElementById('profile-content').innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle text-danger"></i><p>${err.message}</p></div>`; }
+        document.getElementById('profile-content').innerHTML = `<div class="card"><div class="card-body"><div style="display:flex;gap:20px"><div class="user-avatar" style="width:64px;height:64px;font-size:28px">${p.firstName?.charAt(0)}</div><div><h2>${p.firstName} ${p.lastName}</h2><p>${p.position} | ${p.department}</p><p>${p.email} | ${p.phoneNumber}</p></div></div><div class="info-grid" style="margin-top:20px"><div class="info-item"><label>Employee Code</label><span>${p.employeeCode}</span></div><div class="info-item"><label>Joined</label><span>${formatDate(p.joiningDate)}</span></div><div class="info-item"><label>Salary</label><span>₹${p.salary?.toLocaleString()}</span></div></div></div></div>`;
+      } catch (err) { document.getElementById('profile-content').innerHTML = `<div class="empty-state">${err.message}</div>`; }
     }
     
-    /* ============================================================
-       EMPLOYEE - MY LEADS
-    ============================================================ */
     async function loadMyLeads() {
-      document.getElementById('my-leads-table-body').innerHTML = '<tr><td colspan="6"><div class="page-loading"><div class="loading"></div> Loading...</div></td></tr>';
-      try {
-        const res = await api('GET', '/api/employee/my-leads');
-        allMyLeads = res.data || [];
-        renderMyLeads(allMyLeads);
-      } catch (err) { toast(err.message, 'error'); }
+      try { const res = await api('GET', '/api/employee/my-leads'); allMyLeads = res.data || []; renderMyLeads(allMyLeads); } catch (err) { toast(err.message, 'error'); }
     }
     
     function renderMyLeads(list) {
       const tb = document.getElementById('my-leads-table-body');
-      if (!list.length) { tb.innerHTML = `<tr><td colspan="6"><div class="empty-state"><i class="fas fa-inbox"></i><h3>No leads assigned</h3></div></td></tr>`; return; }
-      tb.innerHTML = list.map(l => `
-        <tr>
-          <td>
-            <div style="font-weight:600">${l.name}</div>
-            <div style="font-size:12px;color:var(--text2)">${l.email}</div>
-          </td>
-          <td><span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span></td>
-          <td><span class="badge-stage badge">${formatStage(l.leadStage)}</span></td>
-          <td style="font-size:13px;color:${isOverdue(l.nextFollowUpDate)?'var(--danger)':'var(--text2)'}">${formatDate(l.nextFollowUpDate)}</td>
-          <td>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <span style="font-size:11px;color:var(--text2)" title="WhatsApp">📱${l.whatsappSentCount||0}</span>
-              <span style="font-size:11px;color:var(--text2)" title="Calls">📞${l.callsMadeCount||0}</span>
-              <span style="font-size:11px;color:var(--text2)" title="Meetings">🤝${l.meetingsDoneCount||0}</span>
-            </div>
-          </td>
-          <td>
-            <div style="display:flex;gap:6px;flex-wrap:wrap">
-              <button class="btn btn-outline btn-sm" onclick="viewMyLeadDetail(${l.id})"><i class="fas fa-eye"></i></button>
-              <button class="btn btn-purple btn-sm" onclick="openUpdateContact(${l.id})"><i class="fas fa-phone-alt"></i></button>
-              <button class="btn btn-success btn-sm" onclick="openEmployeeStats(${l.id})"><i class="fas fa-chart-bar"></i></button>
-              <button class="btn btn-warning btn-sm" onclick="openFollowUpModal(${l.id},'employee')"><i class="fas fa-calendar-plus"></i></button>
-              <button class="btn btn-accent2 btn-sm" onclick="viewMyLeadHistory(${l.id})"><i class="fas fa-history"></i></button>
-            </div>
-          </td>
-        </tr>`).join('');
+      if (!list.length) { tb.innerHTML = '<tr><td colspan="6"><div class="empty-state">No leads assigned</div></td></tr>'; return; }
+      tb.innerHTML = list.map(l => `<tr><td><div style="font-weight:600">${l.name}</div><div style="font-size:12px;color:var(--text2)">${l.email}</div></td><td><span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span></td><td><span class="badge-stage">${formatStage(l.leadStage)}</span></td><td>${formatDate(l.nextFollowUpDate)}</td><td><span style="font-size:11px">📱${l.whatsappSentCount||0} 📞${l.callsMadeCount||0}</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm" onclick="viewMyLeadDetail(${l.id})"><i class="fas fa-eye"></i></button><button class="btn btn-purple btn-sm" onclick="openConsolidatedUpdate(${l.id},'employee')"><i class="fas fa-edit"></i></button><button class="btn btn-accent2 btn-sm" onclick="viewMyLeadHistory(${l.id})"><i class="fas fa-history"></i></button></div></td></tr>`).join('');
     }
     
     function filterMyLeads(q) { renderMyLeads(allMyLeads.filter(l => `${l.name} ${l.email}`.toLowerCase().includes(q.toLowerCase()))); }
     function filterMyLeadsByType(t) { renderMyLeads(t ? allMyLeads.filter(l => l.leadType === t) : allMyLeads); }
     
-    function openUpdateContact(leadId) {
-      document.getElementById('ul-lead-id').value = leadId;
-      document.getElementById('update-lead-form').reset();
-      document.getElementById('ul-lead-id').value = leadId;
-      openModal('update-lead-modal');
-    }
-    
-    async function handleUpdateLeadAfterContact(e) {
-      e.preventDefault();
-      const leadId = document.getElementById('ul-lead-id').value;
-      const stageVal = document.getElementById('ul-stage').value;
-      const body = {
-        contactMade: document.getElementById('ul-contact').value === 'true',
-        responseMessage: document.getElementById('ul-response').value,
-        remarks: document.getElementById('ul-remarks').value,
-        convertToCustomer: document.getElementById('ul-convert').value === 'true'
-      };
-      if (stageVal) body.newLeadStage = stageVal;
-      try {
-        await api('PATCH', `/api/employee/leads/${leadId}/contact`, body);
-        toast('Lead updated after contact!');
-        closeModal('update-lead-modal');
-        loadMyLeads();
-      } catch (err) { toast(err.message, 'error'); }
-    }
-    
-    function openEmployeeStats(leadId) {
-      document.getElementById('stats-lead-id').value = leadId;
-      document.getElementById('stats-mode').value = 'employee';
-      document.getElementById('stat-whatsapp').checked = false;
-      document.getElementById('stat-call').checked = false;
-      document.getElementById('stat-followup').checked = false;
-      document.getElementById('stat-meeting-booked').checked = false;
-      document.getElementById('stat-meeting-done').checked = false;
-      openModal('stats-modal');
-    }
-    
-    function openFollowUpModal(leadId, mode) {
-      document.getElementById('fu-lead-id').value = leadId;
-      document.getElementById('fu-mode').value = mode;
-      document.getElementById('fu-date').value = '';
-      document.getElementById('fu-desc').value = '';
-      openModal('followup-modal');
-    }
-    
-    async function handleFollowUpUpdate(e) {
-      e.preventDefault();
-      const leadId = document.getElementById('fu-lead-id').value;
-      const mode = document.getElementById('fu-mode').value;
-      const date = document.getElementById('fu-date').value;
-      const desc = document.getElementById('fu-desc').value;
-      try {
-        if (mode === 'employee') {
-          await api('POST', `/api/employee/leads/${leadId}/followup?nextFollowUpDate=${date}&nextFollowUpDescription=${encodeURIComponent(desc)}`);
-        } else {
-          // Admin can use the update lead endpoint
-          const lead = allLeads.find(l => l.id == leadId);
-          if (lead) await api('PUT', `/api/admin/leads/${leadId}`, { nextFollowUpDate: date, nextFollowUp: desc });
-        }
-        toast('Follow-up updated!');
-        closeModal('followup-modal');
-        if (mode === 'employee') loadMyLeads(); else loadLeads();
-      } catch (err) { toast(err.message, 'error'); }
-    }
-    
     async function viewMyLeadDetail(id) {
       const content = document.getElementById('lead-detail-content');
-      content.innerHTML = '<div class="page-loading"><div class="loading"></div> Loading...</div>';
+      content.innerHTML = '<div class="loading"></div>';
       openModal('lead-detail-modal');
       try {
         const res = await api('GET', `/api/employee/my-leads/${id}`);
         const l = res.data;
-        content.innerHTML = `
-          <div>
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-              <div>
-                <h2 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700">${l.name}</h2>
-                <div style="color:var(--text2);font-size:14px">${l.email} • ${l.phoneNumber}</div>
-              </div>
-              <div style="display:flex;gap:8px">
-                <span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span>
-                <span class="badge-stage badge">${formatStage(l.leadStage)}</span>
-              </div>
-            </div>
-            <div class="lead-stats-grid">
-              <div class="lead-stat-item"><div class="val">${l.whatsappSentCount||0}</div><div class="lbl">WhatsApp</div></div>
-              <div class="lead-stat-item"><div class="val">${l.callsMadeCount||0}</div><div class="lbl">Calls</div></div>
-              <div class="lead-stat-item"><div class="val">${l.followUpsCount||0}</div><div class="lbl">Follow-ups</div></div>
-              <div class="lead-stat-item"><div class="val">${l.meetingsBookedCount||0}</div><div class="lbl">Mtg Booked</div></div>
-              <div class="lead-stat-item"><div class="val">${l.meetingsDoneCount||0}</div><div class="lbl">Mtg Done</div></div>
-            </div>
-            <div class="info-grid" style="margin-top:16px">
-              <div class="info-item"><label>Source</label><span>${l.source}</span></div>
-              <div class="info-item"><label>Next Follow-up</label><span style="color:${isOverdue(l.nextFollowUpDate)?'var(--danger)':'inherit'}">${formatDate(l.nextFollowUpDate)}</span></div>
-              <div class="info-item"><label>Last Contact</label><span>${l.lastContactDate ? formatDateTime(l.lastContactDate) : 'Never'}</span></div>
-              <div class="info-item"><label>Updates Made</label><span>${l.updateCount || 0}</span></div>
-              <div class="info-item" style="grid-column:span 2"><label>Remarks</label><span>${l.remarks}</span></div>
-              <div class="info-item" style="grid-column:span 2"><label>Follow-up Plan</label><span>${l.nextFollowUp}</span></div>
-            </div>
-            <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
-              <button class="btn btn-purple btn-sm" onclick="openUpdateContact(${l.id})"><i class="fas fa-phone-alt"></i> Update Contact</button>
-              <button class="btn btn-success btn-sm" onclick="openEmployeeStats(${l.id})"><i class="fas fa-chart-bar"></i> Update Stats</button>
-              <button class="btn btn-warning btn-sm" onclick="openFollowUpModal(${l.id},'employee')"><i class="fas fa-calendar-plus"></i> Set Follow-up</button>
-              <button class="btn btn-accent2 btn-sm" onclick="viewMyLeadHistory(${l.id})"><i class="fas fa-history"></i> History</button>
-            </div>
-          </div>`;
-      } catch (err) { content.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle text-danger"></i><p>${err.message}</p></div>`; }
+        content.innerHTML = `<div><h2>${l.name}</h2><p>${l.email} | ${l.phoneNumber}</p><div class="lead-stats-grid"><div class="lead-stat-item"><div class="val">${l.whatsappSentCount||0}</div><div class="lbl">WhatsApp</div></div><div class="lead-stat-item"><div class="val">${l.callsMadeCount||0}</div><div class="lbl">Calls</div></div><div class="lead-stat-item"><div class="val">${l.followUpsCount||0}</div><div class="lbl">Follow-ups</div></div><div class="lead-stat-item"><div class="val">${l.meetingsBookedCount||0}</div><div class="lbl">Mtg Booked</div></div><div class="lead-stat-item"><div class="val">${l.meetingsDoneCount||0}</div><div class="lbl">Mtg Done</div></div></div><div class="info-grid"><div class="info-item"><label>Source</label><span>${l.source}</span></div><div class="info-item"><label>Next Follow-up</label><span>${formatDate(l.nextFollowUpDate)}</span></div><div class="info-item"><label>Remarks</label><span>${l.remarks}</span></div><div class="info-item"><label>Plan</label><span>${l.nextFollowUp}</span></div></div><div style="margin-top:20px"><button class="btn btn-purple btn-sm" onclick="closeModal('lead-detail-modal');openConsolidatedUpdate(${l.id},'employee')"><i class="fas fa-edit"></i> Update Lead</button></div></div>`;
+      } catch (err) { content.innerHTML = `<div class="empty-state">${err.message}</div>`; }
     }
     
     async function viewMyLeadHistory(id) {
       const content = document.getElementById('history-content');
-      content.innerHTML = '<div class="page-loading"><div class="loading"></div> Loading history...</div>';
+      content.innerHTML = '<div class="loading"></div>';
       openModal('history-modal');
       try {
         const res = await api('GET', `/api/employee/my-leads/${id}/history`);
         const history = res.data || [];
-        if (!history.length) { content.innerHTML = '<div class="empty-state"><i class="fas fa-history"></i><h3>No history yet</h3></div>'; return; }
-        content.innerHTML = `<div class="timeline">${history.map(h => `
-          <div class="timeline-item">
-            <div class="timeline-dot ${h.action === 'CREATE' ? 'create' : h.action === 'STAGE_CHANGE' ? 'stage' : 'update'}"></div>
-            <div class="timeline-content">
-              <div class="timeline-header">
-                <span class="timeline-action">${h.action}</span>
-                <span class="timeline-date">${formatDateTime(h.createdAt)}</span>
-              </div>
-              <div class="timeline-changes">${h.changes || '-'}</div>
-              ${h.remarks ? `<div class="timeline-by">Remarks: ${h.remarks}</div>` : ''}
-            </div>
-          </div>`).join('')}</div>`;
-      } catch (err) { content.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle text-danger"></i><p>${err.message}</p></div>`; }
+        if (!history.length) { content.innerHTML = '<div class="empty-state">No history</div>'; return; }
+        content.innerHTML = `<div class="timeline">${history.map(h => `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><div><strong>${h.action}</strong> - ${formatDateTime(h.createdAt)}</div><div style="font-size:13px;margin-top:4px">${h.changes || '-'}</div></div></div>`).join('')}</div>`;
+      } catch (err) { content.innerHTML = `<div class="empty-state">${err.message}</div>`; }
     }
     
-    /* ============================================================
-       CHANGE PASSWORD
-    ============================================================ */
     async function handleChangePassword(e) {
       e.preventDefault();
       const newPass = document.getElementById('new-pass').value;
       const confirm = document.getElementById('confirm-pass').value;
       if (newPass !== confirm) { toast('Passwords do not match!', 'error'); return; }
       try {
-        await api('POST', '/api/employee/auth/change-password', {
-          currentPassword: document.getElementById('cur-pass').value,
-          newPassword: newPass
-        });
+        await api('POST', '/api/employee/auth/change-password', { currentPassword: document.getElementById('cur-pass').value, newPassword: newPass });
         toast('Password changed successfully!');
         document.getElementById('cur-pass').value = '';
         document.getElementById('new-pass').value = '';
@@ -2206,46 +909,12 @@
     /* ============================================================
        UTILS
     ============================================================ */
-    function formatDate(d) {
-      if (!d) return '-';
-      const date = new Date(d);
-      return date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-    }
-    function formatDateTime(d) {
-      if (!d) return '-';
-      const date = new Date(d);
-      return date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' +
-             date.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
-    }
-    function isOverdue(dateStr) {
-      if (!dateStr) return false;
-      return new Date(dateStr) < new Date(new Date().toDateString());
-    }
-    function formatStage(s) {
-      const map = {
-        LEAD_GENERATED: 'Generated', CONTACTED: 'Contacted', INTERESTED: 'Interested',
-        MEETING_BOOKED: 'Mtg Booked', PROPOSAL_SENT: 'Proposal', NEGOTIATION: 'Negotiation',
-        CLOSED: 'Closed', WHATSAPP_SENT: 'WhatsApp', CALLS_MADE: 'Calls', FOLLOW_UPS: 'Follow-ups',
-        MEETINGS_BOOKED: 'Meetings', MEETINGS_DONE: 'Mtg Done', CONVERSIONS: 'Converted'
-      };
-      return map[s] || s;
-    }
+    function formatDate(d) { if (!d) return '-'; return new Date(d).toLocaleDateString('en-IN'); }
+    function formatDateTime(d) { if (!d) return '-'; return new Date(d).toLocaleString('en-IN'); }
+    function formatStage(s) { const map = { LEAD_GENERATED: 'Generated', CONTACTED: 'Contacted', INTERESTED: 'Interested', MEETING_BOOKED: 'Mtg Booked', PROPOSAL_SENT: 'Proposal', NEGOTIATION: 'Negotiation', CLOSED: 'Closed' }; return map[s] || s; }
     
-    /* ============================================================
-       AUTO-LOGIN CHECK
-    ============================================================ */
-    window.addEventListener('DOMContentLoaded', () => {
-      if (token && currentRole) {
-        initApp();
-      }
-    });
-    
-    // Close modals on overlay click
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-      overlay.addEventListener('click', e => {
-        if (e.target === overlay) overlay.classList.remove('open');
-      });
-    });
+    window.addEventListener('DOMContentLoaded', () => { if (token && currentRole) initApp(); });
+    document.querySelectorAll('.modal-overlay').forEach(overlay => { overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); }); });
 </script>
 </body>
 </html>

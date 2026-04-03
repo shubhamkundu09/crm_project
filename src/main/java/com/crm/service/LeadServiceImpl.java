@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,33 +42,22 @@ public class LeadServiceImpl implements LeadService {
     public LeadResponseDTO createLead(LeadDTO leadDTO) {
         log.info("Creating new lead with email: {}", leadDTO.getEmail());
 
-        // Get current user from security context
         String currentUserEmail = SecurityContextHolder.getContext().getAuthentication().getName();
-
-        // Try to find user in employee table
         Employee currentUser = employeeRepository.findByEmail(currentUserEmail)
-                .orElseGet(() -> {
-                    // If admin (not in employee table), get the system admin
-                    return employeeRepository.findByEmail("admin@crm.com")
-                            .orElseThrow(() -> new ResourceNotFoundException("Admin not found"));
-                });
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        // Check for duplicate email
         if (leadRepository.existsByEmail(leadDTO.getEmail())) {
             throw new DuplicateResourceException("Lead with email already exists: " + leadDTO.getEmail());
         }
 
-        // Get assigned employee
         Employee assignedEmployee = employeeRepository.findById(leadDTO.getAssignedEmployeeId())
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + leadDTO.getAssignedEmployeeId()));
 
         Lead lead = mapToEntity(leadDTO, assignedEmployee);
         Lead savedLead = leadRepository.save(lead);
 
-        // Record history
         leadHistoryService.recordLeadCreation(savedLead, currentUser);
 
-        // Send notification email to assigned employee
         emailService.sendLeadAssignmentEmail(
                 assignedEmployee.getEmail(),
                 assignedEmployee.getFirstName() + " " + assignedEmployee.getLastName(),
@@ -89,26 +80,12 @@ public class LeadServiceImpl implements LeadService {
         Lead existingLead = leadRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Lead not found with ID: " + id));
 
-        // Track changes
-        Map<String, String> changes = new HashMap<>();
         StringBuilder changesText = new StringBuilder();
+        List<String> changes = new ArrayList<>();
 
-        // Store old values for history
-        String oldName = existingLead.getName();
-        String oldEmail = existingLead.getEmail();
-        String oldPhone = existingLead.getPhoneNumber();
-        LeadType oldType = existingLead.getLeadType();
-        LeadStage oldStage = existingLead.getLeadStage();
-        LocalDate oldFollowUpDate = existingLead.getNextFollowUpDate();
-        String oldRemarks = existingLead.getRemarks();
-        String oldNextFollowUp = existingLead.getNextFollowUp();
-        String oldSource = existingLead.getSource();
-        Long oldEmployeeId = existingLead.getAssignedEmployee().getId();
-
-        // Update fields if present
+        // Track and update each field
         if (leadUpdateDTO.getName() != null && !leadUpdateDTO.getName().equals(existingLead.getName())) {
-            changes.put("name", "Changed from '" + existingLead.getName() + "' to '" + leadUpdateDTO.getName() + "'");
-            changesText.append("Name: ").append(oldName).append(" → ").append(leadUpdateDTO.getName()).append("; ");
+            changes.add("Name: '" + existingLead.getName() + "' → '" + leadUpdateDTO.getName() + "'");
             existingLead.setName(leadUpdateDTO.getName());
         }
 
@@ -116,64 +93,53 @@ public class LeadServiceImpl implements LeadService {
             if (leadRepository.existsByEmail(leadUpdateDTO.getEmail())) {
                 throw new DuplicateResourceException("Lead with email already exists: " + leadUpdateDTO.getEmail());
             }
-            changes.put("email", "Changed from '" + existingLead.getEmail() + "' to '" + leadUpdateDTO.getEmail() + "'");
-            changesText.append("Email: ").append(oldEmail).append(" → ").append(leadUpdateDTO.getEmail()).append("; ");
+            changes.add("Email: '" + existingLead.getEmail() + "' → '" + leadUpdateDTO.getEmail() + "'");
             existingLead.setEmail(leadUpdateDTO.getEmail());
         }
 
         if (leadUpdateDTO.getPhoneNumber() != null && !leadUpdateDTO.getPhoneNumber().equals(existingLead.getPhoneNumber())) {
-            changes.put("phoneNumber", "Changed from '" + existingLead.getPhoneNumber() + "' to '" + leadUpdateDTO.getPhoneNumber() + "'");
-            changesText.append("Phone: ").append(oldPhone).append(" → ").append(leadUpdateDTO.getPhoneNumber()).append("; ");
+            changes.add("Phone: '" + existingLead.getPhoneNumber() + "' → '" + leadUpdateDTO.getPhoneNumber() + "'");
             existingLead.setPhoneNumber(leadUpdateDTO.getPhoneNumber());
         }
 
         if (leadUpdateDTO.getLeadType() != null && leadUpdateDTO.getLeadType() != existingLead.getLeadType()) {
-            changes.put("leadType", "Changed from '" + existingLead.getLeadType() + "' to '" + leadUpdateDTO.getLeadType() + "'");
-            changesText.append("Lead Type: ").append(oldType).append(" → ").append(leadUpdateDTO.getLeadType()).append("; ");
+            changes.add("Lead Type: '" + existingLead.getLeadType() + "' → '" + leadUpdateDTO.getLeadType() + "'");
             existingLead.setLeadType(leadUpdateDTO.getLeadType());
         }
 
         if (leadUpdateDTO.getLeadStage() != null && leadUpdateDTO.getLeadStage() != existingLead.getLeadStage()) {
             String previousStage = existingLead.getLeadStage().toString();
             String newStage = leadUpdateDTO.getLeadStage().toString();
-            changes.put("leadStage", "Changed from '" + previousStage + "' to '" + newStage + "'");
-            changesText.append("Stage: ").append(previousStage).append(" → ").append(newStage).append("; ");
+            changes.add("Stage: '" + previousStage + "' → '" + newStage + "'");
             leadHistoryService.recordStageChange(existingLead, currentUser, previousStage, newStage, "Stage updated by admin");
             existingLead.setLeadStage(leadUpdateDTO.getLeadStage());
         }
 
         if (leadUpdateDTO.getNextFollowUpDate() != null && !leadUpdateDTO.getNextFollowUpDate().equals(existingLead.getNextFollowUpDate())) {
-            changes.put("nextFollowUpDate", "Changed from '" + existingLead.getNextFollowUpDate() + "' to '" + leadUpdateDTO.getNextFollowUpDate() + "'");
-            changesText.append("Follow-up Date: ").append(oldFollowUpDate).append(" → ").append(leadUpdateDTO.getNextFollowUpDate()).append("; ");
+            changes.add("Follow-up Date: '" + existingLead.getNextFollowUpDate() + "' → '" + leadUpdateDTO.getNextFollowUpDate() + "'");
             existingLead.setNextFollowUpDate(leadUpdateDTO.getNextFollowUpDate());
         }
 
         if (leadUpdateDTO.getRemarks() != null && !leadUpdateDTO.getRemarks().equals(existingLead.getRemarks())) {
-            changes.put("remarks", "Remarks updated");
-            changesText.append("Remarks updated; ");
+            changes.add("Remarks updated");
             existingLead.setRemarks(leadUpdateDTO.getRemarks());
         }
 
         if (leadUpdateDTO.getNextFollowUp() != null && !leadUpdateDTO.getNextFollowUp().equals(existingLead.getNextFollowUp())) {
-            changes.put("nextFollowUp", "Follow-up description updated");
-            changesText.append("Follow-up description: ").append(oldNextFollowUp).append(" → ").append(leadUpdateDTO.getNextFollowUp()).append("; ");
+            changes.add("Follow-up description updated");
             existingLead.setNextFollowUp(leadUpdateDTO.getNextFollowUp());
         }
 
         if (leadUpdateDTO.getSource() != null && !leadUpdateDTO.getSource().equals(existingLead.getSource())) {
-            changes.put("source", "Changed from '" + existingLead.getSource() + "' to '" + leadUpdateDTO.getSource() + "'");
-            changesText.append("Source: ").append(oldSource).append(" → ").append(leadUpdateDTO.getSource()).append("; ");
+            changes.add("Source: '" + existingLead.getSource() + "' → '" + leadUpdateDTO.getSource() + "'");
             existingLead.setSource(leadUpdateDTO.getSource());
         }
 
         if (leadUpdateDTO.getAssignedEmployeeId() != null && !leadUpdateDTO.getAssignedEmployeeId().equals(existingLead.getAssignedEmployee().getId())) {
             Employee newEmployee = employeeRepository.findById(leadUpdateDTO.getAssignedEmployeeId())
                     .orElseThrow(() -> new ResourceNotFoundException("Employee not found with ID: " + leadUpdateDTO.getAssignedEmployeeId()));
-            changes.put("assignedEmployee", "Changed from '" + existingLead.getAssignedEmployee().getEmail() + "' to '" + newEmployee.getEmail() + "'");
-            changesText.append("Assigned Employee: ").append(oldEmployeeId).append(" → ").append(leadUpdateDTO.getAssignedEmployeeId()).append("; ");
+            changes.add("Assigned Employee: '" + existingLead.getAssignedEmployee().getEmail() + "' → '" + newEmployee.getEmail() + "'");
             existingLead.setAssignedEmployee(newEmployee);
-
-            // Send notification to new assigned employee
             emailService.sendLeadAssignmentEmail(
                     newEmployee.getEmail(),
                     newEmployee.getFirstName() + " " + newEmployee.getLastName(),
@@ -187,9 +153,8 @@ public class LeadServiceImpl implements LeadService {
 
         Lead updatedLead = leadRepository.save(existingLead);
 
-        // Record history if there are changes
         if (!changes.isEmpty()) {
-            String finalChanges = changesText.toString();
+            String finalChanges = String.join("; ", changes);
             leadHistoryService.recordLeadUpdate(updatedLead, currentUser, finalChanges, "Lead details updated by " + currentUser.getEmail());
         }
 
@@ -208,9 +173,7 @@ public class LeadServiceImpl implements LeadService {
         Lead lead = leadRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Lead not found with ID: " + id));
 
-        // Record deletion in history before soft delete
         leadHistoryService.recordLeadUpdate(lead, currentUser, "Lead marked as inactive", "Lead deleted by " + currentUser.getEmail());
-
         lead.setIsActive(false);
         leadRepository.save(lead);
 
@@ -220,17 +183,14 @@ public class LeadServiceImpl implements LeadService {
     @Override
     public LeadResponseDTO getLeadById(Long id) {
         log.info("Fetching lead with ID: {}", id);
-
         Lead lead = leadRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Lead not found with ID: " + id));
-
         return mapToResponseDTO(lead);
     }
 
     @Override
     public List<LeadResponseDTO> getAllLeads() {
         log.info("Fetching all leads");
-
         return leadRepository.findAll()
                 .stream()
                 .filter(Lead::getIsActive)
@@ -241,7 +201,6 @@ public class LeadServiceImpl implements LeadService {
     @Override
     public List<LeadResponseDTO> getLeadsByEmployee(Long employeeId) {
         log.info("Fetching leads for employee ID: {}", employeeId);
-
         return leadRepository.findByAssignedEmployeeId(employeeId)
                 .stream()
                 .filter(Lead::getIsActive)
@@ -252,7 +211,6 @@ public class LeadServiceImpl implements LeadService {
     @Override
     public List<LeadResponseDTO> getLeadsByType(LeadType leadType) {
         log.info("Fetching leads by type: {}", leadType);
-
         return leadRepository.findByLeadType(leadType)
                 .stream()
                 .filter(Lead::getIsActive)
@@ -263,7 +221,6 @@ public class LeadServiceImpl implements LeadService {
     @Override
     public List<LeadResponseDTO> getLeadsByStage(LeadStage leadStage) {
         log.info("Fetching leads by stage: {}", leadStage);
-
         return leadRepository.findByLeadStage(leadStage)
                 .stream()
                 .filter(Lead::getIsActive)
@@ -274,7 +231,6 @@ public class LeadServiceImpl implements LeadService {
     @Override
     public List<LeadResponseDTO> getTodayFollowUps() {
         log.info("Fetching today's follow-ups");
-
         return leadRepository.findByNextFollowUpDate(LocalDate.now())
                 .stream()
                 .filter(Lead::getIsActive)
@@ -285,7 +241,6 @@ public class LeadServiceImpl implements LeadService {
     @Override
     public List<LeadResponseDTO> getPendingFollowUps() {
         log.info("Fetching pending follow-ups");
-
         return leadRepository.findByNextFollowUpDateBefore(LocalDate.now())
                 .stream()
                 .filter(Lead::getIsActive)
@@ -304,85 +259,66 @@ public class LeadServiceImpl implements LeadService {
         Lead lead = leadRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Lead not found with ID: " + id));
 
-        // Verify employee has access to this lead
-        boolean isAdmin = currentUserEmail.equals("admin") || currentUser.getEmail().equals("admin");
-        boolean isAssignedEmployee = lead.getAssignedEmployee() != null && lead.getAssignedEmployee().getId().equals(currentUser.getId());
+        boolean isAdmin = currentUserEmail.equals("redcircle0908@gmail.com") ||
+                currentUser.getEmail().equals("redcircle0908@gmail.com");
+        boolean isAssignedEmployee = lead.getAssignedEmployee() != null &&
+                lead.getAssignedEmployee().getId().equals(currentUser.getId());
 
-        if (isAdmin || isAssignedEmployee) {
-
-            Map<String, String> statsChanges = new HashMap<>();
-            StringBuilder statsText = new StringBuilder();
-
-            // Store old values
-            int oldWhatsappCount = lead.getWhatsappSentCount() != null ? lead.getWhatsappSentCount() : 0;
-            int oldCallsCount = lead.getCallsMadeCount() != null ? lead.getCallsMadeCount() : 0;
-            int oldFollowupsCount = lead.getFollowUpsCount() != null ? lead.getFollowUpsCount() : 0;
-            int oldMeetingsBooked = lead.getMeetingsBookedCount() != null ? lead.getMeetingsBookedCount() : 0;
-            int oldMeetingsDone = lead.getMeetingsDoneCount() != null ? lead.getMeetingsDoneCount() : 0;
-            LeadStage oldStage = lead.getLeadStage();
-
-            if (statisticsDTO.getWhatsappSent() != null && statisticsDTO.getWhatsappSent()) {
-                lead.setWhatsappSentCount(lead.getWhatsappSentCount() + 1);
-                statsChanges.put("whatsappSent", "WhatsApp sent count increased from " + oldWhatsappCount + " to " + lead.getWhatsappSentCount());
-                statsText.append("WhatsApp Sent: ").append(oldWhatsappCount).append(" → ").append(lead.getWhatsappSentCount()).append("; ");
-                lead.setLastContactDate(LocalDateTime.now());
-                leadHistoryService.recordContactMade(lead, currentUser, "WhatsApp", "WhatsApp message sent", "WhatsApp communication sent to lead");
-            }
-            if (statisticsDTO.getCallsMade() != null && statisticsDTO.getCallsMade()) {
-                lead.setCallsMadeCount(lead.getCallsMadeCount() + 1);
-                statsChanges.put("callsMade", "Calls made count increased from " + oldCallsCount + " to " + lead.getCallsMadeCount());
-                statsText.append("Calls Made: ").append(oldCallsCount).append(" → ").append(lead.getCallsMadeCount()).append("; ");
-                lead.setLastContactDate(LocalDateTime.now());
-                leadHistoryService.recordContactMade(lead, currentUser, "Phone Call", "Phone call made to lead", "Phone conversation completed");
-            }
-            if (statisticsDTO.getFollowUp() != null && statisticsDTO.getFollowUp()) {
-                lead.setFollowUpsCount(lead.getFollowUpsCount() + 1);
-                statsChanges.put("followUp", "Follow-ups count increased from " + oldFollowupsCount + " to " + lead.getFollowUpsCount());
-                statsText.append("Follow-ups: ").append(oldFollowupsCount).append(" → ").append(lead.getFollowUpsCount()).append("; ");
-            }
-            if (statisticsDTO.getMeetingBooked() != null && statisticsDTO.getMeetingBooked()) {
-                lead.setMeetingsBookedCount(lead.getMeetingsBookedCount() + 1);
-                statsChanges.put("meetingBooked", "Meetings booked count increased from " + oldMeetingsBooked + " to " + lead.getMeetingsBookedCount());
-                statsText.append("Meetings Booked: ").append(oldMeetingsBooked).append(" → ").append(lead.getMeetingsBookedCount()).append("; ");
-
-                // Record stage change
-                if (lead.getLeadStage() != LeadStage.MEETING_BOOKED) {
-                    leadHistoryService.recordStageChange(lead, currentUser, oldStage.toString(), LeadStage.MEETING_BOOKED.toString(), "Meeting booked with lead");
-                    lead.setLeadStage(LeadStage.MEETING_BOOKED);
-                }
-            }
-            if (statisticsDTO.getMeetingDone() != null && statisticsDTO.getMeetingDone()) {
-                lead.setMeetingsDoneCount(lead.getMeetingsDoneCount() + 1);
-                statsChanges.put("meetingDone", "Meetings done count increased from " + oldMeetingsDone + " to " + lead.getMeetingsDoneCount());
-                statsText.append("Meetings Done: ").append(oldMeetingsDone).append(" → ").append(lead.getMeetingsDoneCount()).append("; ");
-
-                // Record stage change
-                if (lead.getLeadStage() == LeadStage.MEETING_BOOKED) {
-                    leadHistoryService.recordStageChange(lead, currentUser, lead.getLeadStage().toString(), LeadStage.PROPOSAL_SENT.toString(), "Meeting completed, moving to proposal stage");
-                    lead.setLeadStage(LeadStage.PROPOSAL_SENT);
-                }
-            }
-
-            lead.setUpdateCount(lead.getUpdateCount() + 1);
-            lead.setLastUpdatedBy(currentUser.getEmail());
-
-            Lead updatedLead = leadRepository.save(lead);
-
-            if (!statsChanges.isEmpty()) {
-                leadHistoryService.recordStatisticsUpdate(updatedLead, currentUser, statsText.toString(), "Statistics updated by " + currentUser.getEmail());
-            }
-
-            log.info("Statistics updated for lead {} by {}", id, currentUser.getEmail());
-            return mapToResponseDTO(updatedLead);
-        } else {
+        if (!isAdmin && !isAssignedEmployee) {
             throw new UnauthorizedException("You are not authorized to update this lead");
         }
+
+        List<String> statsChanges = new ArrayList<>();
+
+        if (Boolean.TRUE.equals(statisticsDTO.getWhatsappSent())) {
+            lead.setWhatsappSentCount(lead.getWhatsappSentCount() + 1);
+            statsChanges.add("WhatsApp sent (Total: " + lead.getWhatsappSentCount() + ")");
+            lead.setLastContactDate(LocalDateTime.now());
+        }
+        if (Boolean.TRUE.equals(statisticsDTO.getCallsMade())) {
+            lead.setCallsMadeCount(lead.getCallsMadeCount() + 1);
+            statsChanges.add("Phone call made (Total: " + lead.getCallsMadeCount() + ")");
+            lead.setLastContactDate(LocalDateTime.now());
+        }
+        if (Boolean.TRUE.equals(statisticsDTO.getFollowUp())) {
+            lead.setFollowUpsCount(lead.getFollowUpsCount() + 1);
+            statsChanges.add("Follow-up completed (Total: " + lead.getFollowUpsCount() + ")");
+        }
+        if (Boolean.TRUE.equals(statisticsDTO.getMeetingBooked())) {
+            lead.setMeetingsBookedCount(lead.getMeetingsBookedCount() + 1);
+            statsChanges.add("Meeting booked (Total: " + lead.getMeetingsBookedCount() + ")");
+            if (lead.getLeadStage() != LeadStage.MEETING_BOOKED) {
+                lead.setLeadStage(LeadStage.MEETING_BOOKED);
+                statsChanges.add("Stage automatically updated to MEETING_BOOKED");
+            }
+        }
+        if (Boolean.TRUE.equals(statisticsDTO.getMeetingDone())) {
+            lead.setMeetingsDoneCount(lead.getMeetingsDoneCount() + 1);
+            statsChanges.add("Meeting completed (Total: " + lead.getMeetingsDoneCount() + ")");
+            if (lead.getLeadStage() == LeadStage.MEETING_BOOKED) {
+                lead.setLeadStage(LeadStage.PROPOSAL_SENT);
+                statsChanges.add("Stage automatically updated to PROPOSAL_SENT");
+            }
+        }
+
+        lead.setUpdateCount(lead.getUpdateCount() + 1);
+        lead.setLastUpdatedBy(currentUser.getEmail());
+
+        Lead updatedLead = leadRepository.save(lead);
+
+        if (!statsChanges.isEmpty()) {
+            String allChanges = String.join("; ", statsChanges);
+            leadHistoryService.recordStatisticsUpdate(updatedLead, currentUser, allChanges,
+                    "Statistics updated by " + currentUser.getEmail());
+        }
+
+        log.info("Statistics updated for lead {} by {}", id, currentUser.getEmail());
+        return mapToResponseDTO(updatedLead);
     }
 
     @Override
     public Map<String, Long> getLeadStatistics() {
         log.info("Fetching lead statistics");
-
         Map<String, Long> statistics = new HashMap<>();
 
         List<Object[]> typeStats = leadRepository.countLeadsByType();
@@ -396,14 +332,12 @@ public class LeadServiceImpl implements LeadService {
         }
 
         statistics.put("total_active_leads", leadRepository.findByIsActiveTrue().stream().count());
-
         return statistics;
     }
 
     @Override
     public List<LeadResponseDTO> getLeadsByDateRange(LocalDate startDate, LocalDate endDate) {
         log.info("Fetching leads between {} and {}", startDate, endDate);
-
         return leadRepository.findAll()
                 .stream()
                 .filter(lead -> lead.getCreatedAt().toLocalDate().isAfter(startDate.minusDays(1)) &&
@@ -423,7 +357,6 @@ public class LeadServiceImpl implements LeadService {
         Lead lead = leadRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Lead not found with ID: " + id));
 
-        // Verify ownership
         if (!lead.getAssignedEmployee().getId().equals(employee.getId())) {
             throw new UnauthorizedException("You are not authorized to update this lead");
         }
@@ -444,11 +377,9 @@ public class LeadServiceImpl implements LeadService {
         switch (newStage) {
             case WHATSAPP_SENT:
                 lead.setWhatsappSentCount(lead.getWhatsappSentCount() + 1);
-                leadHistoryService.recordContactMade(lead, employee, "WhatsApp", "WhatsApp message sent", "WhatsApp communication sent");
                 break;
             case CALLS_MADE:
                 lead.setCallsMadeCount(lead.getCallsMadeCount() + 1);
-                leadHistoryService.recordContactMade(lead, employee, "Phone Call", "Phone call made", "Phone conversation completed");
                 break;
             case FOLLOW_UPS:
                 lead.setFollowUpsCount(lead.getFollowUpsCount() + 1);
@@ -459,17 +390,11 @@ public class LeadServiceImpl implements LeadService {
             case MEETINGS_DONE:
                 lead.setMeetingsDoneCount(lead.getMeetingsDoneCount() + 1);
                 break;
-            case CONVERSIONS:
-                lead.setLeadStage(LeadStage.CLOSED);
-                log.info("Lead {} converted to customer", id);
-                break;
             default:
                 break;
         }
 
         Lead savedLead = leadRepository.save(lead);
-
-        // Record stage change in history
         leadHistoryService.recordStageChange(savedLead, employee, oldStage, stage, "Stage updated by " + employee.getEmail());
 
         log.info("Stage updated for lead {} to {} by {}", id, newStage, employeeEmail);
@@ -486,32 +411,20 @@ public class LeadServiceImpl implements LeadService {
         Lead lead = leadRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Lead not found with ID: " + id));
 
-        // Verify ownership
         if (!lead.getAssignedEmployee().getId().equals(employee.getId())) {
             throw new UnauthorizedException("You are not authorized to update this lead");
         }
 
         String oldFollowUpDate = lead.getNextFollowUpDate().toString();
         String oldDescription = lead.getNextFollowUp();
-        LocalDate newDate = LocalDate.parse(nextFollowUpDate);
+        LocalDate newDate = LocalDate.parse(nextFollowUpDate, DateTimeFormatter.ISO_LOCAL_DATE);
 
         lead.setNextFollowUpDate(newDate);
         lead.setNextFollowUp(nextFollowUpDescription);
         lead.setUpdateCount(lead.getUpdateCount() + 1);
         lead.setLastUpdatedBy(employee.getEmail());
 
-        // Update stage to follow-ups if not already in appropriate stage
-        if (lead.getLeadStage() != LeadStage.FOLLOW_UPS &&
-                lead.getLeadStage() != LeadStage.MEETING_BOOKED &&
-                lead.getLeadStage() != LeadStage.NEGOTIATION) {
-            String oldStage = lead.getLeadStage().toString();
-            lead.setLeadStage(LeadStage.FOLLOW_UPS);
-            leadHistoryService.recordStageChange(lead, employee, oldStage, LeadStage.FOLLOW_UPS.toString(), "Moving to follow-up stage");
-        }
-
         Lead savedLead = leadRepository.save(lead);
-
-        // Record follow-up update
         leadHistoryService.recordFollowUpUpdate(savedLead, employee, oldFollowUpDate, nextFollowUpDate, oldDescription, nextFollowUpDescription);
 
         log.info("Follow-up updated for lead {} for date {} by {}", id, newDate, employeeEmail);
@@ -528,56 +441,47 @@ public class LeadServiceImpl implements LeadService {
         Lead lead = leadRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Lead not found with ID: " + id));
 
-        // Verify ownership
         if (!lead.getAssignedEmployee().getId().equals(employee.getId())) {
             throw new UnauthorizedException("You are not authorized to update this lead");
         }
 
-        StringBuilder contactInfo = new StringBuilder();
+        List<String> changes = new ArrayList<>();
+        String oldStage = lead.getLeadStage().toString();
 
-        // Update based on contact made
+        // Handle contact made
         if (Boolean.TRUE.equals(updateDTO.getContactMade())) {
-            contactInfo.append("Contact made. ");
-
-            // Increment appropriate statistics based on contact type
-            if (updateDTO.getResponseMessage() != null) {
-                if (updateDTO.getResponseMessage().toLowerCase().contains("call")) {
-                    lead.setCallsMadeCount(lead.getCallsMadeCount() + 1);
-                    contactInfo.append("Phone call made. ");
-                    leadHistoryService.recordContactMade(lead, employee, "Phone", updateDTO.getResponseMessage(), "Call completed");
-                } else if (updateDTO.getResponseMessage().toLowerCase().contains("whatsapp")) {
-                    lead.setWhatsappSentCount(lead.getWhatsappSentCount() + 1);
-                    contactInfo.append("WhatsApp message sent. ");
-                    leadHistoryService.recordContactMade(lead, employee, "WhatsApp", updateDTO.getResponseMessage(), "WhatsApp communication sent");
-                }
-                lead.setFollowUpsCount(lead.getFollowUpsCount() + 1);
-                contactInfo.append("Follow-up recorded. ");
-            }
-
+            String contactInfo = processContactMade(lead, updateDTO);
+            changes.add(contactInfo);
             lead.setLastContactDate(LocalDateTime.now());
         }
 
-        // Update lead stage if provided
-        if (updateDTO.getNewLeadStage() != null) {
-            String oldStage = lead.getLeadStage().toString();
+        // Handle statistics updates
+        List<String> statsChanges = processStatisticsUpdates(lead, updateDTO);
+        changes.addAll(statsChanges);
+
+        // Handle stage update
+        if (updateDTO.getNewLeadStage() != null && updateDTO.getNewLeadStage() != lead.getLeadStage()) {
+            changes.add("Stage changed from " + oldStage + " to " + updateDTO.getNewLeadStage());
             lead.setLeadStage(updateDTO.getNewLeadStage());
-            contactInfo.append("Stage changed from ").append(oldStage).append(" to ").append(updateDTO.getNewLeadStage()).append(". ");
-            leadHistoryService.recordStageChange(lead, employee, oldStage, updateDTO.getNewLeadStage().toString(), updateDTO.getResponseMessage());
         }
 
-        // Update remarks
-        if (updateDTO.getRemarks() != null) {
-            lead.setRemarks(updateDTO.getRemarks());
-            contactInfo.append("Remarks updated. ");
+        // Handle follow-up update
+        if (updateDTO.getNextFollowUpDate() != null ||
+                (updateDTO.getNextFollowUpDescription() != null && !updateDTO.getNextFollowUpDescription().isEmpty())) {
+            String followUpChange = processFollowUpUpdate(lead, updateDTO);
+            changes.add(followUpChange);
         }
 
         // Handle conversion to customer
         if (Boolean.TRUE.equals(updateDTO.getConvertToCustomer())) {
-            String oldStage = lead.getLeadStage().toString();
+            changes.add("Lead converted to customer and marked as CLOSED");
             lead.setLeadStage(LeadStage.CLOSED);
-            contactInfo.append("Lead converted to customer! ");
-            leadHistoryService.recordStageChange(lead, employee, oldStage, LeadStage.CLOSED.toString(), "Lead converted to customer");
-            log.info("Lead {} marked as converted to customer by {}", id, employeeEmail);
+        }
+
+        // Update remarks if provided
+        if (updateDTO.getRemarks() != null && !updateDTO.getRemarks().isEmpty()) {
+            changes.add("Remarks updated: " + updateDTO.getRemarks());
+            lead.setRemarks(updateDTO.getRemarks());
         }
 
         lead.setUpdateCount(lead.getUpdateCount() + 1);
@@ -585,13 +489,90 @@ public class LeadServiceImpl implements LeadService {
 
         Lead savedLead = leadRepository.save(lead);
 
-        // Record contact made
-        if (contactInfo.length() > 0) {
-            leadHistoryService.recordContactMade(savedLead, employee, "Contact", contactInfo.toString(), updateDTO.getResponseMessage());
+        // Create single consolidated history entry
+        if (!changes.isEmpty()) {
+            String allChanges = String.join("; ", changes);
+            leadHistoryService.recordLeadUpdate(savedLead, employee, allChanges,
+                    "Lead updated by employee: " + employee.getEmail());
         }
 
-        log.info("Lead {} updated after contact by {}", id, employeeEmail);
+        log.info("Lead {} updated after contact with {} changes", id, changes.size());
         return mapToResponseDTO(savedLead);
+    }
+
+    private String processContactMade(Lead lead, EmployeeLeadUpdateDTO updateDTO) {
+        StringBuilder contactInfo = new StringBuilder("Contact made. ");
+
+        if (updateDTO.getResponseMessage() != null && !updateDTO.getResponseMessage().isEmpty()) {
+            String response = updateDTO.getResponseMessage().toLowerCase();
+            if (response.contains("call") || response.contains("phone")) {
+                lead.setCallsMadeCount(lead.getCallsMadeCount() + 1);
+                contactInfo.append("Phone call recorded. ");
+            }
+            if (response.contains("whatsapp") || response.contains("whatsapp")) {
+                lead.setWhatsappSentCount(lead.getWhatsappSentCount() + 1);
+                contactInfo.append("WhatsApp message sent. ");
+            }
+            lead.setFollowUpsCount(lead.getFollowUpsCount() + 1);
+            contactInfo.append("Follow-up recorded. ");
+            contactInfo.append("Response: \"").append(updateDTO.getResponseMessage()).append("\". ");
+        }
+
+        return contactInfo.toString();
+    }
+
+    private List<String> processStatisticsUpdates(Lead lead, EmployeeLeadUpdateDTO updateDTO) {
+        List<String> statsChanges = new ArrayList<>();
+
+        if (Boolean.TRUE.equals(updateDTO.getWhatsappSent())) {
+            lead.setWhatsappSentCount(lead.getWhatsappSentCount() + 1);
+            statsChanges.add("WhatsApp sent (Total: " + lead.getWhatsappSentCount() + ")");
+        }
+
+        if (Boolean.TRUE.equals(updateDTO.getCallsMade())) {
+            lead.setCallsMadeCount(lead.getCallsMadeCount() + 1);
+            statsChanges.add("Phone call made (Total: " + lead.getCallsMadeCount() + ")");
+        }
+
+        if (Boolean.TRUE.equals(updateDTO.getMeetingBooked())) {
+            lead.setMeetingsBookedCount(lead.getMeetingsBookedCount() + 1);
+            statsChanges.add("Meeting booked (Total: " + lead.getMeetingsBookedCount() + ")");
+
+            if (lead.getLeadStage() != LeadStage.MEETING_BOOKED) {
+                statsChanges.add("Stage automatically updated to MEETING_BOOKED");
+                lead.setLeadStage(LeadStage.MEETING_BOOKED);
+            }
+        }
+
+        if (Boolean.TRUE.equals(updateDTO.getMeetingDone())) {
+            lead.setMeetingsDoneCount(lead.getMeetingsDoneCount() + 1);
+            statsChanges.add("Meeting completed (Total: " + lead.getMeetingsDoneCount() + ")");
+
+            if (lead.getLeadStage() == LeadStage.MEETING_BOOKED) {
+                statsChanges.add("Stage automatically updated to PROPOSAL_SENT");
+                lead.setLeadStage(LeadStage.PROPOSAL_SENT);
+            }
+        }
+
+        return statsChanges;
+    }
+
+    private String processFollowUpUpdate(Lead lead, EmployeeLeadUpdateDTO updateDTO) {
+        StringBuilder followUpChange = new StringBuilder();
+
+        if (updateDTO.getNextFollowUpDate() != null) {
+            String oldDate = lead.getNextFollowUpDate().toString();
+            lead.setNextFollowUpDate(updateDTO.getNextFollowUpDate());
+            followUpChange.append("Follow-up date changed from ").append(oldDate)
+                    .append(" to ").append(updateDTO.getNextFollowUpDate()).append(". ");
+        }
+
+        if (updateDTO.getNextFollowUpDescription() != null && !updateDTO.getNextFollowUpDescription().isEmpty()) {
+            lead.setNextFollowUp(updateDTO.getNextFollowUpDescription());
+            followUpChange.append("Follow-up description: \"").append(updateDTO.getNextFollowUpDescription()).append("\". ");
+        }
+
+        return followUpChange.length() > 0 ? followUpChange.toString() : "";
     }
 
     private Lead mapToEntity(LeadDTO dto, Employee assignedEmployee) {

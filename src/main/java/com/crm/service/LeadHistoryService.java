@@ -35,6 +35,7 @@ public class LeadHistoryService {
         log.info("Recorded lead creation history for lead ID: {}", lead.getId());
     }
 
+    // Single method for all lead updates
     public void recordLeadUpdate(Lead lead, Employee employee, String changes, String remarks) {
         LeadHistory history = LeadHistory.builder()
                 .lead(lead)
@@ -49,13 +50,14 @@ public class LeadHistoryService {
         log.info("Recorded lead update history for lead ID: {}", lead.getId());
     }
 
+    // Record stage change specifically
     public void recordStageChange(Lead lead, Employee employee, String previousStage, String newStage, String remarks) {
         LeadHistory history = LeadHistory.builder()
                 .lead(lead)
                 .employee(employee)
                 .action("STAGE_CHANGE")
-                .changes(remarks)
-                .remarks("Stage updated by employee")
+                .changes("Stage changed from " + previousStage + " to " + newStage)
+                .remarks(remarks)
                 .previousStage(previousStage)
                 .newStage(newStage)
                 .build();
@@ -63,11 +65,12 @@ public class LeadHistoryService {
         log.info("Recorded stage change history for lead ID: {} from {} to {}", lead.getId(), previousStage, newStage);
     }
 
+    // Record statistics update
     public void recordStatisticsUpdate(Lead lead, Employee employee, String statisticsChanges, String remarks) {
         LeadHistory history = LeadHistory.builder()
                 .lead(lead)
                 .employee(employee)
-                .action("UPDATE")
+                .action("STATISTICS_UPDATE")
                 .changes(statisticsChanges)
                 .remarks(remarks)
                 .previousStage(lead.getLeadStage().toString())
@@ -77,13 +80,15 @@ public class LeadHistoryService {
         log.info("Recorded statistics update history for lead ID: {}", lead.getId());
     }
 
-    public void recordFollowUpUpdate(Lead lead, Employee employee, String oldFollowUpDate, String newFollowUpDate, String oldDescription, String newDescription) {
-        String changes = String.format("Follow-up updated: Date changed from %s to %s. New description: %s",
+    // Record follow-up update
+    public void recordFollowUpUpdate(Lead lead, Employee employee, String oldFollowUpDate, String newFollowUpDate,
+                                     String oldDescription, String newDescription) {
+        String changes = String.format("Follow-up updated: Date changed from %s to %s. Description: %s",
                 oldFollowUpDate, newFollowUpDate, newDescription);
         LeadHistory history = LeadHistory.builder()
                 .lead(lead)
                 .employee(employee)
-                .action("UPDATE")
+                .action("FOLLOWUP_UPDATE")
                 .changes(changes)
                 .remarks("Follow-up rescheduled")
                 .previousStage(lead.getLeadStage().toString())
@@ -93,10 +98,20 @@ public class LeadHistoryService {
         log.info("Recorded follow-up update history for lead ID: {}", lead.getId());
     }
 
+    // Record contact made
     public void recordContactMade(Lead lead, Employee employee, String contactMethod, String response, String remarks) {
-        // This method is now consolidated into UPDATE action
-        // Keeping for backward compatibility but not creating separate entries
-        log.info("Contact recorded for lead ID: {} via {}", lead.getId(), contactMethod);
+        String changes = String.format("Contact made via %s. Response: %s", contactMethod, response);
+        LeadHistory history = LeadHistory.builder()
+                .lead(lead)
+                .employee(employee)
+                .action("CONTACT_MADE")
+                .changes(changes)
+                .remarks(remarks)
+                .previousStage(lead.getLeadStage().toString())
+                .newStage(lead.getLeadStage().toString())
+                .build();
+        leadHistoryRepository.save(history);
+        log.info("Recorded contact made history for lead ID: {} via {}", lead.getId(), contactMethod);
     }
 
     public List<LeadHistoryDTO> getLeadHistory(Long leadId) {
