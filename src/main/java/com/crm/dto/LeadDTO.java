@@ -1,8 +1,7 @@
 // LeadDTO.java
 package com.crm.dto;
 
-import com.crm.entity.LeadStage;
-import com.crm.entity.LeadType;
+import com.crm.entity.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,4 +51,11 @@ public class LeadDTO {
 
     @NotBlank(message = "Source is required")
     private String source;
+
+
+    // Add these fields to LeadDTO class
+    private MainService interestedService;
+    private ServiceSubcategory serviceSubcategory;
+    private ServiceSubSubcategory serviceSubSubcategory;
+    private String serviceDescription;
 }

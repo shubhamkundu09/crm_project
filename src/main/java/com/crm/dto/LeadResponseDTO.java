@@ -1,7 +1,6 @@
 package com.crm.dto;
 
-import com.crm.entity.LeadStage;
-import com.crm.entity.LeadType;
+import com.crm.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,4 +41,11 @@ public class LeadResponseDTO {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+
+    // Add these fields
+    private MainService interestedService;
+    private ServiceSubcategory serviceSubcategory;
+    private ServiceSubSubcategory serviceSubSubcategory;
+    private String serviceDescription;
 }

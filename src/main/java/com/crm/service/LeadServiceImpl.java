@@ -588,6 +588,10 @@ public class LeadServiceImpl implements LeadService {
                 .assignedEmployee(assignedEmployee)
                 .source(dto.getSource())
                 .isActive(true)
+                .interestedService(dto.getInterestedService())  // Add this
+                .serviceSubcategory(dto.getServiceSubcategory())  // Add this
+                .serviceSubSubcategory(dto.getServiceSubSubcategory())  // Add this
+                .serviceDescription(dto.getServiceDescription())  // Add this
                 .updateCount(0)
                 .lastUpdatedBy("SYSTEM")
                 .whatsappSentCount(0)
@@ -611,6 +615,10 @@ public class LeadServiceImpl implements LeadService {
                 .nextFollowUp(lead.getNextFollowUp())
                 .assignedEmployee(mapToEmployeeResponseDTO(lead.getAssignedEmployee()))
                 .source(lead.getSource())
+                .interestedService(lead.getInterestedService())  // Add this
+                .serviceSubcategory(lead.getServiceSubcategory())  // Add this
+                .serviceSubSubcategory(lead.getServiceSubSubcategory())  // Add this
+                .serviceDescription(lead.getServiceDescription())  // Add this
                 .isActive(lead.getIsActive())
                 .whatsappSentCount(lead.getWhatsappSentCount())
                 .callsMadeCount(lead.getCallsMadeCount())

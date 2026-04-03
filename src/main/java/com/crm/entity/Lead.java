@@ -85,6 +85,26 @@ public class Lead {
 
 
 
+
+    // Add these fields to your Lead class
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private MainService interestedService;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private ServiceSubcategory serviceSubcategory;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private ServiceSubSubcategory serviceSubSubcategory;
+
+    // Also add a field for custom service description if needed
+    @Column(length = 500)
+    private String serviceDescription;
+
+
+
     @Version
     private Integer version;
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRM System</title>
+    <title>CRM System - Insurance Lead Management</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -92,6 +92,7 @@
           outline: none;
         }
         .form-control:focus { border-color: var(--accent); }
+        .form-control:disabled { opacity: 0.5; cursor: not-allowed; }
         
         .btn {
           display: inline-flex;
@@ -198,6 +199,7 @@
         .badge-warm { background: rgba(255,165,2,0.15); color: var(--warm); }
         .badge-cold { background: rgba(116,185,255,0.15); color: var(--cold); }
         .badge-stage { background: rgba(108,99,255,0.15); color: var(--accent); }
+        .badge-service { background: rgba(67,233,123,0.15); color: var(--accent3); }
         
         /* Modal */
         .modal-overlay {
@@ -219,7 +221,7 @@
           border: 1px solid var(--border);
           border-radius: 16px;
           width: 90%;
-          max-width: 680px;
+          max-width: 800px;
           max-height: 90vh;
           overflow-y: auto;
         }
@@ -274,6 +276,9 @@
         .timeline-dot { position: absolute; left: -24px; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); }
         .timeline-content { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px 16px; }
         
+        .service-hierarchy { background: var(--surface2); border-radius: var(--radius-sm); padding: 12px; margin-top: 8px; }
+        .service-preview { font-size: 12px; color: var(--accent3); margin-top: 8px; padding: 8px; background: rgba(67,233,123,0.1); border-radius: var(--radius-sm); }
+        
         @media (max-width: 768px) {
           .sidebar { width: 200px; }
           .main-content { margin-left: 200px; padding: 20px; }
@@ -290,7 +295,7 @@
 <div id="login-page">
     <div class="login-box">
         <div class="login-logo">CRM<span>.</span>Pro</div>
-        <div class="login-sub">Sign in to your account</div>
+        <div class="login-sub">Insurance CRM System</div>
         <div class="role-tabs">
             <button class="role-tab active" onclick="switchLoginRole('admin')">Admin Login</button>
             <button class="role-tab" onclick="switchLoginRole('employee')">Employee Login</button>
@@ -362,12 +367,12 @@
                 <select class="select-filter" onchange="filterLeadsByType(this.value)"><option value="">All Types</option><option value="HOT">Hot</option><option value="WARM">Warm</option><option value="COLD">Cold</option></select>
                 <select class="select-filter" onchange="filterLeadsByStage(this.value)"><option value="">All Stages</option><option value="LEAD_GENERATED">Generated</option><option value="CONTACTED">Contacted</option><option value="INTERESTED">Interested</option><option value="MEETING_BOOKED">Meeting Booked</option><option value="PROPOSAL_SENT">Proposal Sent</option><option value="NEGOTIATION">Negotiation</option><option value="CLOSED">Closed</option></select>
             </div>
-            <div class="card"><div class="table-wrapper"><table><thead><tr><th>Lead</th><th>Type</th><th>Stage</th><th>Assigned To</th><th>Follow-up</th><th>Stats</th><th>Actions</th></tr></thead><tbody id="leads-table-body"></tbody></table></div></div>
+            <div class="card"><div class="table-wrapper"><table><thead><tr><th>Lead</th><th>Type</th><th>Stage</th><th>Service</th><th>Assigned To</th><th>Follow-up</th><th>Stats</th><th>Actions</th></tr></thead><tbody id="leads-table-body"></tbody></table></div></div>
         </div>
         
         <div id="section-followups" class="section">
             <div class="topbar"><div><div class="page-title">Follow-ups</div></div><div class="topbar-actions"><button class="btn btn-outline btn-sm" onclick="loadTodayFollowUps()"><i class="fas fa-calendar-day"></i> Today</button><button class="btn btn-warning btn-sm" onclick="loadPendingFollowUps()"><i class="fas fa-clock"></i> Pending</button></div></div>
-            <div class="card"><div class="card-header"><div class="card-title" id="followup-title">Today's Follow-ups</div></div><div class="table-wrapper"><table><thead><tr><th>Lead</th><th>Type</th><th>Stage</th><th>Assigned To</th><th>Follow-up Date</th><th>Description</th><th>Actions</th></tr></thead><tbody id="followups-table-body"></tbody></table></div></div>
+            <div class="card"><div class="card-header"><div class="card-title" id="followup-title">Today's Follow-ups</div></div><div class="table-wrapper"><table><thead><tr><th>Lead</th><th>Type</th><th>Stage</th><th>Service</th><th>Assigned To</th><th>Follow-up Date</th><th>Description</th><th>Actions</th></tr></thead><tbody id="followups-table-body"></tbody></table></div></div>
         </div>
         
         <!-- Employee Sections -->
@@ -382,7 +387,7 @@
                 <div class="search-wrap"><i class="fas fa-search"></i><input type="text" class="search-input" placeholder="Search my leads..." oninput="filterMyLeads(this.value)"></div>
                 <select class="select-filter" onchange="filterMyLeadsByType(this.value)"><option value="">All Types</option><option value="HOT">Hot</option><option value="WARM">Warm</option><option value="COLD">Cold</option></select>
             </div>
-            <div class="card"><div class="table-wrapper"><table><thead><tr><th>Lead</th><th>Type</th><th>Stage</th><th>Follow-up</th><th>Stats</th><th>Actions</th></tr></thead><tbody id="my-leads-table-body"></tbody></table></div></div>
+            <div class="card"><div class="table-wrapper"><table><thead><tr><th>Lead</th><th>Type</th><th>Stage</th><th>Service</th><th>Follow-up</th><th>Stats</th><th>Actions</th></tr></thead><tbody id="my-leads-table-body"></tbody></table></div></div>
         </div>
         
         <div id="section-change-password" class="section">
@@ -399,7 +404,177 @@
     </main>
 </div>
 
-<!-- Consolidated Lead Update Modal (Single Modal for All Updates) -->
+<!-- Lead Modal with Service Categories -->
+<div class="modal-overlay" id="lead-modal"><div class="modal modal-lg"><div class="modal-header"><div class="modal-title" id="lead-modal-title">Add Lead</div><button class="modal-close" onclick="closeModal('lead-modal')"><i class="fas fa-times"></i></button></div><div class="modal-body"><form id="lead-form" onsubmit="handleLeadSubmit(event)"><div class="form-grid">
+    <div class="form-group"><label class="form-label">Lead Name *</label><input type="text" class="form-control" id="lead-name" required></div>
+    <div class="form-group"><label class="form-label">Email *</label><input type="email" class="form-control" id="lead-email" required></div>
+    <div class="form-group"><label class="form-label">Phone *</label><input type="text" class="form-control" id="lead-phone" maxlength="10" required></div>
+    <div class="form-group"><label class="form-label">Source *</label><input type="text" class="form-control" id="lead-source" required></div>
+    <div class="form-group"><label class="form-label">Lead Type *</label><select class="form-control" id="lead-type" required><option value="">Select</option><option value="HOT">Hot</option><option value="WARM">Warm</option><option value="COLD">Cold</option></select></div>
+    <div class="form-group"><label class="form-label">Lead Stage *</label><select class="form-control" id="lead-stage" required><option value="">Select</option><option value="LEAD_GENERATED">Lead Generated</option><option value="CONTACTED">Contacted</option><option value="INTERESTED">Interested</option><option value="MEETING_BOOKED">Meeting Booked</option><option value="PROPOSAL_SENT">Proposal Sent</option><option value="NEGOTIATION">Negotiation</option><option value="CLOSED">Closed</option></select></div>
+    
+    <!-- Service Category Section -->
+    <div class="col-span-2"><div style="border-top:1px solid var(--border); margin: 8px 0 16px;"></div><h3 style="font-size:14px;margin-bottom:12px;color:var(--accent3)"><i class="fas fa-boxes"></i> Service Information</h3></div>
+    
+    <div class="form-group"><label class="form-label">Main Service *</label><select class="form-control" id="lead-main-service" onchange="loadSubcategories()"><option value="">Select Service</option><option value="LIFE_INSURANCE">Life Insurance</option><option value="HEALTH_INSURANCE">Health Insurance</option><option value="GENERAL_INSURANCE">General Insurance</option><option value="INVESTMENT">Investment</option><option value="RETIREMENT_PLANNING">Retirement Planning</option><option value="BUSINESS_INSURANCE">Business Insurance</option></select></div>
+    
+    <div class="form-group"><label class="form-label">Sub Category</label><select class="form-control" id="lead-subcategory" onchange="loadSubSubcategories()" disabled><option value="">Select Main Service First</option></select></div>
+    
+    <div class="form-group"><label class="form-label">Sub-Sub Category</label><select class="form-control" id="lead-subsubcategory" disabled><option value="">Select Sub Category First</option></select></div>
+    
+    <div class="form-group col-span-2"><label class="form-label">Service Description (Optional)</label><textarea class="form-control" id="lead-service-desc" rows="2" placeholder="Additional details about the service the lead is interested in..."></textarea></div>
+    
+    <div id="service-preview" class="service-preview col-span-2" style="display:none"></div>
+    
+    <div class="col-span-2"><div style="border-top:1px solid var(--border); margin: 8px 0 16px;"></div></div>
+    
+    <div class="form-group"><label class="form-label">Assigned Employee *</label><select class="form-control" id="lead-employee" required><option value="">Select</option></select></div>
+    <div class="form-group"><label class="form-label">Next Follow-up Date *</label><input type="date" class="form-control" id="lead-followup-date" required></div>
+    <div class="form-group col-span-2"><label class="form-label">Remarks *</label><textarea class="form-control" id="lead-remarks" rows="2" required></textarea></div>
+    <div class="form-group col-span-2"><label class="form-label">Next Follow-up Description *</label><textarea class="form-control" id="lead-next-followup" rows="2" required></textarea></div>
+</div><input type="hidden" id="lead-id"></form></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('lead-modal')">Cancel</button><button class="btn btn-primary" onclick="document.getElementById('lead-form').requestSubmit()">Save Lead</button></div></div></div>
+
+<!-- Service Category Mappings -->
+<script>
+    // Service Category Data
+    const SERVICE_DATA = {
+        LIFE_INSURANCE: {
+            display: "Life Insurance",
+            subcategories: {
+                TERM_LIFE: { display: "Term Life Insurance", subsub: { LEVEL_TERM: "Level Term Plan", DECREASING_TERM: "Decreasing Term Plan", INCREASING_TERM: "Increasing Term Plan" } },
+                WHOLE_LIFE: { display: "Whole Life Insurance", subsub: {} },
+                UNIVERSAL_LIFE: { display: "Universal Life Insurance", subsub: {} },
+                ENDOWMENT_PLANS: { display: "Endowment Plans", subsub: {} }
+            }
+        },
+        HEALTH_INSURANCE: {
+            display: "Health Insurance",
+            subcategories: {
+                INDIVIDUAL_HEALTH: { display: "Individual Health Insurance", subsub: { INDIVIDUAL_COVER: "Individual Coverage" } },
+                FAMILY_FLOATER: { display: "Family Floater Insurance", subsub: { FAMILY_COVER: "Family Coverage", TOP_UP_PLANS: "Top-up Plans" } },
+                CRITICAL_ILLNESS: { display: "Critical Illness Insurance", subsub: {} },
+                SENIOR_CITIZEN: { display: "Senior Citizen Health Insurance", subsub: {} }
+            }
+        },
+        GENERAL_INSURANCE: {
+            display: "General Insurance",
+            subcategories: {
+                MOTOR_INSURANCE: { display: "Motor Insurance", subsub: {} },
+                HOME_INSURANCE: { display: "Home Insurance", subsub: {} },
+                TRAVEL_INSURANCE: { display: "Travel Insurance", subsub: {} }
+            }
+        },
+        INVESTMENT: {
+            display: "Investment",
+            subcategories: {
+                MUTUAL_FUNDS: { display: "Mutual Funds", subsub: { EQUITY_FUNDS: "Equity Funds", DEBT_FUNDS: "Debt Funds", HYBRID_FUNDS: "Hybrid Funds" } },
+                ULIP: { display: "ULIP Plans", subsub: { EQUITY_ULIP: "Equity-oriented ULIP", DEBT_ULIP: "Debt-oriented ULIP", BALANCED_ULIP: "Balanced ULIP" } },
+                FIXED_DEPOSITS: { display: "Fixed Deposits", subsub: {} }
+            }
+        },
+        RETIREMENT_PLANNING: {
+            display: "Retirement Planning",
+            subcategories: {
+                PENSION_PLANS: { display: "Pension Plans", subsub: {} },
+                ANNUITY_PLANS: { display: "Annuity Plans", subsub: {} }
+            }
+        },
+        BUSINESS_INSURANCE: {
+            display: "Business Insurance",
+            subcategories: {
+                CORPORATE_HEALTH: { display: "Corporate Health Insurance", subsub: {} },
+                LIABILITY_INSURANCE: { display: "Liability Insurance", subsub: {} },
+                PROPERTY_INSURANCE: { display: "Property Insurance", subsub: {} }
+            }
+        }
+    };
+    
+    function loadSubcategories() {
+        const mainService = document.getElementById('lead-main-service').value;
+        const subcatSelect = document.getElementById('lead-subcategory');
+        const subsubSelect = document.getElementById('lead-subsubcategory');
+        
+        if (!mainService || !SERVICE_DATA[mainService]) {
+            subcatSelect.innerHTML = '<option value="">Select Main Service First</option>';
+            subcatSelect.disabled = true;
+            subsubSelect.innerHTML = '<option value="">Select Sub Category First</option>';
+            subsubSelect.disabled = true;
+            document.getElementById('service-preview').style.display = 'none';
+            return;
+        }
+        
+        subcatSelect.disabled = false;
+        subcatSelect.innerHTML = '<option value="">Select Sub Category</option>';
+        
+        const subs = SERVICE_DATA[mainService].subcategories;
+        for (const [key, value] of Object.entries(subs)) {
+            subcatSelect.innerHTML += `<option value="${key}">${value.display}</option>`;
+        }
+        
+        subsubSelect.innerHTML = '<option value="">Select Sub Category First</option>';
+        subsubSelect.disabled = true;
+        updateServicePreview();
+    }
+    
+    function loadSubSubcategories() {
+        const mainService = document.getElementById('lead-main-service').value;
+        const subcategory = document.getElementById('lead-subcategory').value;
+        const subsubSelect = document.getElementById('lead-subsubcategory');
+        
+        if (!mainService || !subcategory || !SERVICE_DATA[mainService]?.subcategories[subcategory]) {
+            subsubSelect.innerHTML = '<option value="">Select Sub Category First</option>';
+            subsubSelect.disabled = true;
+            updateServicePreview();
+            return;
+        }
+        
+        const subsubs = SERVICE_DATA[mainService].subcategories[subcategory].subsub;
+        subsubSelect.disabled = false;
+        subsubSelect.innerHTML = '<option value="">Select Sub-Sub Category (Optional)</option>';
+        
+        for (const [key, value] of Object.entries(subsubs)) {
+            subsubSelect.innerHTML += `<option value="${key}">${value}</option>`;
+        }
+        
+        updateServicePreview();
+    }
+    
+    function updateServicePreview() {
+        const mainService = document.getElementById('lead-main-service').value;
+        const subcategory = document.getElementById('lead-subcategory').value;
+        const subsubcategory = document.getElementById('lead-subsubcategory').value;
+        const previewDiv = document.getElementById('service-preview');
+        
+        if (!mainService) {
+            previewDiv.style.display = 'none';
+            return;
+        }
+        
+        let previewText = `Selected: ${SERVICE_DATA[mainService]?.display || mainService}`;
+        if (subcategory && SERVICE_DATA[mainService]?.subcategories[subcategory]) {
+            previewText += ` → ${SERVICE_DATA[mainService].subcategories[subcategory].display}`;
+        }
+        if (subsubcategory && SERVICE_DATA[mainService]?.subcategories[subcategory]?.subsub[subsubcategory]) {
+            previewText += ` → ${SERVICE_DATA[mainService].subcategories[subcategory].subsub[subsubcategory]}`;
+        }
+        
+        previewDiv.innerHTML = `<i class="fas fa-info-circle"></i> ${previewText}`;
+        previewDiv.style.display = 'block';
+    }
+    
+    function getServiceDisplay(mainService, subcategory, subsubcategory) {
+        let display = SERVICE_DATA[mainService]?.display || mainService;
+        if (subcategory && SERVICE_DATA[mainService]?.subcategories[subcategory]) {
+            display = SERVICE_DATA[mainService].subcategories[subcategory].display;
+        }
+        if (subsubcategory && SERVICE_DATA[mainService]?.subcategories[subcategory]?.subsub[subsubcategory]) {
+            display = SERVICE_DATA[mainService].subcategories[subcategory].subsub[subsubcategory];
+        }
+        return display;
+    }
+</script>
+
+<!-- Consolidated Lead Update Modal -->
 <div class="modal-overlay" id="consolidated-update-modal">
     <div class="modal">
         <div class="modal-header">
@@ -408,14 +583,12 @@
         </div>
         <div class="modal-body">
             <form id="consolidated-update-form" onsubmit="handleConsolidatedUpdate(event)">
-                <!-- Contact Section -->
                 <div style="margin-bottom:20px">
                     <h3 style="font-size:14px;margin-bottom:12px;color:var(--accent)"><i class="fas fa-phone-alt"></i> Contact Information</h3>
                     <div class="checkbox-group"><input type="checkbox" id="cu-contact-made"> <span>Contact Made with Lead</span></div>
                     <div class="form-group"><textarea class="form-control" id="cu-response" rows="2" placeholder="Response message (include 'call' or 'whatsapp' for auto-tracking)..."></textarea></div>
                 </div>
                 
-                <!-- Statistics Section -->
                 <div style="margin-bottom:20px">
                     <h3 style="font-size:14px;margin-bottom:12px;color:var(--accent3)"><i class="fas fa-chart-bar"></i> Statistics Updates</h3>
                     <div class="form-grid">
@@ -426,7 +599,6 @@
                     </div>
                 </div>
                 
-                <!-- Stage & Conversion Section -->
                 <div style="margin-bottom:20px">
                     <h3 style="font-size:14px;margin-bottom:12px;color:var(--accent4)"><i class="fas fa-arrow-right"></i> Stage & Conversion</h3>
                     <div class="form-grid">
@@ -447,7 +619,6 @@
                     </div>
                 </div>
                 
-                <!-- Follow-up Section -->
                 <div style="margin-bottom:20px">
                     <h3 style="font-size:14px;margin-bottom:12px;color:var(--warning)"><i class="fas fa-calendar-alt"></i> Follow-up Planning</h3>
                     <div class="form-grid">
@@ -456,7 +627,6 @@
                     </div>
                 </div>
                 
-                <!-- Remarks Section -->
                 <div style="margin-bottom:20px">
                     <h3 style="font-size:14px;margin-bottom:12px;color:var(--text2)"><i class="fas fa-sticky-note"></i> Additional Notes</h3>
                     <div class="form-group"><textarea class="form-control" id="cu-remarks" rows="2" placeholder="Additional remarks or notes about this interaction..."></textarea></div>
@@ -477,8 +647,6 @@
 
 <!-- Other Modals -->
 <div class="modal-overlay" id="employee-modal"><div class="modal"><div class="modal-header"><div class="modal-title" id="emp-modal-title">Add Employee</div><button class="modal-close" onclick="closeModal('employee-modal')"><i class="fas fa-times"></i></button></div><div class="modal-body"><form id="employee-form" onsubmit="handleEmployeeSubmit(event)"><div class="form-grid"><div class="form-group"><label class="form-label">First Name *</label><input type="text" class="form-control" id="emp-fname" required></div><div class="form-group"><label class="form-label">Last Name *</label><input type="text" class="form-control" id="emp-lname" required></div><div class="form-group col-span-2"><label class="form-label">Email *</label><input type="email" class="form-control" id="emp-email" required></div><div class="form-group col-span-2" id="emp-pass-group"><label class="form-label">Password *</label><input type="password" class="form-control" id="emp-pass"></div><div class="form-group"><label class="form-label">Department *</label><input type="text" class="form-control" id="emp-dept" required></div><div class="form-group"><label class="form-label">Position *</label><input type="text" class="form-control" id="emp-pos" required></div><div class="form-group"><label class="form-label">Salary *</label><input type="number" class="form-control" id="emp-salary" required></div><div class="form-group"><label class="form-label">Phone *</label><input type="text" class="form-control" id="emp-phone" maxlength="10" required></div><div class="form-group col-span-2"><label class="form-label">Joining Date *</label><input type="date" class="form-control" id="emp-date" required></div></div><input type="hidden" id="emp-id"></form></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('employee-modal')">Cancel</button><button class="btn btn-primary" onclick="document.getElementById('employee-form').requestSubmit()">Save Employee</button></div></div></div>
-
-<div class="modal-overlay" id="lead-modal"><div class="modal modal-lg"><div class="modal-header"><div class="modal-title" id="lead-modal-title">Add Lead</div><button class="modal-close" onclick="closeModal('lead-modal')"><i class="fas fa-times"></i></button></div><div class="modal-body"><form id="lead-form" onsubmit="handleLeadSubmit(event)"><div class="form-grid"><div class="form-group"><label class="form-label">Lead Name *</label><input type="text" class="form-control" id="lead-name" required></div><div class="form-group"><label class="form-label">Email *</label><input type="email" class="form-control" id="lead-email" required></div><div class="form-group"><label class="form-label">Phone *</label><input type="text" class="form-control" id="lead-phone" maxlength="10" required></div><div class="form-group"><label class="form-label">Source *</label><input type="text" class="form-control" id="lead-source" required></div><div class="form-group"><label class="form-label">Lead Type *</label><select class="form-control" id="lead-type" required><option value="">Select</option><option value="HOT">Hot</option><option value="WARM">Warm</option><option value="COLD">Cold</option></select></div><div class="form-group"><label class="form-label">Lead Stage *</label><select class="form-control" id="lead-stage" required><option value="">Select</option><option value="LEAD_GENERATED">Lead Generated</option><option value="CONTACTED">Contacted</option><option value="INTERESTED">Interested</option><option value="MEETING_BOOKED">Meeting Booked</option><option value="PROPOSAL_SENT">Proposal Sent</option><option value="NEGOTIATION">Negotiation</option><option value="CLOSED">Closed</option></select></div><div class="form-group"><label class="form-label">Assigned Employee *</label><select class="form-control" id="lead-employee" required><option value="">Select</option></select></div><div class="form-group"><label class="form-label">Next Follow-up Date *</label><input type="date" class="form-control" id="lead-followup-date" required></div><div class="form-group col-span-2"><label class="form-label">Remarks *</label><textarea class="form-control" id="lead-remarks" rows="2" required></textarea></div><div class="form-group col-span-2"><label class="form-label">Next Follow-up Description *</label><textarea class="form-control" id="lead-next-followup" rows="2" required></textarea></div></div><input type="hidden" id="lead-id"></form></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('lead-modal')">Cancel</button><button class="btn btn-primary" onclick="document.getElementById('lead-form').requestSubmit()">Save Lead</button></div></div></div>
 
 <div class="modal-overlay" id="lead-detail-modal"><div class="modal modal-lg"><div class="modal-header"><div class="modal-title">Lead Details</div><button class="modal-close" onclick="closeModal('lead-detail-modal')"><i class="fas fa-times"></i></button></div><div class="modal-body" id="lead-detail-content"></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('lead-detail-modal')">Close</button></div></div></div>
 
@@ -623,10 +791,10 @@
         
         const recentLeads = leads.slice(0, 5);
         document.getElementById('recent-leads-table').innerHTML = recentLeads.length ? `
-          <table><thead><tr><th>Name</th><th>Type</th><th>Stage</th></tr></thead><tbody>${recentLeads.map(l => `<tr><td>${l.name}</td><td><span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span></td><td><span class="badge-stage">${formatStage(l.leadStage)}</span></td></tr>`).join('')}</tbody></table>
+          <table><thead><tr><th>Name</th><th>Type</th><th>Stage</th><th>Service</th></tr></thead><tbody>${recentLeads.map(l => `<tr><td>${l.name}</td><td><span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span></td><td><span class="badge-stage">${formatStage(l.leadStage)}</span></td><td><span class="badge-service">${getServiceDisplay(l.interestedService, l.serviceSubcategory, l.serviceSubSubcategory)}</span></td></tr>`).join('')}</tbody></table>
         ` : '<div class="empty-state"><i class="fas fa-inbox"></i><p>No leads</p></div>';
         
-        document.getElementById('today-followups').innerHTML = followups.length ? `<div style="padding:12px">${followups.slice(0, 5).map(l => `<div style="padding:10px 0;border-bottom:1px solid var(--border)"><div style="font-weight:600">${l.name}</div><div style="font-size:12px;color:var(--text2)">${l.nextFollowUp || '-'}</div></div>`).join('')}</div>` : '<div class="empty-state"><i class="fas fa-calendar-check"></i><p>No follow-ups today</p></div>';
+        document.getElementById('today-followups').innerHTML = followups.length ? `<div style="padding:12px">${followups.slice(0, 5).map(l => `<div style="padding:10px 0;border-bottom:1px solid var(--border)"><div style="font-weight:600">${l.name}</div><div style="font-size:12px;color:var(--text2)">${l.nextFollowUp || '-'}</div><div style="font-size:11px;color:var(--accent3)">${getServiceDisplay(l.interestedService, l.serviceSubcategory, l.serviceSubSubcategory)}</div></div>`).join('')}</div>` : '<div class="empty-state"><i class="fas fa-calendar-check"></i><p>No follow-ups today</p></div>';
       } catch (err) { document.getElementById('dashboard-stats').innerHTML = `<div class="empty-state"><p>${err.message}</p></div>`; }
     }
     
@@ -712,8 +880,8 @@
     
     function renderLeads(list) {
       const tb = document.getElementById('leads-table-body');
-      if (!list.length) { tb.innerHTML = '<tr><td colspan="7"><div class="empty-state">No leads</div></td></tr>'; return; }
-      tb.innerHTML = list.map(l => `<tr><td><div style="font-weight:600">${l.name}</div><div style="font-size:12px;color:var(--text2)">${l.email}</div></td><td><span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span></td><td><span class="badge-stage">${formatStage(l.leadStage)}</span></td><td>${l.assignedEmployee ? l.assignedEmployee.firstName : '-'}</td><td>${formatDate(l.nextFollowUpDate)}</td><td><span style="font-size:11px">📱${l.whatsappSentCount||0} 📞${l.callsMadeCount||0}</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm" onclick="viewLeadDetail(${l.id})"><i class="fas fa-eye"></i></button><button class="btn btn-purple btn-sm" onclick="openConsolidatedUpdate(${l.id},'admin')"><i class="fas fa-edit"></i></button><button class="btn btn-accent2 btn-sm" onclick="viewHistory(${l.id})"><i class="fas fa-history"></i></button><button class="btn btn-danger btn-sm" onclick="deleteLead(${l.id})"><i class="fas fa-trash"></i></button></div></td></tr>`).join('');
+      if (!list.length) { tb.innerHTML = '<tr><td colspan="8"><div class="empty-state">No leads</div></td></tr>'; return; }
+      tb.innerHTML = list.map(l => `<tr><td><div style="font-weight:600">${l.name}</div><div style="font-size:12px;color:var(--text2)">${l.email}</div></td><td><span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span></td><td><span class="badge-stage">${formatStage(l.leadStage)}</span></td><td><span class="badge-service">${getServiceDisplay(l.interestedService, l.serviceSubcategory, l.serviceSubSubcategory)}</span></td><td>${l.assignedEmployee ? l.assignedEmployee.firstName : '-'}</td><td>${formatDate(l.nextFollowUpDate)}</td><td><span style="font-size:11px">📱${l.whatsappSentCount||0} 📞${l.callsMadeCount||0}</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm" onclick="viewLeadDetail(${l.id})"><i class="fas fa-eye"></i></button><button class="btn btn-purple btn-sm" onclick="openConsolidatedUpdate(${l.id},'admin')"><i class="fas fa-edit"></i></button><button class="btn btn-accent2 btn-sm" onclick="viewHistory(${l.id})"><i class="fas fa-history"></i></button><button class="btn btn-danger btn-sm" onclick="deleteLead(${l.id})"><i class="fas fa-trash"></i></button></div></td></tr>`).join('');
     }
     
     function filterLeads(q) { renderLeads(allLeads.filter(l => `${l.name} ${l.email}`.toLowerCase().includes(q.toLowerCase()))); }
@@ -724,7 +892,13 @@
       document.getElementById('lead-modal-title').textContent = 'Add Lead';
       document.getElementById('lead-form').reset();
       document.getElementById('lead-id').value = '';
-      try { const res = await api('GET', '/api/admin/employees/active'); document.getElementById('lead-employee').innerHTML = '<option value="">Select</option>' + (res.data || []).map(e => `<option value="${e.id}">${e.firstName} ${e.lastName}</option>`).join(''); } catch {}
+      document.getElementById('lead-subcategory').disabled = true;
+      document.getElementById('lead-subsubcategory').disabled = true;
+      document.getElementById('service-preview').style.display = 'none';
+      try {
+        const res = await api('GET', '/api/admin/employees/active');
+        document.getElementById('lead-employee').innerHTML = '<option value="">Select</option>' + (res.data || []).map(e => `<option value="${e.id}">${e.firstName} ${e.lastName} (${e.department})</option>`).join('');
+      } catch {}
       openModal('lead-modal');
     }
     
@@ -741,20 +915,28 @@
         assignedEmployeeId: parseInt(document.getElementById('lead-employee').value),
         nextFollowUpDate: document.getElementById('lead-followup-date').value,
         remarks: document.getElementById('lead-remarks').value,
-        nextFollowUp: document.getElementById('lead-next-followup').value
+        nextFollowUp: document.getElementById('lead-next-followup').value,
+        interestedService: document.getElementById('lead-main-service').value || null,
+        serviceSubcategory: document.getElementById('lead-subcategory').value || null,
+        serviceSubSubcategory: document.getElementById('lead-subsubcategory').value || null,
+        serviceDescription: document.getElementById('lead-service-desc').value || null
       };
-      try { if (id) { await api('PUT', `/api/admin/leads/${id}`, body); toast('Lead updated!'); } else { await api('POST', '/api/admin/leads', body); toast('Lead created!'); } closeModal('lead-modal'); loadLeads(); } catch (err) { toast(err.message, 'error'); }
+      try {
+        if (id) { await api('PUT', `/api/admin/leads/${id}`, body); toast('Lead updated!'); }
+        else { await api('POST', '/api/admin/leads', body); toast('Lead created!'); }
+        closeModal('lead-modal');
+        loadLeads();
+      } catch (err) { toast(err.message, 'error'); }
     }
     
     async function deleteLead(id) { if (confirm('Delete?')) { await api('DELETE', `/api/admin/leads/${id}`); toast('Deleted'); loadLeads(); } }
     
     /* ============================================================
-       CONSOLIDATED LEAD UPDATE (SINGLE MODAL)
+       CONSOLIDATED LEAD UPDATE
     ============================================================ */
     function openConsolidatedUpdate(leadId, mode) {
       document.getElementById('cu-lead-id').value = leadId;
       document.getElementById('cu-mode').value = mode;
-      // Reset form
       document.getElementById('cu-contact-made').checked = false;
       document.getElementById('cu-response').value = '';
       document.getElementById('cu-whatsapp').checked = false;
@@ -774,7 +956,6 @@
       const leadId = document.getElementById('cu-lead-id').value;
       const mode = document.getElementById('cu-mode').value;
       
-      // Build the update DTO
       const updateData = {
         contactMade: document.getElementById('cu-contact-made').checked,
         responseMessage: document.getElementById('cu-response').value,
@@ -795,7 +976,6 @@
       if (followupDesc) updateData.nextFollowUpDescription = followupDesc;
       
       try {
-        // Use the consolidated PUT endpoint
         await api('PUT', `/api/employee/leads/${leadId}/update`, updateData);
         toast('Lead updated successfully with all changes!');
         closeModal('consolidated-update-modal');
@@ -810,7 +990,22 @@
       try {
         const res = await api('GET', `/api/admin/leads/${id}`);
         const l = res.data;
-        content.innerHTML = `<div><h2>${l.name}</h2><p>${l.email} | ${l.phoneNumber}</p><div class="lead-stats-grid"><div class="lead-stat-item"><div class="val">${l.whatsappSentCount||0}</div><div class="lbl">WhatsApp</div></div><div class="lead-stat-item"><div class="val">${l.callsMadeCount||0}</div><div class="lbl">Calls</div></div><div class="lead-stat-item"><div class="val">${l.followUpsCount||0}</div><div class="lbl">Follow-ups</div></div><div class="lead-stat-item"><div class="val">${l.meetingsBookedCount||0}</div><div class="lbl">Mtg Booked</div></div><div class="lead-stat-item"><div class="val">${l.meetingsDoneCount||0}</div><div class="lbl">Mtg Done</div></div></div><div class="info-grid"><div class="info-item"><label>Source</label><span>${l.source}</span></div><div class="info-item"><label>Next Follow-up</label><span>${formatDate(l.nextFollowUpDate)}</span></div><div class="info-item"><label>Remarks</label><span>${l.remarks}</span></div><div class="info-item"><label>Plan</label><span>${l.nextFollowUp}</span></div></div></div>`;
+        content.innerHTML = `<div><h2>${l.name}</h2><p>${l.email} | ${l.phoneNumber}</p>
+        <div class="service-hierarchy"><strong><i class="fas fa-boxes"></i> Interested Service:</strong><br>
+        🏢 Main: ${SERVICE_DATA[l.interestedService]?.display || l.interestedService || 'Not specified'}<br>
+        📁 Sub: ${l.serviceSubcategory ? (SERVICE_DATA[l.interestedService]?.subcategories[l.serviceSubcategory]?.display || l.serviceSubcategory) : 'Not specified'}<br>
+        📄 Detail: ${l.serviceSubSubcategory ? (SERVICE_DATA[l.interestedService]?.subcategories[l.serviceSubcategory]?.subsub[l.serviceSubSubcategory] || l.serviceSubSubcategory) : 'Not specified'}<br>
+        ${l.serviceDescription ? `📝 Description: ${l.serviceDescription}` : ''}
+        </div>
+        <div class="lead-stats-grid"><div class="lead-stat-item"><div class="val">${l.whatsappSentCount||0}</div><div class="lbl">WhatsApp</div></div>
+        <div class="lead-stat-item"><div class="val">${l.callsMadeCount||0}</div><div class="lbl">Calls</div></div>
+        <div class="lead-stat-item"><div class="val">${l.followUpsCount||0}</div><div class="lbl">Follow-ups</div></div>
+        <div class="lead-stat-item"><div class="val">${l.meetingsBookedCount||0}</div><div class="lbl">Mtg Booked</div></div>
+        <div class="lead-stat-item"><div class="val">${l.meetingsDoneCount||0}</div><div class="lbl">Mtg Done</div></div></div>
+        <div class="info-grid"><div class="info-item"><label>Source</label><span>${l.source}</span></div>
+        <div class="info-item"><label>Next Follow-up</label><span>${formatDate(l.nextFollowUpDate)}</span></div>
+        <div class="info-item"><label>Remarks</label><span>${l.remarks}</span></div>
+        <div class="info-item"><label>Plan</label><span>${l.nextFollowUp}</span></div></div></div>`;
       } catch (err) { content.innerHTML = `<div class="empty-state">${err.message}</div>`; }
     }
     
@@ -841,8 +1036,17 @@
     
     function renderFollowUps(list) {
       const tb = document.getElementById('followups-table-body');
-      if (!list.length) { tb.innerHTML = '<tr><td colspan="7"><div class="empty-state">No follow-ups</div></td></tr>'; return; }
-      tb.innerHTML = list.map(l => `<tr><td>${l.name}</td><td><span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span></td><td><span class="badge-stage">${formatStage(l.leadStage)}</span></td><td>${l.assignedEmployee?.firstName || '-'}</td><td>${formatDate(l.nextFollowUpDate)}</td><td>${l.nextFollowUp || '-'}</td><td><button class="btn btn-outline btn-sm" onclick="viewLeadDetail(${l.id})"><i class="fas fa-eye"></i></button></td></tr>`).join('');
+      if (!list.length) { tb.innerHTML = '<tr><td colspan="8"><div class="empty-state">No follow-ups</div></td></tr>'; return; }
+      tb.innerHTML = list.map(l => `<tr>
+        <td>${l.name}</td>
+        <td><span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span></td>
+        <td><span class="badge-stage">${formatStage(l.leadStage)}</span></td>
+        <td><span class="badge-service">${getServiceDisplay(l.interestedService, l.serviceSubcategory, l.serviceSubSubcategory)}</span></td>
+        <td>${l.assignedEmployee?.firstName || '-'}</td>
+        <td>${formatDate(l.nextFollowUpDate)}</td>
+        <td>${l.nextFollowUp || '-'}</td>
+        <td><button class="btn btn-outline btn-sm" onclick="viewLeadDetail(${l.id})"><i class="fas fa-eye"></i></button></td>
+      </tr>`).join('');
     }
     
     /* ============================================================
@@ -862,8 +1066,16 @@
     
     function renderMyLeads(list) {
       const tb = document.getElementById('my-leads-table-body');
-      if (!list.length) { tb.innerHTML = '<tr><td colspan="6"><div class="empty-state">No leads assigned</div></td></tr>'; return; }
-      tb.innerHTML = list.map(l => `<tr><td><div style="font-weight:600">${l.name}</div><div style="font-size:12px;color:var(--text2)">${l.email}</div></td><td><span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span></td><td><span class="badge-stage">${formatStage(l.leadStage)}</span></td><td>${formatDate(l.nextFollowUpDate)}</td><td><span style="font-size:11px">📱${l.whatsappSentCount||0} 📞${l.callsMadeCount||0}</span></td><td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm" onclick="viewMyLeadDetail(${l.id})"><i class="fas fa-eye"></i></button><button class="btn btn-purple btn-sm" onclick="openConsolidatedUpdate(${l.id},'employee')"><i class="fas fa-edit"></i></button><button class="btn btn-accent2 btn-sm" onclick="viewMyLeadHistory(${l.id})"><i class="fas fa-history"></i></button></div></td></tr>`).join('');
+      if (!list.length) { tb.innerHTML = '<tr><td colspan="7"><div class="empty-state">No leads assigned</div></td></tr>'; return; }
+      tb.innerHTML = list.map(l => `<tr>
+        <td><div style="font-weight:600">${l.name}</div><div style="font-size:12px;color:var(--text2)">${l.email}</div></td>
+        <td><span class="badge badge-${l.leadType.toLowerCase()}">${l.leadType}</span></td>
+        <td><span class="badge-stage">${formatStage(l.leadStage)}</span></td>
+        <td><span class="badge-service">${getServiceDisplay(l.interestedService, l.serviceSubcategory, l.serviceSubSubcategory)}</span></td>
+        <td>${formatDate(l.nextFollowUpDate)}</td>
+        <td><span style="font-size:11px">📱${l.whatsappSentCount||0} 📞${l.callsMadeCount||0}</span></td>
+        <td><div style="display:flex;gap:6px"><button class="btn btn-outline btn-sm" onclick="viewMyLeadDetail(${l.id})"><i class="fas fa-eye"></i></button><button class="btn btn-purple btn-sm" onclick="openConsolidatedUpdate(${l.id},'employee')"><i class="fas fa-edit"></i></button><button class="btn btn-accent2 btn-sm" onclick="viewMyLeadHistory(${l.id})"><i class="fas fa-history"></i></button></div></td>
+      </tr>`).join('');
     }
     
     function filterMyLeads(q) { renderMyLeads(allMyLeads.filter(l => `${l.name} ${l.email}`.toLowerCase().includes(q.toLowerCase()))); }
@@ -876,7 +1088,23 @@
       try {
         const res = await api('GET', `/api/employee/my-leads/${id}`);
         const l = res.data;
-        content.innerHTML = `<div><h2>${l.name}</h2><p>${l.email} | ${l.phoneNumber}</p><div class="lead-stats-grid"><div class="lead-stat-item"><div class="val">${l.whatsappSentCount||0}</div><div class="lbl">WhatsApp</div></div><div class="lead-stat-item"><div class="val">${l.callsMadeCount||0}</div><div class="lbl">Calls</div></div><div class="lead-stat-item"><div class="val">${l.followUpsCount||0}</div><div class="lbl">Follow-ups</div></div><div class="lead-stat-item"><div class="val">${l.meetingsBookedCount||0}</div><div class="lbl">Mtg Booked</div></div><div class="lead-stat-item"><div class="val">${l.meetingsDoneCount||0}</div><div class="lbl">Mtg Done</div></div></div><div class="info-grid"><div class="info-item"><label>Source</label><span>${l.source}</span></div><div class="info-item"><label>Next Follow-up</label><span>${formatDate(l.nextFollowUpDate)}</span></div><div class="info-item"><label>Remarks</label><span>${l.remarks}</span></div><div class="info-item"><label>Plan</label><span>${l.nextFollowUp}</span></div></div><div style="margin-top:20px"><button class="btn btn-purple btn-sm" onclick="closeModal('lead-detail-modal');openConsolidatedUpdate(${l.id},'employee')"><i class="fas fa-edit"></i> Update Lead</button></div></div>`;
+        content.innerHTML = `<div><h2>${l.name}</h2><p>${l.email} | ${l.phoneNumber}</p>
+        <div class="service-hierarchy"><strong><i class="fas fa-boxes"></i> Interested Service:</strong><br>
+        🏢 Main: ${SERVICE_DATA[l.interestedService]?.display || l.interestedService || 'Not specified'}<br>
+        📁 Sub: ${l.serviceSubcategory ? (SERVICE_DATA[l.interestedService]?.subcategories[l.serviceSubcategory]?.display || l.serviceSubcategory) : 'Not specified'}<br>
+        📄 Detail: ${l.serviceSubSubcategory ? (SERVICE_DATA[l.interestedService]?.subcategories[l.serviceSubcategory]?.subsub[l.serviceSubSubcategory] || l.serviceSubSubcategory) : 'Not specified'}<br>
+        ${l.serviceDescription ? `📝 Description: ${l.serviceDescription}` : ''}
+        </div>
+        <div class="lead-stats-grid"><div class="lead-stat-item"><div class="val">${l.whatsappSentCount||0}</div><div class="lbl">WhatsApp</div></div>
+        <div class="lead-stat-item"><div class="val">${l.callsMadeCount||0}</div><div class="lbl">Calls</div></div>
+        <div class="lead-stat-item"><div class="val">${l.followUpsCount||0}</div><div class="lbl">Follow-ups</div></div>
+        <div class="lead-stat-item"><div class="val">${l.meetingsBookedCount||0}</div><div class="lbl">Mtg Booked</div></div>
+        <div class="lead-stat-item"><div class="val">${l.meetingsDoneCount||0}</div><div class="lbl">Mtg Done</div></div></div>
+        <div class="info-grid"><div class="info-item"><label>Source</label><span>${l.source}</span></div>
+        <div class="info-item"><label>Next Follow-up</label><span>${formatDate(l.nextFollowUpDate)}</span></div>
+        <div class="info-item"><label>Remarks</label><span>${l.remarks}</span></div>
+        <div class="info-item"><label>Plan</label><span>${l.nextFollowUp}</span></div></div>
+        <div style="margin-top:20px"><button class="btn btn-purple btn-sm" onclick="closeModal('lead-detail-modal');openConsolidatedUpdate(${l.id},'employee')"><i class="fas fa-edit"></i> Update Lead</button></div></div>`;
       } catch (err) { content.innerHTML = `<div class="empty-state">${err.message}</div>`; }
     }
     
@@ -912,6 +1140,17 @@
     function formatDate(d) { if (!d) return '-'; return new Date(d).toLocaleDateString('en-IN'); }
     function formatDateTime(d) { if (!d) return '-'; return new Date(d).toLocaleString('en-IN'); }
     function formatStage(s) { const map = { LEAD_GENERATED: 'Generated', CONTACTED: 'Contacted', INTERESTED: 'Interested', MEETING_BOOKED: 'Mtg Booked', PROPOSAL_SENT: 'Proposal', NEGOTIATION: 'Negotiation', CLOSED: 'Closed' }; return map[s] || s; }
+    function getServiceDisplay(main, sub, subsub) {
+      if (!main) return 'Not specified';
+      let display = SERVICE_DATA[main]?.display || main;
+      if (sub && SERVICE_DATA[main]?.subcategories[sub]) {
+        display = SERVICE_DATA[main].subcategories[sub].display;
+      }
+      if (subsub && SERVICE_DATA[main]?.subcategories[sub]?.subsub[subsub]) {
+        display = SERVICE_DATA[main].subcategories[sub].subsub[subsub];
+      }
+      return display;
+    }
     
     window.addEventListener('DOMContentLoaded', () => { if (token && currentRole) initApp(); });
     document.querySelectorAll('.modal-overlay').forEach(overlay => { overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); }); });

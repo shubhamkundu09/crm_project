@@ -2,8 +2,7 @@
 // LeadUpdateDTO.java
 package com.crm.dto;
 
-import com.crm.entity.LeadStage;
-import com.crm.entity.LeadType;
+import com.crm.entity.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -32,4 +31,11 @@ public class LeadUpdateDTO {
     private String nextFollowUp;
     private Long assignedEmployeeId;
     private String source;
+
+
+    // Add these fields to LeadUpdateDTO
+    private MainService interestedService;
+    private ServiceSubcategory serviceSubcategory;
+    private ServiceSubSubcategory serviceSubSubcategory;
+    private String serviceDescription;
 }
