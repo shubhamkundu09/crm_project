@@ -16,13 +16,5 @@ public class WebController {
         return "forward:/login.html";
     }
 
-    @GetMapping("/admin")
-    public String admin() {
-        return "forward:/admin.html";
-    }
 
-    @GetMapping("/employee")
-    public String employee() {
-        return "forward:/employee.html";
-    }
 }

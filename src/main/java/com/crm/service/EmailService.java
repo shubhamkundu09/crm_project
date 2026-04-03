@@ -1,4 +1,3 @@
-// EmailService.java (updated)
 package com.crm.service;
 
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,7 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
 
-    @Value("${app.admin.email}")
+    @Value("${app.admin.notification-email}")
     private String adminEmail;
 
     @Async
@@ -34,14 +33,15 @@ public class EmailService {
                 ------------------------
                 Employee Code: %s
                 Email: %s
-                Temporary Password: %s
+                Password: %s
                 
                 Important Notes:
                 1. Please change your password after first login
                 2. Never share your password with anyone
                 3. For security reasons, you will be prompted to change your password on first login
+                4. You can login using your email and the password provided above
                 
-                You can log in to the system using your email and the temporary password.
+                Login URL: http://localhost:8080/login
                 
                 Best regards,
                 CRM Admin Team
@@ -73,11 +73,13 @@ public class EmailService {
                 Security Instructions:
                 1. Please change this password after logging in
                 2. Do not share this password with anyone
-                3. If you didn't request this reset, please contact the administrator immediately
+                3. If you didn't request this reset, please contact the administrator immediately at %s
+                
+                Login URL: http://localhost:8080/login
                 
                 Best regards,
                 CRM Admin Team
-                """, name, to, newPassword));
+                """, name, to, newPassword, adminEmail));
 
             mailSender.send(message);
             log.info("Password reset email sent to: {}", to);
@@ -86,8 +88,6 @@ public class EmailService {
         }
     }
 
-
-    // Add this method to EmailService.java
     @Async
     public void sendLeadAssignmentEmail(String to, String employeeName, String leadName, String leadType) {
         try {
@@ -95,20 +95,22 @@ public class EmailService {
             message.setTo(to);
             message.setSubject("New Lead Assigned - CRM System");
             message.setText(String.format("""
-            Dear %s,
-            
-            A new lead has been assigned to you.
-            
-            Lead Details:
-            -------------
-            Name: %s
-            Type: %s
-            
-            Please log in to the CRM system to view more details and take necessary action.
-            
-            Best regards,
-            CRM Admin Team
-            """, employeeName, leadName, leadType));
+                Dear %s,
+                
+                A new lead has been assigned to you.
+                
+                Lead Details:
+                -------------
+                Name: %s
+                Type: %s
+                
+                Please log in to the CRM system to view more details and take necessary action.
+                
+                Login URL: http://localhost:8080/login
+                
+                Best regards,
+                CRM Admin Team
+                """, employeeName, leadName, leadType));
 
             mailSender.send(message);
             log.info("Lead assignment email sent to: {}", to);

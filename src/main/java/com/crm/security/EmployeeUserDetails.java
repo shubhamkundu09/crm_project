@@ -1,4 +1,3 @@
-// EmployeeUserDetails.java
 package com.crm.security;
 
 import com.crm.entity.Employee;
@@ -19,6 +18,10 @@ public class EmployeeUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        // Check if this is the admin user by email
+        if ("redcircle0908@gmail.com".equals(employee.getEmail())) {
+            return Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
         return Collections.singletonList(new SimpleGrantedAuthority("ROLE_EMPLOYEE"));
     }
 

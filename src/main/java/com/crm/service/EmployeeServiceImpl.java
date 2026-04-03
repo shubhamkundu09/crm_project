@@ -35,22 +35,26 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new DuplicateResourceException("Email already exists: " + employeeDTO.getEmail());
         }
 
-        // Generate temporary password
-        String tempPassword = generateTemporaryPassword();
+        // Validate password strength (redundant as DTO validation already does this)
+        if (!isValidPassword(employeeDTO.getPassword())) {
+            throw new IllegalArgumentException("Password does not meet security requirements. " +
+                    "It must contain at least 8 characters, one digit, one lowercase, one uppercase, and one special character");
+        }
 
         Employee employee = mapToEntity(employeeDTO);
-        employee.setPassword(passwordEncoder.encode(tempPassword));
-        employee.setIsFirstLogin(true);
+        // Encode the password provided by admin
+        employee.setPassword(passwordEncoder.encode(employeeDTO.getPassword()));
+        employee.setIsFirstLogin(true); // Force password change on first login
         employee.setIsActive(true);
 
         Employee savedEmployee = employeeRepository.save(employee);
 
-        // Send welcome email with password
+        // Send welcome email with the password set by admin
         emailService.sendWelcomeEmail(
                 savedEmployee.getEmail(),
                 savedEmployee.getFirstName() + " " + savedEmployee.getLastName(),
                 savedEmployee.getEmployeeCode(),
-                tempPassword
+                employeeDTO.getPassword() // Send the actual password (not encoded)
         );
 
         log.info("Employee created successfully with ID: {} and Code: {}",
@@ -71,7 +75,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new DuplicateResourceException("Email already exists: " + employeeDTO.getEmail());
         }
 
-        // Update fields (password should not be updated here)
+        // Update fields
         existingEmployee.setFirstName(employeeDTO.getFirstName());
         existingEmployee.setLastName(employeeDTO.getLastName());
         existingEmployee.setEmail(employeeDTO.getEmail());
@@ -80,7 +84,19 @@ public class EmployeeServiceImpl implements EmployeeService {
         existingEmployee.setSalary(employeeDTO.getSalary());
         existingEmployee.setPhoneNumber(employeeDTO.getPhoneNumber());
         existingEmployee.setJoiningDate(employeeDTO.getJoiningDate());
-        // Do NOT update password and employeeCode here
+
+        // Update password only if provided (not blank)
+        if (employeeDTO.getPassword() != null && !employeeDTO.getPassword().trim().isEmpty()) {
+            if (!isValidPassword(employeeDTO.getPassword())) {
+                throw new IllegalArgumentException("Password does not meet security requirements. " +
+                        "It must contain at least 8 characters, one digit, one lowercase, one uppercase, and one special character");
+            }
+            existingEmployee.setPassword(passwordEncoder.encode(employeeDTO.getPassword()));
+            existingEmployee.setIsFirstLogin(true); // Force password change on next login
+            log.info("Password updated for employee ID: {}", id);
+        }
+
+        // Do NOT update employeeCode here
 
         Employee updatedEmployee = employeeRepository.save(existingEmployee);
         log.info("Employee updated successfully with ID: {}", id);
@@ -161,47 +177,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         employee.setIsFirstLogin(true); // Force password change on next login
         employeeRepository.save(employee);
 
-        // Send password reset email
+        // Send password reset email with the new password
         emailService.sendPasswordResetEmail(
                 employee.getEmail(),
                 employee.getFirstName() + " " + employee.getLastName(),
-                passwordResetDTO.getNewPassword()
+                passwordResetDTO.getNewPassword() // Send the actual password (not encoded)
         );
 
         log.info("Password reset successfully for employee: {}", passwordResetDTO.getEmail());
-    }
-
-    private String generateTemporaryPassword() {
-        // Generate a secure random 12-character password
-        String upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        String lowerCase = "abcdefghijklmnopqrstuvwxyz";
-        String digits = "0123456789";
-        String specialChars = "!@#$%";
-
-        StringBuilder password = new StringBuilder();
-
-        // Ensure at least one character from each category
-        password.append(upperCase.charAt((int)(Math.random() * upperCase.length())));
-        password.append(lowerCase.charAt((int)(Math.random() * lowerCase.length())));
-        password.append(digits.charAt((int)(Math.random() * digits.length())));
-        password.append(specialChars.charAt((int)(Math.random() * specialChars.length())));
-
-        // Fill remaining characters randomly
-        String allChars = upperCase + lowerCase + digits + specialChars;
-        for (int i = 4; i < 12; i++) {
-            password.append(allChars.charAt((int)(Math.random() * allChars.length())));
-        }
-
-        // Shuffle the password
-        char[] passwordArray = password.toString().toCharArray();
-        for (int i = passwordArray.length - 1; i > 0; i--) {
-            int j = (int)(Math.random() * (i + 1));
-            char temp = passwordArray[i];
-            passwordArray[i] = passwordArray[j];
-            passwordArray[j] = temp;
-        }
-
-        return new String(passwordArray);
     }
 
     private boolean isValidPassword(String password) {

@@ -27,7 +27,7 @@ public class LeadHistoryService {
                 .employee(employee)
                 .action("CREATE")
                 .changes("Lead created with type: " + lead.getLeadType() + ", stage: " + lead.getLeadStage())
-                .remarks("Initial lead creation by " + employee.getEmail())
+                .remarks("Initial lead creation")
                 .previousStage("NONE")
                 .newStage(lead.getLeadStage().toString())
                 .build();
@@ -54,8 +54,8 @@ public class LeadHistoryService {
                 .lead(lead)
                 .employee(employee)
                 .action("STAGE_CHANGE")
-                .changes("Stage changed from " + previousStage + " to " + newStage)
-                .remarks(remarks)
+                .changes(remarks)
+                .remarks("Stage updated by employee")
                 .previousStage(previousStage)
                 .newStage(newStage)
                 .build();
@@ -67,7 +67,7 @@ public class LeadHistoryService {
         LeadHistory history = LeadHistory.builder()
                 .lead(lead)
                 .employee(employee)
-                .action("STATISTICS_UPDATE")
+                .action("UPDATE")
                 .changes(statisticsChanges)
                 .remarks(remarks)
                 .previousStage(lead.getLeadStage().toString())
@@ -78,14 +78,14 @@ public class LeadHistoryService {
     }
 
     public void recordFollowUpUpdate(Lead lead, Employee employee, String oldFollowUpDate, String newFollowUpDate, String oldDescription, String newDescription) {
-        String changes = String.format("Follow-up date changed from %s to %s. Description: %s",
+        String changes = String.format("Follow-up updated: Date changed from %s to %s. New description: %s",
                 oldFollowUpDate, newFollowUpDate, newDescription);
         LeadHistory history = LeadHistory.builder()
                 .lead(lead)
                 .employee(employee)
-                .action("FOLLOWUP_UPDATE")
+                .action("UPDATE")
                 .changes(changes)
-                .remarks(newDescription)
+                .remarks("Follow-up rescheduled")
                 .previousStage(lead.getLeadStage().toString())
                 .newStage(lead.getLeadStage().toString())
                 .build();
@@ -94,18 +94,9 @@ public class LeadHistoryService {
     }
 
     public void recordContactMade(Lead lead, Employee employee, String contactMethod, String response, String remarks) {
-        String changes = String.format("Contact made via %s. Response: %s", contactMethod, response);
-        LeadHistory history = LeadHistory.builder()
-                .lead(lead)
-                .employee(employee)
-                .action("CONTACT_MADE")
-                .changes(changes)
-                .remarks(remarks)
-                .previousStage(lead.getLeadStage().toString())
-                .newStage(lead.getLeadStage().toString())
-                .build();
-        leadHistoryRepository.save(history);
-        log.info("Recorded contact made history for lead ID: {}", lead.getId());
+        // This method is now consolidated into UPDATE action
+        // Keeping for backward compatibility but not creating separate entries
+        log.info("Contact recorded for lead ID: {} via {}", lead.getId(), contactMethod);
     }
 
     public List<LeadHistoryDTO> getLeadHistory(Long leadId) {

@@ -1,4 +1,3 @@
-// CustomUserDetailsService.java (updated)
 package com.crm.security;
 
 import com.crm.entity.Employee;
@@ -18,11 +17,8 @@ import jakarta.annotation.PostConstruct;
 @Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
 
-    @Value("${app.admin.username}")
-    private String adminUsername;
-
-    @Value("${app.admin.password}")
-    private String adminPassword;
+    @Value("${app.admin.email}")
+    private String adminEmail;
 
     private final PasswordEncoder passwordEncoder;
     private final EmployeeRepository employeeRepository;
@@ -34,10 +30,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Check if it's admin login
-        if (adminUsername.equals(username)) {
-            log.info("Admin user found: {}", username);
-            return new AdminUserDetails(adminUsername, passwordEncoder.encode(adminPassword));
+        // Check if it's admin login (by email)
+        if (adminEmail.equals(username)) {
+            Employee admin = employeeRepository.findByEmail(adminEmail)
+                    .orElseThrow(() -> new UsernameNotFoundException("Admin not found with email: " + username));
+            log.info("Admin user found: {}", admin.getEmail());
+            return new EmployeeUserDetails(admin);
         }
 
         // Check if it's employee login (by email)
@@ -50,6 +48,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @PostConstruct
     public void init() {
-        log.info("User details service initialized with admin username: {}", adminUsername);
+        log.info("User details service initialized with admin email: {}", adminEmail);
     }
 }

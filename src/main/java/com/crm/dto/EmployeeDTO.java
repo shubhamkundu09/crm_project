@@ -26,6 +26,11 @@ public class EmployeeDTO {
     @Email(message = "Invalid email format")
     private String email;
 
+    @NotBlank(message = "Password is required")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$",
+            message = "Password must contain at least 8 characters, one digit, one lowercase, one uppercase, and one special character")
+    private String password;
+
     @NotBlank(message = "Department is required")
     private String department;
 
@@ -41,7 +46,7 @@ public class EmployeeDTO {
     private String phoneNumber;
 
     @NotNull(message = "Joining date is required")
-    private LocalDate joiningDate;  // Changed from LocalDateTime to LocalDate
+    private LocalDate joiningDate;
 
     private Boolean isActive;
 }
