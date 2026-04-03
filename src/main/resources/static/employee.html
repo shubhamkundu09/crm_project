@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Employee Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; }
+        .sidebar { min-height: 100vh; background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%); }
+        .sidebar a { color: white; text-decoration: none; padding: 12px 20px; display: block; transition: all 0.3s; }
+        .sidebar a:hover { background-color: #34495e; transform: translateX(5px); }
+        .sidebar a i { margin-right: 10px; width: 20px; }
+        .content { padding: 20px; }
+        .nav-link.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .lead-card { cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; border: none; border-radius: 15px; overflow: hidden; }
+        .lead-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .badge-hot { background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 20px; font-size: 12px; }
+        .badge-warm { background-color: #ffc107; color: #000; padding: 5px 10px; border-radius: 20px; font-size: 12px; }
+        .badge-cold { background-color: #17a2b8; color: white; padding: 5px 10px; border-radius: 20px; font-size: 12px; }
+        .timeline { position: relative; padding: 20px 0; max-height: 500px; overflow-y: auto; }
+        .timeline-item { padding: 15px; border-left: 3px solid #667eea; margin-bottom: 15px; background: #f8f9fa; border-radius: 8px; transition: all 0.3s; }
+        .timeline-item:hover { background: #e9ecef; transform: translateX(5px); }
+        .timeline-badge { font-weight: bold; color: #667eea; font-size: 14px; }
+        .timeline-date { font-size: 11px; color: #6c757d; margin-top: 5px; }
+        .timeline-content { margin-top: 8px; font-size: 13px; }
+        .nav-tabs .nav-link { color: #2c3e50; font-weight: 500; }
+        .nav-tabs .nav-link.active { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; }
+        .stat-card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: transform 0.3s; }
+        .stat-card:hover { transform: translateY(-5px); }
+        .btn { border-radius: 8px; padding: 8px 16px; font-weight: 500; transition: all 0.3s; }
+        .btn:hover { transform: translateY(-2px); }
+        .form-control, .form-select { border-radius: 8px; border: 1px solid #dee2e6; padding: 10px; }
+        .form-control:focus, .form-select:focus { border-color: #667eea; box-shadow: 0 0 0 0.2rem rgba(102,126,234,0.25); }
+        .modal-content { border-radius: 15px; }
+        .alert-toast { position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px; animation: slideIn 0.3s ease-out; border-radius: 10px; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .profile-card { background: white; border-radius: 15px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .profile-avatar { width: 100px; height: 100px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+        .profile-avatar i { font-size: 50px; color: white; }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2 p-0 sidebar">
+            <div class="text-center py-4">
+                <i class="fas fa-user-circle fa-2x text-white mb-2"></i>
+                <h4 class="text-white">CRM Employee</h4>
+                <small class="text-light" id="employeeName">Loading...</small>
+            </div>
+            <nav>
+                <a href="#" class="nav-link" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+                <a href="#" class="nav-link" onclick="showSection('myLeads')"><i class="fas fa-chart-line"></i> My Leads</a>
+                <a href="#" class="nav-link" onclick="showSection('profile')"><i class="fas fa-user"></i> Profile</a>
+                <a href="#" class="nav-link" onclick="showChangePassword()"><i class="fas fa-key"></i> Change Password</a>
+                <a href="#" class="nav-link" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </div>
+        
+        <div class="col-md-10 content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 id="pageTitle"><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                <button class="btn btn-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+            
+            <div id="dashboardSection">
+                <div class="row mb-4">
+                    <div class="col-md-4"><div class="stat-card text-center"><i class="fas fa-chart-line fa-2x text-primary mb-2"></i><h5>My Leads</h5><h2 id="myLeadsCount">0</h2></div></div>
+                    <div class="col-md-4"><div class="stat-card text-center"><i class="fas fa-calendar-day fa-2x text-warning mb-2"></i><h5>Today's Follow-ups</h5><h2 id="todayFollowups">0</h2></div></div>
+                    <div class="col-md-4"><div class="stat-card text-center"><i class="fas fa-clock fa-2x text-danger mb-2"></i><h5>Pending Follow-ups</h5><h2 id="pendingFollowups">0</h2></div></div>
+                </div>
+            </div>
+            
+            <div id="myLeadsSection" style="display:none;">
+                <div class="row" id="leadsContainer"></div>
+            </div>
+            
+            <div id="profileSection" style="display:none;">
+                <div class="profile-card" id="profileContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Change Password Modal -->
+<div class="modal fade" id="passwordModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title"><i class="fas fa-key"></i> Change Password</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <input type="password" id="currentPassword" class="form-control mb-2" placeholder="Current Password">
+                <input type="password" id="newPassword" class="form-control mb-2" placeholder="New Password (min 8 chars, 1 uppercase, 1 lowercase, 1 number, 1 special)">
+                <input type="password" id="confirmPassword" class="form-control mb-2" placeholder="Confirm Password">
+            </div>
+            <div class="modal-footer"><button class="btn btn-primary" onclick="changePassword()"><i class="fas fa-save"></i> Update Password</button></div>
+        </div>
+    </div>
+</div>
+
+<!-- Lead Details Modal with History Tabs -->
+<div class="modal fade" id="leadDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title"><i class="fas fa-chart-line"></i> Lead Details</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body">
+                <ul class="nav nav-tabs mb-3" id="leadDetailTab" role="tablist">
+                    <li class="nav-item"><button class="nav-link active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab"><i class="fas fa-info-circle"></i> Details</button></li>
+                    <li class="nav-item"><button class="nav-link" id="update-tab" data-bs-toggle="tab" data-bs-target="#update" type="button" role="tab"><i class="fas fa-edit"></i> Update</button></li>
+                    <li class="nav-item"><button class="nav-link" id="lead-history-tab" data-bs-toggle="tab" data-bs-target="#leadHistory" type="button" role="tab"><i class="fas fa-history"></i> History</button></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="details" role="tabpanel"><div id="leadDetails"></div></div>
+                    <div class="tab-pane fade" id="update" role="tabpanel">
+                        <h6><i class="fas fa-arrow-right"></i> Update Lead Status</h6>
+                        <select id="updateStage" class="form-select mb-2">
+                            <option value="CONTACTED">Contacted</option><option value="INTERESTED">Interested</option>
+                            <option value="MEETING_BOOKED">Meeting Booked</option><option value="PROPOSAL_SENT">Proposal Sent</option>
+                            <option value="NEGOTIATION">Negotiation</option><option value="CLOSED">Closed - Won</option>
+                        </select>
+                        <textarea id="updateRemarks" class="form-control mb-2" placeholder="Update Remarks / Contact Notes" rows="3"></textarea>
+                        <input type="date" id="updateFollowUpDate" class="form-control mb-2">
+                        <div class="mb-2"><label class="form-label fw-bold"><i class="fas fa-chart-bar"></i> Update Statistics:</label>
+                            <div class="row">
+                                <div class="col-md-3"><div class="form-check"><input type="checkbox" id="whatsappSent" class="form-check-input"> <label class="form-check-label">WhatsApp Sent</label></div></div>
+                                <div class="col-md-3"><div class="form-check"><input type="checkbox" id="callsMade" class="form-check-input"> <label class="form-check-label">Calls Made</label></div></div>
+                                <div class="col-md-3"><div class="form-check"><input type="checkbox" id="meetingBooked" class="form-check-input"> <label class="form-check-label">Meeting Booked</label></div></div>
+                                <div class="col-md-3"><div class="form-check"><input type="checkbox" id="meetingDone" class="form-check-input"> <label class="form-check-label">Meeting Done</label></div></div>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary w-100" onclick="updateLead()"><i class="fas fa-save"></i> Update Lead</button>
+                    </div>
+                    <div class="tab-pane fade" id="leadHistory" role="tabpanel"><div id="leadHistoryList" class="timeline"></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const API_BASE = '/api/employee';
+    let token = localStorage.getItem('token');
+    let currentLeadId = null;
+
+    if (!token) window.location.href = '/login.html';
+
+    async function loadProfile() {
+        const res = await fetch(`${API_BASE}/profile`, { headers: { 'Authorization': `Bearer ${token}` } });
+        const data = await res.json();
+        if (data.data) {
+            const emp = data.data;
+            document.getElementById('employeeName').innerText = `${emp.firstName} ${emp.lastName}`;
+            document.getElementById('profileContainer').innerHTML = `
+                <div class="text-center"><div class="profile-avatar"><i class="fas fa-user-circle"></i></div>
+                <h3>${emp.firstName} ${emp.lastName}</h3><p class="text-muted">${emp.position} | ${emp.department}</p></div>
+                <div class="row mt-4"><div class="col-md-6"><div class="info-item"><label>Employee Code</label><p><strong>${emp.employeeCode}</strong></p></div></div>
+                <div class="col-md-6"><div class="info-item"><label>Email</label><p><strong>${emp.email}</strong></p></div></div>
+                <div class="col-md-6"><div class="info-item"><label>Phone Number</label><p><strong>${emp.phoneNumber}</strong></p></div></div>
+                <div class="col-md-6"><div class="info-item"><label>Joining Date</label><p><strong>${emp.joiningDate}</strong></p></div></div>
+                <div class="col-md-6"><div class="info-item"><label>Salary</label><p><strong>$${emp.salary?.toLocaleString()}</strong></p></div></div>
+                <div class="col-md-6"><div class="info-item"><label>Status</label><p><strong class="text-success">Active</strong></p></div></div></div>`;
+        }
+    }
+
+    async function loadMyLeads() {
+        const res = await fetch(`${API_BASE}/my-leads`, { headers: { 'Authorization': `Bearer ${token}` } });
+        const data = await res.json();
+        const leads = data.data || [];
+        document.getElementById('myLeadsCount').innerText = leads.length;
+        document.getElementById('todayFollowups').innerText = leads.filter(l => l.nextFollowUpDate === new Date().toISOString().split('T')[0]).length;
+        document.getElementById('pendingFollowups').innerText = leads.filter(l => l.nextFollowUpDate < new Date().toISOString().split('T')[0]).length;
+        
+        const container = document.getElementById('leadsContainer');
+        container.innerHTML = leads.map(lead => `
+            <div class="col-md-4 mb-3"><div class="card lead-card" onclick="showLeadDetail(${lead.id})">
+                <div class="card-body"><div class="d-flex justify-content-between align-items-start mb-2"><h5 class="card-title mb-0">${lead.name}</h5>
+                <span class="badge-${lead.leadType.toLowerCase()}">${lead.leadType}</span></div>
+                <p class="card-text small mb-1"><i class="fas fa-envelope"></i> ${lead.email}</p>
+                <p class="card-text small mb-1"><i class="fas fa-phone"></i> ${lead.phoneNumber}</p>
+                <p class="card-text small mb-1"><i class="fas fa-tag"></i> ${lead.leadStage}</p>
+                <p class="card-text small mb-2"><i class="fas fa-calendar"></i> Next: ${lead.nextFollowUpDate}</p>
+                <div class="d-flex justify-content-between mt-2"><small><i class="fas fa-phone-alt"></i> Calls: ${lead.callsMadeCount || 0}</small>
+                <small><i class="fab fa-whatsapp"></i> WhatsApp: ${lead.whatsappSentCount || 0}</small>
+                <small><i class="fas fa-handshake"></i> Meetings: ${lead.meetingsBookedCount || 0}</small></div></div></div></div>
+        `).join('');
+    }
+
+    async function showLeadDetail(leadId) {
+        currentLeadId = leadId;
+        const res = await fetch(`${API_BASE}/my-leads/${leadId}`, { headers: { 'Authorization': `Bearer ${token}` } });
+        const data = await res.json();
+        const lead = data.data;
+        
+        document.getElementById('leadDetails').innerHTML = `
+            <div class="row"><div class="col-md-6"><strong>Lead Name:</strong><p>${lead.name}</p></div>
+            <div class="col-md-6"><strong>Email:</strong><p>${lead.email}</p></div>
+            <div class="col-md-6"><strong>Phone:</strong><p>${lead.phoneNumber}</p></div>
+            <div class="col-md-6"><strong>Type:</strong><p><span class="badge-${lead.leadType.toLowerCase()}">${lead.leadType}</span></p></div>
+            <div class="col-md-6"><strong>Current Stage:</strong><p>${lead.leadStage}</p></div>
+            <div class="col-md-6"><strong>Source:</strong><p>${lead.source}</p></div>
+            <div class="col-12"><strong>Remarks:</strong><p>${lead.remarks}</p></div>
+            <div class="col-md-6"><strong>Next Follow-up:</strong><p>${lead.nextFollowUpDate}</p></div>
+            <div class="col-md-6"><strong>Last Updated By:</strong><p>${lead.lastUpdatedBy || 'N/A'}</p></div>
+            <div class="col-md-6"><strong>Last Contact Date:</strong><p>${lead.lastContactDate ? new Date(lead.lastContactDate).toLocaleString() : 'Never'}</p></div>
+            <div class="col-12"><hr><h6>Statistics:</h6><div class="row text-center">
+                <div class="col"><div class="stat-card"><h3>${lead.whatsappSentCount || 0}</h3><small>WhatsApp</small></div></div>
+                <div class="col"><div class="stat-card"><h3>${lead.callsMadeCount || 0}</h3><small>Calls</small></div></div>
+                <div class="col"><div class="stat-card"><h3>${lead.followUpsCount || 0}</h3><small>Follow-ups</small></div></div>
+                <div class="col"><div class="stat-card"><h3>${lead.meetingsBookedCount || 0}</h3><small>Meetings</small></div></div>
+                <div class="col"><div class="stat-card"><h3>${lead.meetingsDoneCount || 0}</h3><small>Completed</small></div></div>
+            </div></div></div>`;
+        
+        document.getElementById('updateStage').value = lead.leadStage;
+        document.getElementById('updateRemarks').value = '';
+        document.getElementById('updateFollowUpDate').value = lead.nextFollowUpDate;
+        document.getElementById('whatsappSent').checked = false;
+        document.getElementById('callsMade').checked = false;
+        document.getElementById('meetingBooked').checked = false;
+        document.getElementById('meetingDone').checked = false;
+        
+        await loadLeadHistory(leadId);
+        new bootstrap.Modal(document.getElementById('leadDetailModal')).show();
+    }
+
+    async function loadLeadHistory(leadId) {
+        try {
+            const res = await fetch(`${API_BASE}/my-leads/${leadId}/history`, { headers: { 'Authorization': `Bearer ${token}` } });
+            const data = await res.json();
+            const history = data.data || [];
+            document.getElementById('leadHistoryList').innerHTML = history.map(h => `
+                <div class="timeline-item"><div class="timeline-badge">${h.action}</div>
+                <div class="timeline-date">${new Date(h.createdAt).toLocaleString()}</div>
+                <div class="timeline-content"><strong>${h.employee?.firstName} ${h.employee?.lastName}</strong><br>
+                <span>${h.changes}</span><br><small>Stage: ${h.previousStage} → ${h.newStage}</small><br><em>${h.remarks}</em></div></div>
+            `).join('') || '<p class="text-muted text-center">No history records found</p>';
+        } catch(error) { document.getElementById('leadHistoryList').innerHTML = '<p class="text-danger text-center">Error loading history</p>'; }
+    }
+
+    async function updateLead() {
+        const statistics = { whatsappSent: document.getElementById('whatsappSent').checked, callsMade: document.getElementById('callsMade').checked,
+            meetingBooked: document.getElementById('meetingBooked').checked, meetingDone: document.getElementById('meetingDone').checked };
+        try {
+            if (Object.values(statistics).some(v => v === true)) {
+                await fetch(`${API_BASE}/leads/${currentLeadId}/statistics`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify(statistics) });
+            }
+            const newStage = document.getElementById('updateStage').value;
+            await fetch(`${API_BASE}/leads/${currentLeadId}/stage?stage=${newStage}`, { method: 'PATCH', headers: { 'Authorization': `Bearer ${token}` } });
+            const newFollowUpDate = document.getElementById('updateFollowUpDate').value;
+            const remarks = document.getElementById('updateRemarks').value;
+            if (remarks) {
+                await fetch(`${API_BASE}/leads/${currentLeadId}/followup?nextFollowUpDate=${newFollowUpDate}&nextFollowUpDescription=${encodeURIComponent(remarks)}`, { method: 'POST', headers: { 'Authorization': `Bearer ${token}` } });
+            }
+            showAlert('Lead updated successfully!', 'success');
+            bootstrap.Modal.getInstance(document.getElementById('leadDetailModal')).hide();
+            loadMyLeads();
+        } catch(error) { showAlert('Error: ' + error.message, 'danger'); }
+    }
+
+    async function changePassword() {
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        if (newPassword !== confirmPassword) { showAlert('New passwords do not match!', 'danger'); return; }
+        const passwordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$/;
+        if (!passwordRegex.test(newPassword)) { showAlert('Password must contain at least 8 characters, one digit, one lowercase, one uppercase, and one special character', 'danger'); return; }
+        try {
+            const res = await fetch(`${API_BASE}/auth/change-password`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` }, body: JSON.stringify({ currentPassword, newPassword }) });
+            if (res.ok) { showAlert('Password changed successfully!', 'success'); bootstrap.Modal.getInstance(document.getElementById('passwordModal')).hide();
+                document.getElementById('currentPassword').value = ''; document.getElementById('newPassword').value = ''; document.getElementById('confirmPassword').value = ''; }
+            else showAlert('Failed to change password', 'danger');
+        } catch(e) { showAlert('Error: ' + e.message, 'danger'); }
+    }
+
+    function showSection(section) {
+        document.getElementById('dashboardSection').style.display = section === 'dashboard' ? 'block' : 'none';
+        document.getElementById('myLeadsSection').style.display = section === 'myLeads' ? 'block' : 'none';
+        document.getElementById('profileSection').style.display = section === 'profile' ? 'block' : 'none';
+        document.getElementById('pageTitle').innerHTML = section === 'dashboard' ? '<i class="fas fa-tachometer-alt"></i> Dashboard' :
+            (section === 'myLeads' ? '<i class="fas fa-chart-line"></i> My Leads' : '<i class="fas fa-user"></i> My Profile');
+        document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+        if (section === 'dashboard') loadMyLeads();
+        else if (section === 'myLeads') loadMyLeads();
+        else if (section === 'profile') loadProfile();
+    }
+
+    function showChangePassword() { new bootstrap.Modal(document.getElementById('passwordModal')).show(); }
+    function showAlert(message, type) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show alert-toast`;
+        alertDiv.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+        document.body.appendChild(alertDiv);
+        setTimeout(() => alertDiv.remove(), 3000);
+    }
+    function logout() { localStorage.removeItem('token'); window.location.href = '/login.html'; }
+
+    loadProfile();
+    loadMyLeads();
+    showSection('dashboard');
+</script>
+</body>
+</html>

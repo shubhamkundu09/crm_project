@@ -1,5 +1,3 @@
-
-// LeadResponseDTO.java
 package com.crm.dto;
 
 import com.crm.entity.LeadStage;
@@ -36,6 +34,11 @@ public class LeadResponseDTO {
     private Integer followUpsCount;
     private Integer meetingsBookedCount;
     private Integer meetingsDoneCount;
+
+    // Tracking fields
+    private Integer updateCount;
+    private String lastUpdatedBy;
+    private LocalDateTime lastContactDate;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

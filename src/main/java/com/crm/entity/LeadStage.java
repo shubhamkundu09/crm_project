@@ -1,6 +1,3 @@
-
-
-// LeadStage.java
 package com.crm.entity;
 
 public enum LeadStage {

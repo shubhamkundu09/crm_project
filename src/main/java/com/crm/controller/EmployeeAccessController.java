@@ -2,8 +2,10 @@ package com.crm.controller;
 
 import com.crm.dto.ApiResponse;
 import com.crm.dto.EmployeeProfileDTO;
+import com.crm.dto.LeadHistoryDTO;
 import com.crm.dto.LeadResponseDTO;
 import com.crm.service.EmployeeProfileService;
+import com.crm.service.LeadHistoryService;
 import com.crm.service.LeadService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class EmployeeAccessController {
 
     private final EmployeeProfileService employeeProfileService;
     private final LeadService leadService;
+    private final LeadHistoryService leadHistoryService;
 
     @GetMapping("/profile")
     public ResponseEntity<ApiResponse<EmployeeProfileDTO>> getMyProfile(Authentication authentication, HttpServletRequest request) {
@@ -59,5 +62,25 @@ public class EmployeeAccessController {
         }
 
         return ResponseEntity.ok(ApiResponse.success(lead, "Lead details retrieved successfully", request.getRequestURI()));
+    }
+
+
+    @GetMapping("/my-leads/{leadId}/history")
+    public ResponseEntity<ApiResponse<List<LeadHistoryDTO>>> getMyLeadHistory(
+            @PathVariable Long leadId,
+            Authentication authentication,
+            HttpServletRequest request) {
+        log.info("Employee fetching lead history for ID: {}", leadId);
+        String email = authentication.getName();
+        EmployeeProfileDTO profile = employeeProfileService.getEmployeeProfileByEmail(email);
+
+        LeadResponseDTO lead = leadService.getLeadById(leadId);
+        if (!lead.getAssignedEmployee().getId().equals(profile.getId())) {
+            return ResponseEntity.status(403)
+                    .body(ApiResponse.error("You don't have access to this lead", 403, request.getRequestURI()));
+        }
+
+        List<LeadHistoryDTO> history = leadHistoryService.getLeadHistory(leadId);
+        return ResponseEntity.ok(ApiResponse.success(history, "Lead history retrieved successfully", request.getRequestURI()));
     }
 }

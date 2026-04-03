@@ -1,9 +1,6 @@
 package com.crm.service;
 
-import com.crm.dto.LeadDTO;
-import com.crm.dto.LeadResponseDTO;
-import com.crm.dto.LeadStatisticsUpdateDTO;
-import com.crm.dto.LeadUpdateDTO;
+import com.crm.dto.*;
 import com.crm.entity.LeadStage;
 import com.crm.entity.LeadType;
 
@@ -25,4 +22,7 @@ public interface LeadService {
     LeadResponseDTO updateLeadStatistics(Long id, LeadStatisticsUpdateDTO statisticsDTO);
     Map<String, Long> getLeadStatistics();
     List<LeadResponseDTO> getLeadsByDateRange(LocalDate startDate, LocalDate endDate);
+    LeadResponseDTO updateLeadStage(Long id, String stage, String employeeEmail);
+    LeadResponseDTO updateFollowUp(Long id, String nextFollowUpDate, String nextFollowUpDescription, String employeeEmail);
+    LeadResponseDTO updateLeadAfterContact(Long id, EmployeeLeadUpdateDTO updateDTO, String employeeEmail);
 }

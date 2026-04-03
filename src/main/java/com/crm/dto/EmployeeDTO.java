@@ -1,4 +1,3 @@
-// EmployeeDTO.java
 package com.crm.dto;
 
 import jakarta.validation.constraints.*;
@@ -7,15 +6,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class EmployeeDTO {
-
-    // ID removed - will be auto-generated
 
     @NotBlank(message = "First name is required")
     @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters")
@@ -28,7 +25,6 @@ public class EmployeeDTO {
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")
     private String email;
-
 
     @NotBlank(message = "Department is required")
     private String department;
@@ -45,7 +41,7 @@ public class EmployeeDTO {
     private String phoneNumber;
 
     @NotNull(message = "Joining date is required")
-    private LocalDateTime joiningDate;
+    private LocalDate joiningDate;  // Changed from LocalDateTime to LocalDate
 
     private Boolean isActive;
 }

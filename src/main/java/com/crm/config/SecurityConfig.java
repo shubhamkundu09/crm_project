@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -36,13 +37,27 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
+                        // Public API endpoints
                         .requestMatchers(
-                                "/api/auth/**",           // Admin login
-                                "/api/employee/auth/**",  // Employee login and public endpoints
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/swagger-ui.html"
+                                "/api/auth/**",
+                                "/api/employee/auth/**"
+                        ).permitAll()
+                        // Static resources - CRITICAL FIX
+                        .requestMatchers(
+                                "/",
+                                "/login.html",
+                                "/admin.html",
+                                "/employee.html",
+                                "/**.html",
+                                "/**.css",
+                                "/**.js",
+                                "/**.png",
+                                "/**.jpg",
+                                "/**.jpeg",
+                                "/**.gif",
+                                "/favicon.ico",
+                                "/static/**",
+                                "/public/**"
                         ).permitAll()
                         // Admin only endpoints
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")

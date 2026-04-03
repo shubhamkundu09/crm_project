@@ -3,6 +3,7 @@ package com.crm.controller;
 import com.crm.dto.*;
 import com.crm.entity.LeadStage;
 import com.crm.entity.LeadType;
+import com.crm.service.LeadHistoryService;
 import com.crm.service.LeadService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -25,6 +26,7 @@ import java.util.Map;
 public class LeadController {
 
     private final LeadService leadService;
+    private final LeadHistoryService leadHistoryService;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -150,5 +152,15 @@ public class LeadController {
         log.info("Fetching leads between {} and {}", startDate, endDate);
         List<LeadResponseDTO> leads = leadService.getLeadsByDateRange(startDate, endDate);
         return ResponseEntity.ok(ApiResponse.success(leads, "Leads retrieved successfully for date range", request.getRequestURI()));
+    }
+
+    @GetMapping("/{id}/history")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<List<LeadHistoryDTO>>> getLeadHistory(
+            @PathVariable Long id,
+            HttpServletRequest request) {
+        log.info("Fetching history for lead ID: {}", id);
+        List<LeadHistoryDTO> history = leadHistoryService.getLeadHistory(id);
+        return ResponseEntity.ok(ApiResponse.success(history, "Lead history retrieved successfully", request.getRequestURI()));
     }
 }

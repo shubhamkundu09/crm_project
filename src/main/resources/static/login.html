@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; overflow: hidden; }
+        .login-container { margin-top: 100px; }
+        .card { border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; border: none; animation: slideUp 0.5s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+        .card-header { background: white; border-bottom: none; text-align: center; font-size: 28px; font-weight: bold; padding-top: 40px; color: #2c3e50; }
+        .btn-login { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border: none; width: 100%; padding: 12px; font-weight: bold; transition: transform 0.2s; }
+        .btn-login:hover { transform: translateY(-2px); }
+        .form-control:focus { border-color: #667eea; box-shadow: 0 0 0 0.2rem rgba(102,126,234,0.25); }
+        .alert-toast { position: fixed; top: 20px; right: 20px; z-index: 9999; min-width: 300px; animation: slideIn 0.3s ease-out; border-radius: 10px; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .bg-animation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; }
+        .bg-animation div { position: absolute; display: block; width: 20px; height: 20px; background: rgba(255,255,255,0.1); bottom: -150px; animation: animate 25s linear infinite; }
+        @keyframes animate { 0% { transform: translateY(0) rotate(0deg); opacity: 1; border-radius: 0; } 100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; border-radius: 50%; } }
+        .bg-animation div:nth-child(1) { left: 10%; width: 80px; height: 80px; animation-delay: 0s; }
+        .bg-animation div:nth-child(2) { left: 20%; width: 60px; height: 60px; animation-delay: 2s; animation-duration: 18s; }
+        .bg-animation div:nth-child(3) { left: 70%; width: 100px; height: 100px; animation-delay: 4s; }
+        .bg-animation div:nth-child(4) { left: 40%; width: 40px; height: 40px; animation-delay: 1s; animation-duration: 22s; }
+        .bg-animation div:nth-child(5) { left: 65%; width: 70px; height: 70px; animation-delay: 6s; }
+        .bg-animation div:nth-child(6) { left: 85%; width: 50px; height: 50px; animation-delay: 3s; animation-duration: 20s; }
+        .bg-animation div:nth-child(7) { left: 35%; width: 90px; height: 90px; animation-delay: 7s; }
+        .bg-animation div:nth-child(8) { left: 50%; width: 30px; height: 30px; animation-delay: 5s; animation-duration: 15s; }
+    </style>
+</head>
+<body>
+<div class="bg-animation"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+<div class="container">
+    <div class="row justify-content-center login-container">
+        <div class="col-md-5">
+            <div class="card">
+                <div class="card-header"><i class="fas fa-chart-line"></i> CRM System</div>
+                <div class="card-body p-4">
+                    <div class="mb-3"><label class="form-label fw-bold"><i class="fas fa-user-tag"></i> User Type</label>
+                        <select id="userType" class="form-control" onchange="toggleLoginFields()">
+                            <option value="admin">👑 Admin Login</option><option value="employee">👥 Employee Login</option>
+                        </select>
+                    </div>
+                    <div id="adminFields">
+                        <div class="mb-3"><label class="form-label"><i class="fas fa-user"></i> Username</label><input type="text" id="adminUsername" class="form-control" placeholder="Enter admin username"></div>
+                        <div class="mb-3"><label class="form-label"><i class="fas fa-lock"></i> Password</label><input type="password" id="adminPassword" class="form-control" placeholder="Enter password"></div>
+                    </div>
+                    <div id="employeeFields" style="display:none;">
+                        <div class="mb-3"><label class="form-label"><i class="fas fa-envelope"></i> Email Address</label><input type="email" id="employeeEmail" class="form-control" placeholder="Enter your email"></div>
+                        <div class="mb-3"><label class="form-label"><i class="fas fa-lock"></i> Password</label><input type="password" id="employeePassword" class="form-control" placeholder="Enter your password"></div>
+                        <div class="alert alert-info"><small><i class="fas fa-info-circle"></i> First time logging in? Use the temporary password sent to your email.</small></div>
+                    </div>
+                    <button class="btn btn-primary btn-login" onclick="login()"><i class="fas fa-sign-in-alt"></i> Login</button>
+                    <hr class="my-4">
+                    <div class="text-center text-muted"><small>Enterprise CRM System | Secure Login</small></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function toggleLoginFields() { const type = document.getElementById('userType').value;
+        document.getElementById('adminFields').style.display = type === 'admin' ? 'block' : 'none';
+        document.getElementById('employeeFields').style.display = type === 'employee' ? 'block' : 'none'; }
+    async function login() {
+        const type = document.getElementById('userType').value;
+        let url, data;
+        if (type === 'admin') {
+            const username = document.getElementById('adminUsername').value.trim();
+            const password = document.getElementById('adminPassword').value;
+            if (!username || !password) { showAlert('Please enter username and password', 'danger'); return; }
+            url = '/api/auth/login'; data = { username, password };
+        } else {
+            const email = document.getElementById('employeeEmail').value.trim();
+            const password = document.getElementById('employeePassword').value;
+            if (!email || !password) { showAlert('Please enter email and password', 'danger'); return; }
+            url = '/api/employee/auth/login'; data = { email, password };
+        }
+        const loginBtn = event.target; const originalText = loginBtn.innerHTML;
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...'; loginBtn.disabled = true;
+        try {
+            const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+            const result = await res.json();
+            if (result.data && result.data.token) {
+                localStorage.setItem('token', result.data.token); localStorage.setItem('userType', type);
+                showAlert('Login successful! Redirecting...', 'success');
+                setTimeout(() => { window.location.href = type === 'admin' ? '/admin.html' : '/employee.html'; }, 1500);
+            } else { showAlert(result.message || 'Invalid credentials. Please try again.', 'danger'); }
+        } catch(e) { showAlert('Login failed: ' + e.message, 'danger'); }
+        finally { loginBtn.innerHTML = originalText; loginBtn.disabled = false; }
+    }
+    function showAlert(message, type) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show alert-toast`;
+        alertDiv.innerHTML = `${message}<button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+        document.body.appendChild(alertDiv);
+        setTimeout(() => { if (alertDiv) alertDiv.remove(); }, 5000);
+    }
+    toggleLoginFields();
+    document.querySelectorAll('input').forEach(input => { input.addEventListener('keypress', function(e) { if (e.key === 'Enter') login(); }); });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

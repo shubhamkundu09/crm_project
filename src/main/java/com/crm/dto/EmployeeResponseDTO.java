@@ -1,5 +1,3 @@
-
-// EmployeeResponseDTO.java
 package com.crm.dto;
 
 import lombok.AllArgsConstructor;
@@ -7,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;  // Add this import
 import java.time.LocalDateTime;
 
 @Data
@@ -23,7 +22,7 @@ public class EmployeeResponseDTO {
     private String position;
     private Double salary;
     private String phoneNumber;
-    private LocalDateTime joiningDate;
+    private LocalDate joiningDate;  // Changed from LocalDateTime to LocalDate
     private Boolean isActive;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

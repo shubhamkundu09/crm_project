@@ -1,4 +1,3 @@
-// Employee.java (updated)
 package com.crm.entity;
 
 import jakarta.persistence.*;
@@ -9,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDate;  // Add this import
 import java.time.LocalDateTime;
 
 @Entity
@@ -36,7 +36,7 @@ public class Employee {
     private String employeeCode;
 
     @Column(nullable = false)
-    private String password; // New field for employee password
+    private String password;
 
     @Column(nullable = false)
     private String department;
@@ -51,7 +51,7 @@ public class Employee {
     private String phoneNumber;
 
     @Column(nullable = false)
-    private LocalDateTime joiningDate;
+    private LocalDate joiningDate;  // Changed from LocalDateTime to LocalDate
 
     @Column(nullable = false)
     @Builder.Default
@@ -59,7 +59,7 @@ public class Employee {
 
     @Column(nullable = false)
     @Builder.Default
-    private Boolean isFirstLogin = true; // Track if it's first login
+    private Boolean isFirstLogin = true;
 
     @CreationTimestamp
     @Column(updatable = false)

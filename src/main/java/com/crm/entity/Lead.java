@@ -82,4 +82,19 @@ public class Lead {
         if (meetingsBookedCount == null) meetingsBookedCount = 0;
         if (meetingsDoneCount == null) meetingsDoneCount = 0;
     }
+
+
+
+    @Version
+    private Integer version;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private Integer updateCount = 0;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private String lastUpdatedBy = "SYSTEM";
+
+    private LocalDateTime lastContactDate;
 }
