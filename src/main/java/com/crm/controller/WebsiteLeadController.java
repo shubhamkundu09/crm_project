@@ -1,4 +1,3 @@
-// WebsiteLeadController.java
 package com.crm.controller;
 
 import com.crm.dto.*;
@@ -34,8 +33,7 @@ public class WebsiteLeadController {
     private final EmailService emailService;
     private final LeadHistoryService leadHistoryService;
 
-    // Public endpoint for website lead submission (no authentication required)
-    // WebsiteLeadController.java - Updated submitWebsiteLead method
+
 
     @PostMapping("/api/website/leads")
     public ResponseEntity<ApiResponse<LeadResponseDTO>> submitWebsiteLead(
@@ -81,7 +79,7 @@ public class WebsiteLeadController {
                 .meetingsDoneCount(0)
                 .updateCount(0)
                 .lastUpdatedBy("WEBSITE")
-                .assignedEmployee(defaultEmployee) // IMPORTANT: Assign an employee
+                .assignedEmployee(defaultEmployee)
                 .build();
 
         Lead savedLead = leadRepository.save(lead);

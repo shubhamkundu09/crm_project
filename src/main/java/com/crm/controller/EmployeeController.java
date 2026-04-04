@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping("/api/admin/employees")
 @RequiredArgsConstructor
 @PreAuthorize("hasRole('ADMIN')")
-@Slf4j  // Add this annotation to enable logging
+@Slf4j
 public class EmployeeController {
 
     private final EmployeeService employeeService;

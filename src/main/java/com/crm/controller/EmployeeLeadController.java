@@ -22,7 +22,7 @@ public class EmployeeLeadController {
 
     private final EmployeeLeadService employeeLeadService;
 
-    // Single consolidated endpoint for all lead updates
+    // lead update controll
     @PutMapping("/{leadId}/update")
     public ResponseEntity<ApiResponse<LeadResponseDTO>> updateLead(
             @PathVariable Long leadId,

@@ -42,7 +42,9 @@ public class AdminInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Create admin user if not exists (check by email)
+
+        // admin creation here
+
         if (!employeeRepository.existsByEmail(adminEmail)) {
             Employee admin = Employee.builder()
                     .firstName(adminFirstName)

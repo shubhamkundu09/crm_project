@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/employee/auth")
 @RequiredArgsConstructor
-@Slf4j  // Add this annotation
+@Slf4j
 public class EmployeeAuthController {
 
     private final EmployeeAuthService employeeAuthService;

@@ -8,8 +8,14 @@ public class WebController {
 
     @GetMapping("/")
     public String index() {
-        return "forward:/login.html";
+        return "forward:/websi.html";
     }
+
+    @GetMapping("/index")
+    public String home() {
+        return "forward:/websi.html";
+    }
+
 
     @GetMapping("/login")
     public String login() {

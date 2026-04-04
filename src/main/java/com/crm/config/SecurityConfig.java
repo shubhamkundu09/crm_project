@@ -36,15 +36,17 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Public API endpoints
+                        // public api
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/api/employee/auth/**",
-                                "/api/website/**"  // ADD THIS LINE - makes all /api/website/* endpoints public
+                                "/api/website/**"
                         ).permitAll()
+
                         // Static resources
                         .requestMatchers(
                                 "/",
+                                "/login",
                                 "/login.html",
                                 "/admin.html",
                                 "/employee.html",
@@ -63,7 +65,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         // Employee only endpoints
                         .requestMatchers("/api/employee/**").hasRole("EMPLOYEE")
-                        // All other requests require authentication
+//                        all are authenticated
                         .anyRequest().authenticated()
                 );
 

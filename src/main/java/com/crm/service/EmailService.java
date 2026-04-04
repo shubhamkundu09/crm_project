@@ -24,11 +24,11 @@ public class EmailService {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(to);
-            message.setSubject("Welcome to CRM System - Your Account Details");
+            message.setSubject("Welcome to Samriddhi Financial Services - Your Account Details");
             message.setText(String.format("""
                 Dear %s,
                 
-                Welcome to the CRM System! Your employee account has been created successfully.
+                Welcome to the Samriddhi Financial Services! Your employee account has been created successfully.
                 
                 Your Account Details:
                 ------------------------
@@ -42,10 +42,10 @@ public class EmailService {
                 3. For security reasons, you will be prompted to change your password on first login
                 4. You can login using your email and the password provided above
                 
-                Login URL: http://localhost:8080/login
+                Login URL: Contact Admin
                 
                 Best regards,
-                CRM Admin Team
+                Samriddhi Financial Services Admin Team
                 """, name, employeeCode, to, password));
 
             mailSender.send(message);
@@ -75,9 +75,9 @@ public class EmailService {
             Service: %s
             Message: %s
             
-            Please login to the CRM system to assign and follow up with this lead.
+            Please login to the Samriddhi Financial Services system to assign and follow up with this lead.
             
-            Login URL: http://localhost:8080/login
+            
             """,
                     leadDTO.getName(),
                     leadDTO.getEmail(),
@@ -98,7 +98,7 @@ public class EmailService {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(to);
-            message.setSubject("CRM System - Password Reset Notification");
+            message.setSubject("Samriddhi Financial Services System - Password Reset Notification");
             message.setText(String.format("""
                 Dear %s,
                 
@@ -114,10 +114,10 @@ public class EmailService {
                 2. Do not share this password with anyone
                 3. If you didn't request this reset, please contact the administrator immediately at %s
                 
-                Login URL: http://localhost:8080/login
+                Login URL: Contact Admin
                 
                 Best regards,
-                CRM Admin Team
+                Samriddhi Financial Services Admin Team
                 """, name, to, newPassword, adminEmail));
 
             mailSender.send(message);
@@ -132,7 +132,7 @@ public class EmailService {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(to);
-            message.setSubject("New Lead Assigned - CRM System");
+            message.setSubject("New Lead Assigned - Samriddhi Financial Services");
             message.setText(String.format("""
                 Dear %s,
                 
@@ -143,12 +143,12 @@ public class EmailService {
                 Name: %s
                 Type: %s
                 
-                Please log in to the CRM system to view more details and take necessary action.
+                Please log in to the Samriddhi Financial Services system to view more details and take necessary action.
                 
-                Login URL: http://localhost:8080/login
+              
                 
                 Best regards,
-                CRM Admin Team
+                Samriddhi Financial Services Admin Team
                 """, employeeName, leadName, leadType));
 
             mailSender.send(message);
@@ -163,7 +163,7 @@ public class EmailService {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(to);
-            message.setSubject("CRM System - Password Changed Successfully");
+            message.setSubject("Samriddhi Financial Services - Password Changed Successfully");
             message.setText(String.format("""
                 Dear %s,
                 
@@ -172,7 +172,7 @@ public class EmailService {
                 If you did not make this change, please contact the system administrator immediately at %s.
                 
                 Best regards,
-                CRM Admin Team
+                Samriddhi Financial Services Admin Team
                 """, name, adminEmail));
 
             mailSender.send(message);
