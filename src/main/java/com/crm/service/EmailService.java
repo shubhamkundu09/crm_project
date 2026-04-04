@@ -1,5 +1,6 @@
 package com.crm.service;
 
+import com.crm.dto.WebsiteLeadDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,6 +52,44 @@ public class EmailService {
             log.info("Welcome email sent to: {}", to);
         } catch (Exception e) {
             log.error("Failed to send welcome email to {}: {}", to, e.getMessage());
+        }
+    }
+
+
+    // Add this method to EmailService.java
+
+    @Async
+    public void sendWebsiteLeadNotification(WebsiteLeadDTO leadDTO) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(adminEmail);
+            message.setSubject("New Website Lead - " + leadDTO.getName());
+            message.setText(String.format("""
+            New lead submitted from website!
+            
+            Customer Details:
+            -----------------
+            Name: %s
+            Email: %s
+            Phone: %s
+            Service: %s
+            Message: %s
+            
+            Please login to the CRM system to assign and follow up with this lead.
+            
+            Login URL: http://localhost:8080/login
+            """,
+                    leadDTO.getName(),
+                    leadDTO.getEmail(),
+                    leadDTO.getPhoneNumber(),
+                    leadDTO.getInterestedService() != null ? leadDTO.getInterestedService().getDisplayName() : "Not specified",
+                    leadDTO.getRemarks() != null ? leadDTO.getRemarks() : "No message"
+            ));
+
+            mailSender.send(message);
+            log.info("Website lead notification sent to admin: {}", adminEmail);
+        } catch (Exception e) {
+            log.error("Failed to send website lead notification: {}", e.getMessage());
         }
     }
 

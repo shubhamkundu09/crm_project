@@ -39,7 +39,8 @@ public class SecurityConfig {
                         // Public API endpoints
                         .requestMatchers(
                                 "/api/auth/**",
-                                "/api/employee/auth/**"
+                                "/api/employee/auth/**",
+                                "/api/website/**"  // ADD THIS LINE - makes all /api/website/* endpoints public
                         ).permitAll()
                         // Static resources
                         .requestMatchers(

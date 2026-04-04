@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Insurance CRM - Get a Quote</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #111118;
+            --surface2: #18181f;
+            --border: #2a2a38;
+            --accent: #6c63ff;
+            --accent2: #ff6584;
+            --accent3: #43e97b;
+            --text: #e8e8f0;
+            --text2: #8888a8;
+            --success: #2ed573;
+            --danger: #ff4757;
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: var(--text2);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: linear-gradient(135deg, rgba(108,99,255,0.1) 0%, rgba(255,101,132,0.05) 100%);
+        }
+
+        .hero h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+        }
+
+        .hero p {
+            color: var(--text2);
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Form Container */
+        .form-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .form-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .form-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .form-subtitle {
+            color: var(--text2);
+            margin-bottom: 32px;
+            font-size: 14px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            color: var(--text2);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-label .required {
+            color: var(--danger);
+        }
+
+        .form-control {
+            width: 100%;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            padding: 12px 16px;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(108,99,255,0.2);
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .service-preview {
+            background: rgba(108,99,255,0.1);
+            border: 1px solid var(--accent);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--accent3);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--accent);
+            color: white;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-submit:hover {
+            background: #7b73ff;
+            transform: translateY(-2px);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Features Section */
+        .features {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(108,99,255,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .feature-icon i {
+            font-size: 28px;
+            color: var(--accent);
+        }
+
+        .feature-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: var(--text2);
+            font-size: 14px;
+        }
+
+        /* Toast Messages */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.success {
+            border-left: 3px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 3px solid var(--danger);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            border-top: 1px solid var(--border);
+            margin-top: 60px;
+            color: var(--text2);
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+            .hero h1 {
+                font-size: 32px;
+            }
+            .navbar {
+                padding: 15px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="toast-container" id="toast-container"></div>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo">CRM<span>.</span>Pro</div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Services</a>
+            <a href="#">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<section class="hero">
+    <h1>Get Your <span>Insurance Quote</span> Today</h1>
+    <p>Fill out the form below and our experts will contact you with the best insurance plans tailored to your needs.</p>
+</section>
+
+<div class="form-container">
+    <div class="form-card">
+        <h2 class="form-title">Request a Callback</h2>
+        <p class="form-subtitle">Fill in your details and we'll get back to you within 24 hours</p>
+        
+        <form id="lead-form" onsubmit="handleSubmit(event)">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Full Name <span class="required">*</span></label>
+                    <input type="text" class="form-control" id="customer-name" required placeholder="Enter your full name">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email Address <span class="required">*</span></label>
+                    <input type="email" class="form-control" id="customer-email" required placeholder="you@example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Phone Number <span class="required">*</span></label>
+                    <input type="tel" class="form-control" id="customer-phone" maxlength="10" required placeholder="10-digit mobile number">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Preferred Contact Time</label>
+                    <select class="form-control" id="contact-time">
+                        <option value="">Any time</option>
+                        <option value="Morning">Morning (9 AM - 12 PM)</option>
+                        <option value="Afternoon">Afternoon (12 PM - 4 PM)</option>
+                        <option value="Evening">Evening (4 PM - 8 PM)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label class="form-label">Main Service <span class="required">*</span></label>
+                    <select class="form-control" id="main-service" required onchange="loadSubcategories()">
+                        <option value="">Select a service</option>
+                        <option value="LIFE_INSURANCE">Life Insurance</option>
+                        <option value="HEALTH_INSURANCE">Health Insurance</option>
+                        <option value="GENERAL_INSURANCE">General Insurance</option>
+                        <option value="INVESTMENT">Investment</option>
+                        <option value="RETIREMENT_PLANNING">Retirement Planning</option>
+                        <option value="BUSINESS_INSURANCE">Business Insurance</option>
+                    </select>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label class="form-label">Service Subcategory</label>
+                    <select class="form-control" id="subcategory" onchange="loadSubSubcategories()" disabled>
+                        <option value="">Select main service first</option>
+                    </select>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label class="form-label">Service Detail</label>
+                    <select class="form-control" id="subsubcategory" disabled>
+                        <option value="">Select subcategory first</option>
+                    </select>
+                </div>
+                
+                <div class="form-group full-width">
+                    <label class="form-label">Your Message / Requirements</label>
+                    <textarea class="form-control" id="message" placeholder="Tell us about your insurance needs, preferred coverage amount, any existing policies, etc..."></textarea>
+                </div>
+            </div>
+            
+            <div id="service-preview" class="service-preview" style="display: none;"></div>
+            
+            <button type="submit" class="btn-submit" id="submit-btn">
+                <i class="fas fa-paper-plane"></i> Submit Request
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="features">
+    <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+        <h3>Best Insurance Plans</h3>
+        <p>Compare plans from top insurance providers</p>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-clock"></i></div>
+        <h3>Quick Response</h3>
+        <p>Get callback within 24 hours</p>
+    </div>
+    <div class="feature-card">
+        <div class="feature-icon"><i class="fas fa-hand-holding-usd"></i></div>
+        <h3>Best Price Guarantee</h3>
+        <p>We ensure you get the best rates</p>
+    </div>
+</div>
+
+<footer class="footer">
+    <p>&copy; 2024 CRM.Pro Insurance Solutions. All rights reserved.</p>
+</footer>
+
+<script>
+    // Service Category Data
+    const SERVICE_DATA = {
+        LIFE_INSURANCE: {
+            display: "Life Insurance",
+            subcategories: {
+                TERM_LIFE: { display: "Term Life Insurance", subsub: { LEVEL_TERM: "Level Term Plan", DECREASING_TERM: "Decreasing Term Plan", INCREASING_TERM: "Increasing Term Plan" } },
+                WHOLE_LIFE: { display: "Whole Life Insurance", subsub: {} },
+                UNIVERSAL_LIFE: { display: "Universal Life Insurance", subsub: {} },
+                ENDOWMENT_PLANS: { display: "Endowment Plans", subsub: {} }
+            }
+        },
+        HEALTH_INSURANCE: {
+            display: "Health Insurance",
+            subcategories: {
+                INDIVIDUAL_HEALTH: { display: "Individual Health Insurance", subsub: { INDIVIDUAL_COVER: "Individual Coverage" } },
+                FAMILY_FLOATER: { display: "Family Floater Insurance", subsub: { FAMILY_COVER: "Family Coverage", TOP_UP_PLANS: "Top-up Plans" } },
+                CRITICAL_ILLNESS: { display: "Critical Illness Insurance", subsub: {} },
+                SENIOR_CITIZEN: { display: "Senior Citizen Health Insurance", subsub: {} }
+            }
+        },
+        GENERAL_INSURANCE: {
+            display: "General Insurance",
+            subcategories: {
+                MOTOR_INSURANCE: { display: "Motor Insurance", subsub: {} },
+                HOME_INSURANCE: { display: "Home Insurance", subsub: {} },
+                TRAVEL_INSURANCE: { display: "Travel Insurance", subsub: {} }
+            }
+        },
+        INVESTMENT: {
+            display: "Investment",
+            subcategories: {
+                MUTUAL_FUNDS: { display: "Mutual Funds", subsub: { EQUITY_FUNDS: "Equity Funds", DEBT_FUNDS: "Debt Funds", HYBRID_FUNDS: "Hybrid Funds" } },
+                ULIP: { display: "ULIP Plans", subsub: { EQUITY_ULIP: "Equity-oriented ULIP", DEBT_ULIP: "Debt-oriented ULIP", BALANCED_ULIP: "Balanced ULIP" } },
+                FIXED_DEPOSITS: { display: "Fixed Deposits", subsub: {} }
+            }
+        },
+        RETIREMENT_PLANNING: {
+            display: "Retirement Planning",
+            subcategories: {
+                PENSION_PLANS: { display: "Pension Plans", subsub: {} },
+                ANNUITY_PLANS: { display: "Annuity Plans", subsub: {} }
+            }
+        },
+        BUSINESS_INSURANCE: {
+            display: "Business Insurance",
+            subcategories: {
+                CORPORATE_HEALTH: { display: "Corporate Health Insurance", subsub: {} },
+                LIABILITY_INSURANCE: { display: "Liability Insurance", subsub: {} },
+                PROPERTY_INSURANCE: { display: "Property Insurance", subsub: {} }
+            }
+        }
+    };
+
+    function loadSubcategories() {
+        const mainService = document.getElementById('main-service').value;
+        const subcatSelect = document.getElementById('subcategory');
+        const subsubSelect = document.getElementById('subsubcategory');
+        
+        if (!mainService || !SERVICE_DATA[mainService]) {
+            subcatSelect.innerHTML = '<option value="">Select main service first</option>';
+            subcatSelect.disabled = true;
+            subsubSelect.innerHTML = '<option value="">Select subcategory first</option>';
+            subsubSelect.disabled = true;
+            document.getElementById('service-preview').style.display = 'none';
+            return;
+        }
+        
+        subcatSelect.disabled = false;
+        subcatSelect.innerHTML = '<option value="">Select subcategory</option>';
+        
+        const subs = SERVICE_DATA[mainService].subcategories;
+        for (const [key, value] of Object.entries(subs)) {
+            subcatSelect.innerHTML += `<option value="${key}">${value.display}</option>`;
+        }
+        
+        subsubSelect.innerHTML = '<option value="">Select subcategory first</option>';
+        subsubSelect.disabled = true;
+        updatePreview();
+    }
+
+    function loadSubSubcategories() {
+        const mainService = document.getElementById('main-service').value;
+        const subcategory = document.getElementById('subcategory').value;
+        const subsubSelect = document.getElementById('subsubcategory');
+        
+        if (!mainService || !subcategory || !SERVICE_DATA[mainService]?.subcategories[subcategory]) {
+            subsubSelect.innerHTML = '<option value="">Select subcategory first</option>';
+            subsubSelect.disabled = true;
+            updatePreview();
+            return;
+        }
+        
+        const subsubs = SERVICE_DATA[mainService].subcategories[subcategory].subsub;
+        subsubSelect.disabled = false;
+        subsubSelect.innerHTML = '<option value="">Select service detail (optional)</option>';
+        
+        for (const [key, value] of Object.entries(subsubs)) {
+            subsubSelect.innerHTML += `<option value="${key}">${value}</option>`;
+        }
+        
+        updatePreview();
+    }
+
+    function updatePreview() {
+        const mainService = document.getElementById('main-service').value;
+        const subcategory = document.getElementById('subcategory').value;
+        const subsubcategory = document.getElementById('subsubcategory').value;
+        const previewDiv = document.getElementById('service-preview');
+        
+        if (!mainService) {
+            previewDiv.style.display = 'none';
+            return;
+        }
+        
+        let previewText = `📋 Selected: ${SERVICE_DATA[mainService]?.display || mainService}`;
+        if (subcategory && SERVICE_DATA[mainService]?.subcategories[subcategory]) {
+            previewText += ` → ${SERVICE_DATA[mainService].subcategories[subcategory].display}`;
+        }
+        if (subsubcategory && SERVICE_DATA[mainService]?.subcategories[subcategory]?.subsub[subsubcategory]) {
+            previewText += ` → ${SERVICE_DATA[mainService].subcategories[subcategory].subsub[subsubcategory]}`;
+        }
+        
+        previewDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${previewText}`;
+        previewDiv.style.display = 'block';
+    }
+
+    function toast(msg, type = 'success') {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i><span>${msg}</span>`;
+        container.appendChild(toast);
+        setTimeout(() => {
+            toast.style.animation = 'slideOut 0.3s ease forwards';
+            setTimeout(() => toast.remove(), 300);
+        }, 3500);
+    }
+
+    async function handleSubmit(e) {
+        e.preventDefault();
+        
+        const submitBtn = document.getElementById('submit-btn');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<span class="loading"></span> Submitting...';
+        submitBtn.disabled = true;
+        
+        const leadData = {
+            name: document.getElementById('customer-name').value,
+            email: document.getElementById('customer-email').value,
+            phoneNumber: document.getElementById('customer-phone').value,
+            source: "Website Lead Form",
+            leadType: "WARM",
+            leadStage: "LEAD_GENERATED",
+            interestedService: document.getElementById('main-service').value || null,
+            serviceSubcategory: document.getElementById('subcategory').value || null,
+            serviceSubSubcategory: document.getElementById('subsubcategory').value || null,
+            serviceDescription: document.getElementById('message').value || null,
+            remarks: `Contact Time: ${document.getElementById('contact-time').value || 'Any time'}\nMessage: ${document.getElementById('message').value || 'No message provided'}`,
+            nextFollowUp: "Initial contact - Customer inquiry from website",
+            nextFollowUpDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            assignedEmployeeId: null
+        };
+        
+        try {
+            const response = await fetch('http://localhost:8080/api/website/leads', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(leadData)
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok) throw new Error(data.message || 'Submission failed');
+            
+            toast('Thank you! We will contact you within 24 hours.', 'success');
+            document.getElementById('lead-form').reset();
+            document.getElementById('subcategory').disabled = true;
+            document.getElementById('subsubcategory').disabled = true;
+            document.getElementById('service-preview').style.display = 'none';
+        } catch (err) {
+            toast(err.message || 'Something went wrong. Please try again.', 'error');
+        } finally {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    }
+
+    // Event listeners for preview updates
+    document.getElementById('main-service').addEventListener('change', updatePreview);
+    document.getElementById('subcategory').addEventListener('change', updatePreview);
+    document.getElementById('subsubcategory').addEventListener('change', updatePreview);
+</script>
+</body>
+</html>
