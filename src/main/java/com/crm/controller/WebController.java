@@ -16,11 +16,18 @@ public class WebController {
         return "forward:/websi.html";
     }
 
-
     @GetMapping("/login")
     public String login() {
         return "forward:/login.html";
     }
 
+    @GetMapping("/admin")
+    public String adminDashboard() {
+        return "forward:/admin.html";
+    }
 
+    @GetMapping("/employee")
+    public String employeeDashboard() {
+        return "forward:/employee.html";
+    }
 }

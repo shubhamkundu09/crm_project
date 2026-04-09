@@ -36,9 +36,11 @@ public class SecurityConfig {
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Public API - only one auth endpoint needed
+                        // Public API endpoints
                         .requestMatchers(
-                                "/api/auth/**",     // This handles login, logout, validate
+                                "/api/auth/login",
+                                "/api/auth/logout",
+                                "/api/auth/validate",
                                 "/api/website/**"   // Public website endpoints
                         ).permitAll()
 
@@ -49,6 +51,7 @@ public class SecurityConfig {
                                 "/login.html",
                                 "/admin.html",
                                 "/employee.html",
+                                "/websi.html",
                                 "/**.html",
                                 "/**.css",
                                 "/**.js",

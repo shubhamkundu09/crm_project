@@ -1,5 +1,6 @@
 package com.crm.service;
 
+import com.crm.dto.ChangePasswordRequest;
 import com.crm.dto.EmployeeDTO;
 import com.crm.dto.EmployeeResponseDTO;
 import com.crm.dto.PasswordResetDTO;
@@ -211,6 +212,37 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .stream()
                 .map(this::mapToResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public void changePassword(String email, ChangePasswordRequest passwordRequest) {
+        log.info("Changing password for employee: {}", email);
+
+        Employee employee = employeeRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with email: " + email));
+
+        // Verify current password
+        if (!passwordEncoder.matches(passwordRequest.getCurrentPassword(), employee.getPassword())) {
+            throw new IllegalArgumentException("Current password is incorrect");
+        }
+
+        // Validate new password
+        if (!isValidPassword(passwordRequest.getNewPassword())) {
+            throw new IllegalArgumentException("Password does not meet security requirements. " +
+                    "It must contain at least 8 characters, one digit, one lowercase, one uppercase, and one special character");
+        }
+
+        // Update password
+        employee.setPassword(passwordEncoder.encode(passwordRequest.getNewPassword()));
+        employee.setIsFirstLogin(false);
+        employeeRepository.save(employee);
+
+        // Send confirmation email
+        emailService.sendPasswordChangeConfirmation(employee.getEmail(),
+                employee.getFirstName() + " " + employee.getLastName());
+
+        log.info("Password changed successfully for employee: {}", email);
     }
 
     @Override
